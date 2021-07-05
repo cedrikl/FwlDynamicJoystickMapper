@@ -22,6 +22,7 @@ device_DB.detect("C:/Games/X-Plane 11/Output/preferences/X-Plane Joystick Settin
 local TPR  = require("champ_joy_tpr")
 local scgl = require("champ_joy_scg_l")
 local stq  = require("champ_joy_saitek_tq")
+local btq  = require("champ_joy_bravo")
 --TPR.map(1)
 --scgl.map(2)
 --stq.map(0)
@@ -36,8 +37,8 @@ do
     scgl.map(device_DB.db[HID_device]["xpos"])
   end
 
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_saitek_tq" == device_DB.db[HID_device]["modu"])) then
-    stq.map(device_DB.db[HID_device]["xpos"])
+  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
+    btq.map(device_DB.db[HID_device]["xpos"])
   end
 end
 
@@ -57,10 +58,8 @@ function ChampComAxis()
   set_axis_assignment(TPR.yaw    , "yaw"            , "normal")
   set_axis_assignment(TPR.brake_l, "left toe brake" , "reverse")
   set_axis_assignment(TPR.brake_r, "right toe brake", "reverse")
-
-  set_axis_assignment(stq.axis_l, "throttle", "normal")
-  set_axis_assignment(stq.axis_m, "prop",     "reverse")
-  set_axis_assignment(stq.axis_r, "mixture",  "reverse")
+  
+  set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
 
 end
 
@@ -71,32 +70,96 @@ end
 function ChampComButtons()
   clear_all_button_assignments()
 
-  set_button_assignment(scgl.A2           , "sim/autopilot/servos_off_any")
-  set_button_assignment(scgl.A1_Up        , "sim/general/hat_switch_up")
-  set_button_assignment(scgl.A1_Up_Right  , "sim/general/hat_switch_up_right")
-  set_button_assignment(scgl.A1_Right     , "sim/general/hat_switch_right")
+  set_button_assignment(scgl.A2,            "sim/autopilot/servos_off_any")
+  set_button_assignment(scgl.A1_Up,         "sim/general/hat_switch_up")
+  set_button_assignment(scgl.A1_Up_Right,   "sim/general/hat_switch_up_right")
+  set_button_assignment(scgl.A1_Right,      "sim/general/hat_switch_right")
   set_button_assignment(scgl.A1_Down_Right, "sim/general/hat_switch_down_right")
-  set_button_assignment(scgl.A1_Down      , "sim/general/hat_switch_down")
-  set_button_assignment(scgl.A1_Down_Left , "sim/general/hat_switch_down_left")
-  set_button_assignment(scgl.A1_Left      , "sim/general/hat_switch_left")
-  set_button_assignment(scgl.A1_Up_Left   , "sim/general/hat_switch_up_left")
-  set_button_assignment(scgl.B1           , "sim/view/default_view")
-  set_button_assignment(scgl.D1           , "sim/view/circle")
-  set_button_assignment(scgl.A3_Up        , "sim/flight_controls/pitch_trim_down")
-  set_button_assignment(scgl.A3_Down      , "sim/flight_controls/pitch_trim_up")
-  set_button_assignment(scgl.A3_Left      , "sim/flight_controls/rudder_trim_left")
-  set_button_assignment(scgl.A3_Right     , "sim/flight_controls/rudder_trim_right")
+  set_button_assignment(scgl.A1_Down,       "sim/general/hat_switch_down")
+  set_button_assignment(scgl.A1_Down_Left,  "sim/general/hat_switch_down_left")
+  set_button_assignment(scgl.A1_Left,       "sim/general/hat_switch_left")
+  set_button_assignment(scgl.A1_Up_Left,    "sim/general/hat_switch_up_left")
+  set_button_assignment(scgl.B1,            "sim/view/default_view")
+  set_button_assignment(scgl.D1,            "sim/view/circle")
+  set_button_assignment(scgl.A3_Up,         "sim/flight_controls/pitch_trim_down")
+  set_button_assignment(scgl.A3_Down,       "sim/flight_controls/pitch_trim_up")
+  set_button_assignment(scgl.A3_Left,       "sim/flight_controls/rudder_trim_left")
+  set_button_assignment(scgl.A3_Right,      "sim/flight_controls/rudder_trim_right")
 
-  set_button_assignment(stq.T2,      "sim/flight_controls/brakes_toggle_max")
-  set_button_assignment(stq.T5,      "sim/flight_controls/flaps_up")
-  set_button_assignment(stq.T6,      "sim/flight_controls/flaps_down")
-  set_button_assignment(stq.T3,      "sim/flight_controls/landing_gear_up")
-  set_button_assignment(stq.T4,      "sim/flight_controls/landing_gear_down")
-  set_button_assignment(stq.l_click, "sim/engines/thrust_reverse_toggle")
-  set_button_assignment(stq.T1,      "sim/engines/thrust_reverse_toggle")
+  set_button_assignment(btq.sw1_up,         "sim/flight_controls/brakes_max")
+  set_button_assignment(btq.flaps_up,       "sim/flight_controls/flaps_up")
+  set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
+  set_button_assignment(btq.gear_up,        "sim/flight_controls/landing_gear_up")
+  set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
 
 end
 
+
+function ChampComEngine()
+  ChampNbEngines = get("sim/aircraft/engine/acf_num_engines")
+  logMsg(string.format("The number of engines is %i", ChampNbEngines))
+  
+  if ChampNbEngines == 2 then
+    set_axis_assignment(btq.axis3, "throttle 1", "reverse")
+    set_axis_assignment(btq.axis4, "throttle 2", "reverse")
+
+    set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_1")
+    set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_2")
+
+    do_every_frame([[
+      if (button(]]..btq.axis3_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, -1.0001)
+      elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, 0)
+      end
+
+      if (button(]]..btq.axis4_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, -1.0001)
+      elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, 0)
+      end
+    ]])
+
+  elseif ChampNbEngines >= 3 then
+
+    set_axis_assignment(btq.axis2, "throttle 1", "reverse")
+    set_axis_assignment(btq.axis3, "throttle 2", "reverse")
+    set_axis_assignment(btq.axis4, "throttle 3", "reverse")
+    set_axis_assignment(btq.axis5, "throttle 4", "reverse")
+
+    set_button_assignment(btq.axis2_rev_zone, "sim/engines/thrust_reverse_toggle_1")
+    set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_2")
+    set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_3")
+    set_button_assignment(btq.axis5_rev_zone, "sim/engines/thrust_reverse_toggle_4")
+
+    do_every_frame([[
+      if (button(]]..btq.axis2_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, -1.0001)
+      elseif ((not(button(]]..btq.axis2_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, 0)
+      end
+      
+      if (button(]]..btq.axis3_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, -1.0001)
+      elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, 0)
+      end
+
+      if (button(]]..btq.axis4_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 2) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 2) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 2, -1.0001)
+      elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 2) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 2) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 2, 0)
+      end
+
+      if (button(]]..btq.axis5_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 3) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 3) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 3, -1.0001)
+      elseif ((not(button(]]..btq.axis5_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 3) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 3) < 0.05)) then
+        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 3, 0)
+      end
+    ]])
+
+  end
+end
 
 ------------------------------
 -- Specific Buttons Mapping --
@@ -108,7 +171,7 @@ function ChampAcSpecific()
 
   if (PLANE_ICAO == "B738") then
     set_button_assignment(scgl.A2,       "laminar/B738/autopilot/capt_disco_press")
-    set_button_assignment(scgl.Trig_Fwd, "laminar/B738/autopilot/left_toga_press")
+    set_button_assignment(btq.axis3_toga, "laminar/B738/autopilot/left_toga_press")
     set_button_assignment(scgl.Trig_Aft, "laminar/B738/autopilot/left_at_dis_press")
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
@@ -127,30 +190,31 @@ end
 
 --------------------------------------------------
 -- Auto Adjust for A/C with more than 2 engines --
---------------------------------------------------
+----------------------------------------------------
 
-function ChampMultiEngine()
-  ChampNbEngines = get("sim/aircraft/engine/acf_num_engines")
-  logMsg(string.format("The number of engines is %i", ChampNbEngines))
-  if ChampNbEngines == 3 then
-    --set_axis_assignment(X55T_axis_R,"throttle 3","normal")
-    do_every_frame([[
-      Throttle1Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",0)
-      Throttle3Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",2)
-      CalculatedCenterThrottlePos = (Throttle1Pos + Throttle3Pos) / 2
-      set_array("sim/cockpit2/engine/actuators/throttle_ratio", 1, CalculatedCenterThrottlePos)
-    ]])
-  elseif ChampNbEngines == 4 then
-    --set_axis_assignment(X55T_axis_R,"throttle 4","normal")
-    do_every_frame([[
-      Throttle1Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",0)
-      Throttle4Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",3)
-      CalculatedCenterThrottlePos = (Throttle1Pos + Throttle4Pos) / 2
-      set_array("sim/cockpit2/engine/actuators/throttle_ratio", 1, CalculatedCenterThrottlePos)
-      set_array("sim/cockpit2/engine/actuators/throttle_ratio", 2, CalculatedCenterThrottlePos)
-    ]])
-  end
-end
+--function Champ2AxisToMultiEngine()
+--  ChampNbEngines = get("sim/aircraft/engine/acf_num_engines")
+--  logMsg(string.format("The number of engines is %i", ChampNbEngines))
+--  if ChampNbEngines == 3 then
+--    --set_axis_assignment(X55T_axis_R,"throttle 3","normal")
+--    do_every_frame([[
+--      Throttle1Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",0)
+--      Throttle3Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",2)
+--      CalculatedCenterThrottlePos = (Throttle1Pos + Throttle3Pos) / 2
+--      set_array("sim/cockpit2/engine/actuators/throttle_ratio", 1, CalculatedCenterThrottlePos)
+--    ]])
+--  elseif ChampNbEngines == 4 then
+--    --set_axis_assignment(X55T_axis_R,"throttle 4","normal")
+--    do_every_frame([[
+--      Throttle1Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",0)
+--      Throttle4Pos = get("sim/cockpit2/engine/actuators/throttle_ratio",3)
+--      CalculatedCenterThrottlePos = (Throttle1Pos + Throttle4Pos) / 2
+--      set_array("sim/cockpit2/engine/actuators/throttle_ratio", 1, CalculatedCenterThrottlePos)
+--      set_array("sim/cockpit2/engine/actuators/throttle_ratio", 2, CalculatedCenterThrottlePos)
+--    ]])
+--  end
+--end
+
 
 function check_specific_datarefs()
   local ac_ready = false
@@ -188,8 +252,9 @@ function monitor()
     if check_specific_datarefs() then
       ChampComAxis()
       ChampComButtons()
+      ChampComEngine()
       ChampAcSpecific()
-      --ChampMultiEngine()
+      --Champ2AxisToMultiEngine()
       init_completed = true
     else
       draw_string_Helvetica_18(50, 500, "Waiting on ac specific commands/datarefs to be created!")

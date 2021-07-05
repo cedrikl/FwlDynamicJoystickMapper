@@ -1,0 +1,4 @@
+/Modules/*
+!/Modules/champ_joy*
+/Scripts (disabled)/*
+~/Scripts (disabled)/*JoyButtons.lua

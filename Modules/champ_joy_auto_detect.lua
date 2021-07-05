@@ -28,6 +28,62 @@ joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_scg_l"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
 joy_known.size = joy_known.size + 1
 
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x294b
+joy_known.db[joy_known.size + 1]["pid"] = 0x1901
+joy_known.db[joy_known.size + 1]["name"] = "Honeycomb Aeronautical Bravo Throttle Quadrant"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_bravo"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x068e
+joy_known.db[joy_known.size + 1]["pid"] = 0x00ff
+joy_known.db[joy_known.size + 1]["name"] = "CH Products Pro Pedals"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChPedals"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x068e
+joy_known.db[joy_known.size + 1]["pid"] = 0x00f2
+joy_known.db[joy_known.size + 1]["name"] = "CH Products Flight Sim Yoke"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChYoke"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x068e
+joy_known.db[joy_known.size + 1]["pid"] = 0x00fa
+joy_known.db[joy_known.size + 1]["name"] = "CH Products Throttle Quadrant"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChThrottleQuadrant"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x0738
+joy_known.db[joy_known.size + 1]["pid"] = 0xa215
+joy_known.db[joy_known.size + 1]["name"] = "Saitek X-55 HOTAS Throttle"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_x55t"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x0738
+joy_known.db[joy_known.size + 1]["pid"] = 0x2215
+joy_known.db[joy_known.size + 1]["name"] = "Saitek X-55 HOTAS Stick"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_x55j"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.size = joy_known.size + 1
+
+--CH Products w/o driver!?
+--_joy_location0 \\?\hid#vid_068e&pid_c0fa#3&13990947&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+--_joy_location1 \\?\hid#vid_068e&pid_c0f2#3&461ee81&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+--_joy_location3 \\?\hid#vid_068e&pid_c0ff#3&24029fef&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+
+
+
+
 logMsg(string.format("Champion Info: %d known elements loaded", joy_known.size))
 
 ----------------------
