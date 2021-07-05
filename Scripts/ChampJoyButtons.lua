@@ -59,7 +59,7 @@ function ChampComAxis()
   set_axis_assignment(TPR.brake_l, "left toe brake" , "reverse")
   set_axis_assignment(TPR.brake_r, "right toe brake", "reverse")
   
-  set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
+  set_axis_assignment(btq.axis1, "speedbrakes", "normal")
 
 end
 
@@ -95,6 +95,35 @@ function ChampComButtons()
 end
 
 
+function normal_reverser_handler()
+  if PLANE_ICAO == "A320" then
+    if (button(btq.axis3_rev_handle)            and (get("model/controls/engine_reverse1") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_1")
+    elseif ((not(button(btq.axis3_rev_handle))) and (get("model/controls/engine_reverse1") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_1")
+    end
+
+    if (button(btq.axis4_rev_handle)            and (get("model/controls/engine_reverse2") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_2")
+    elseif ((not(button(btq.axis4_rev_handle))) and (get("model/controls/engine_reverse2") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_2")
+    end
+  else
+    if (button(btq.axis3_rev_handle)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+      set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, -1.0001)
+    elseif ((not(button(btq.axis3_rev_handle))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+      set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, 0)
+    end
+
+    if (button(btq.axis4_rev_handle)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+      set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, -1.0001)
+    elseif ((not(button(btq.axis4_rev_handle))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+      set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, 0)
+    end
+  end
+end
+
+
 function ChampComEngine()
   ChampNbEngines = get("sim/aircraft/engine/acf_num_engines")
   logMsg(string.format("The number of engines is %i", ChampNbEngines))
@@ -106,19 +135,7 @@ function ChampComEngine()
     set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_1")
     set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_2")
 
-    do_every_frame([[
-      if (button(]]..btq.axis3_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
-        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, -1.0001)
-      elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
-        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, 0)
-      end
-
-      if (button(]]..btq.axis4_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
-        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, -1.0001)
-      elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
-        set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, 0)
-      end
-    ]])
+    do_every_frame("normal_reverser_handler()")
 
   elseif ChampNbEngines >= 3 then
 
@@ -173,6 +190,7 @@ function ChampAcSpecific()
     set_button_assignment(scgl.A2,       "laminar/B738/autopilot/capt_disco_press")
     set_button_assignment(btq.axis3_toga, "laminar/B738/autopilot/left_toga_press")
     set_button_assignment(scgl.Trig_Aft, "laminar/B738/autopilot/left_at_dis_press")
+    set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
     set_button_assignment(scgl.Trig_Aft, "1-sim/comm/AP/at_disc")
