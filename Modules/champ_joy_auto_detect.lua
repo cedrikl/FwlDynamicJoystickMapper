@@ -38,7 +38,7 @@ joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
 joy_known.db[joy_known.size + 1]["vid"] = 0x068e
-joy_known.db[joy_known.size + 1]["pid"] = 0x00ff
+joy_known.db[joy_known.size + 1]["pid"] = 0x00f2
 joy_known.db[joy_known.size + 1]["name"] = "CH Products Pro Pedals"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChPedals"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
@@ -46,7 +46,7 @@ joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
 joy_known.db[joy_known.size + 1]["vid"] = 0x068e
-joy_known.db[joy_known.size + 1]["pid"] = 0x00f2
+joy_known.db[joy_known.size + 1]["pid"] = 0x00ff
 joy_known.db[joy_known.size + 1]["name"] = "CH Products Flight Sim Yoke"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChYoke"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
@@ -110,8 +110,7 @@ end
 
 function joy_known.detect (pref_file)
 
-  local file = "C:/Games/X-Plane 11/Output/preferences/X-Plane Joystick Settings.prf"
-  local lines = lines_from(file)
+  local lines = lines_from(pref_file)
 
   -- print all line numbers and their contents
   for k,v in pairs(lines) do

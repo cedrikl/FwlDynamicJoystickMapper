@@ -5,7 +5,7 @@ function ChThrottleQuadrant.map(joy_num)
   start_axis   = joy_num * 25
   start_button = joy_num * 160
 
-  logMsg(string.format("Champion Info: Mapping a CH Products Flight Sim Yoke starting at (Axis=%i Buttons=%i)", start_axis, start_button))
+  logMsg(string.format("Champion Info: Mapping a CH Product Throttle Quadrant starting at (Axis=%i Buttons=%i)", start_axis, start_button))
 
 --Axis
   ChThrottleQuadrant.axis_6 = start_axis
