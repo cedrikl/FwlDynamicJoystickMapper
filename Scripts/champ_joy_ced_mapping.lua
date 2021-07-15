@@ -10,14 +10,15 @@ device_DB.detect("C:/Games/X-Plane 11/Output/preferences/X-Plane Joystick Settin
 -- Script to map 1 button to different assignments based on aircraft
 
 --Rift cannot be auto mapped but the rest can
-local rift   = require("champ_joy_rift")
-local pedals = require("champ_joy_ChPedals")
-local yoke   = require("champ_joy_ChYoke")
-local x55j   = require("champ_joy_x55j")
-local TPR    = require("champ_joy_tpr")
-local scgl   = require("champ_joy_scg_l")
-local stq    = require("champ_joy_saitek_tq")
-local btq    = require("champ_joy_bravo")
+local rift    = require("champ_joy_rift")
+local pedals  = require("champ_joy_ChPedals")
+local yoke    = require("champ_joy_ChYoke")
+local x55j    = require("champ_joy_x55j")
+local TPR     = require("champ_joy_tpr")
+local scgl    = require("champ_joy_scg_l")
+local stq     = require("champ_joy_saitek_tq")
+local btq     = require("champ_joy_bravo")
+local btq_led = require("champ_joy_bravo_leds")
 
 --Rift controllers must be manually mapped as they do not appear as a USB device to X-Plane.
 --find their position by searching <X-Plane Directory>\Output\preferences\X-Plane Joystick Settings.prf
@@ -53,6 +54,7 @@ do
 
   if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
     btq.map(device_DB.db[HID_device]["xpos"])
+    btq_led.bravo_led_main()
   end
 end
 
@@ -268,8 +270,6 @@ function ChampComEngine()
 end
 
 
-
-
 function ChampOculusRift()
   set_axis_assignment(rift.L_Joy_X,      "VR Touchpad X", "normal")
   set_axis_assignment(rift.L_Joy_Y,      "VR Touchpad Y", "normal")
@@ -324,11 +324,37 @@ function ChampAcSpecific()
 end
 
 
+--------------------------
+-- Specific LED Mapping --
+--------------------------
+
+-- We should always ensure the required datarefs exist before attempting to map
+-- The associated function is check_specific_datarefs()
+
+function ChampLedSpecificCheck()
+  logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
+
+  if (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
+    --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
+    btq_led.led_check(
+      (
+        (get("laminar/B738/system/wing_anti_ice_valve", 0) == 1) or
+        (get("laminar/B738/system/wing_anti_ice_valve", 1) == 1)
+      ), btq_led, 'C', btq_led.block_C_LED.ANTI_ICE)
+  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
+    --Flight Factor 767
+  elseif (PLANE_ICAO == "A320") then
+    --Flight Factor A320 Ultimate
+  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
+    --Flight Factor 777
+  end
+end
+
 ------------------------------
 -- Specific Buttons Mapping --
 ------------------------------
 
--- We should always ensure the required datarefs exist before attempting to map them in ChampAcSpecific()
+-- We should always ensure the required datarefs exist before attempting to map them in ChampAcSpecific() and ChampLedSpecificCheck()
 
 function check_specific_datarefs()
   local ac_ready = false
@@ -348,7 +374,8 @@ function check_specific_datarefs()
     --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
     if (XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")  ~= nil and
         XPLMFindCommand("laminar/B738/autopilot/left_at_dis_press") ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/left_toga_press")   ~= nil) then
+        XPLMFindCommand("laminar/B738/autopilot/left_toga_press")   ~= nil and
+        XPLMFindDataRef("laminar/B738/system/wing_anti_ice_valve")  ~= nil) then
       ac_ready = true
     end
   elseif (PLANE_ICAO == "B748") then
