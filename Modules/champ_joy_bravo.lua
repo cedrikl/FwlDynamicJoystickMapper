@@ -1,5 +1,9 @@
 local bravo = {}
 
+local lastTickTimestamp = 0
+local upticksRepetition = 0
+local downticksRepetition = 0
+
 function bravo.map(joy_num)
 
   start_axis   = joy_num * 25
@@ -66,7 +70,374 @@ function bravo.map(joy_num)
   bravo.sw6_dn           = start_button + 44
   bravo.sw7_up           = start_button + 45
   bravo.sw7_dn           = start_button + 46
+end
 
+
+function bravo_command_multiple(command, count)
+  while (count > 0)
+  do
+    command_once(command)
+    count = count - 1
+  end
+end
+
+
+function bravo_Ap_AltInc(numticks) bravo_command_multiple("sim/autopilot/altitude_up", numticks) end
+function bravo_Ap_AltDec(numticks) bravo_command_multiple("sim/autopilot/altitude_down", numticks) end
+
+function bravo_Ap_VsInc(numticks) bravo_command_multiple("sim/autopilot/nose_up", numticks) end
+function bravo_Ap_VsDec(numticks) bravo_command_multiple("sim/autopilot/nose_down", numticks) end
+
+function bravo_Ap_HdgInc(numticks) bravo_command_multiple("sim/autopilot/heading_up", numticks) end
+function bravo_Ap_HdgDec(numticks) bravo_command_multiple("sim/autopilot/heading_down", numticks) end
+
+function bravo_Ap_CrsInc(numticks) bravo_command_multiple("sim/GPS/g1000n1_crs_up", numticks) end
+function bravo_Ap_CrsDec(numticks) bravo_command_multiple("sim/GPS/g1000n1_crs_down", numticks) end
+
+function bravo_Ap_IasInc(numticks) bravo_command_multiple("sim/autopilot/airspeed_up", numticks) end
+function bravo_Ap_IasDec(numticks) bravo_command_multiple("sim/autopilot/airspeed_down", numticks) end
+
+
+--Acceleration do not work on all commands (HDG will not accelerate, Laminar Code)
+function apPanelHandleUpticks(numticks)
+  if     (button(bravo.ap_mode_alt)) then
+    bravo_Ap_AltInc(numticks)
+  elseif (button(bravo.ap_mode_vs)) then
+    bravo_Ap_VsInc(numticks)
+  elseif (button(bravo.ap_mode_hdg)) then
+    bravo_Ap_HdgInc(numticks)
+  elseif (button(bravo.ap_mode_crs)) then
+    bravo_Ap_CrsInc(numticks)
+  elseif (button(bravo.ap_mode_ias)) then
+    bravo_Ap_IasInc(numticks)
+  end
+end
+
+function apPanelHandleDownticks(numticks)
+  if     (button(bravo.ap_mode_alt)) then
+    bravo_Ap_AltDec(numticks)
+  elseif (button(bravo.ap_mode_vs)) then
+    bravo_Ap_VsDec(numticks)
+  elseif (button(bravo.ap_mode_hdg)) then
+    bravo_Ap_HdgDec(numticks)
+  elseif (button(bravo.ap_mode_crs)) then
+    bravo_Ap_CrsDec(numticks)
+  elseif (button(bravo.ap_mode_ias)) then
+    bravo_Ap_IasDec(numticks)
+  end
+end
+
+
+function apPanelCheck()
+  timeSinceLastTick = get("sim/time/total_running_time_sec") - lastTickTimestamp
+
+  if (timeSinceLastTick > 0.100) then --min 70 msec between ticks, otherwise these multiple inputs sent
+    uptick = button(bravo.ap_incr)
+    downtick = button(bravo.ap_decr)
+    count = 0
+
+    if (uptick or downtick) then --the incr/decr knob was turned (and debounce exceeded)
+      lastTickTimestamp = get("sim/time/total_running_time_sec")
+      if (uptick) then
+        downticksRepetition = 0
+        upticksRepetition = upticksRepetition + 1
+
+        if (upticksRepetition < 5) then
+          apPanelHandleUpticks(1)
+        elseif (upticksRepetition < 20) then
+          apPanelHandleUpticks(2)
+        else
+          apPanelHandleUpticks(10)
+        end
+      else
+        upticksRepetition = 0
+        downticksRepetition = downticksRepetition + 1
+
+        if (downticksRepetition < 5) then
+          apPanelHandleDownticks(1)
+        elseif (downticksRepetition < 10) then
+          apPanelHandleDownticks(2)
+        else
+          apPanelHandleDownticks(10)
+        end
+      end
+    end
+
+    if (timeSinceLastTick > 0.5) then
+      upticksRepetition = 0
+      downticksRepetition = 0
+    end
+  end
+
+    --  "ButtonNumber": 12,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "AP_INCREASE",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [
+    --        {
+    --          "Variable": "sim/autopilot/nose_up",
+    --          "Value": "",
+    --          "VariableIsCustom": false,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          },
+    --          "Condition": "INT:FCU_SELECTOR, string",
+    --          "ConditionValue": "VS",
+    --          "ConditionIsCustom": true
+    --        },
+    --        {
+    --          "Variable": "sim/GPS/g1000n1_crs_up",
+    --          "Value": "",
+    --          "VariableIsCustom": false,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          },
+    --          "Condition": "INT:FCU_SELECTOR, string",
+    --          "ConditionValue": "CRS",
+    --          "ConditionIsCustom": true
+    --        },
+    --        {
+    --          "Variable": "sim/autopilot/airspeed_up",
+    --          "Value": "",
+    --          "VariableIsCustom": false,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          },
+    --          "Condition": "INT:FCU_SELECTOR, string",
+    --          "ConditionValue": "IAS",
+    --          "ConditionIsCustom": true
+    --        }
+    --      ],
+    --      "Repeat": 3
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 13,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "AP_DECREASE",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [
+    --        {
+    --          "Variable": "sim/autopilot/nose_down",
+    --          "Value": "",
+    --          "VariableIsCustom": false,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          },
+    --          "Condition": "INT:FCU_SELECTOR, string",
+    --          "ConditionValue": "VS",
+    --          "ConditionIsCustom": true
+    --        },
+    --        {
+    --          "Variable": "sim/GPS/g1000n1_crs_down",
+    --          "Value": "",
+    --          "VariableIsCustom": false,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          },
+    --          "Condition": "INT:FCU_SELECTOR, string",
+    --          "ConditionValue": "CRS",
+    --          "ConditionIsCustom": true
+    --        },
+    --        {
+    --          "Variable": "sim/autopilot/airspeed_down",
+    --          "Value": "",
+    --          "VariableIsCustom": false,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          },
+    --          "Condition": "INT:FCU_SELECTOR, string",
+    --          "ConditionValue": "IAS",
+    --          "ConditionIsCustom": true
+    --        }
+    --      ],
+    --      "Repeat": 3
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 14,
+    --  "PressEvent": [],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 15,
+    --  "PressEvent": [],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 16,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [
+    --        {
+    --          "Variable": "INT:FCU_SELECTOR, string",
+    --          "Value": "IAS",
+    --          "VariableIsCustom": true,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          }
+    --        }
+    --      ],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [],
+    --      "Repeat": 0
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 17,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [
+    --        {
+    --          "Variable": "INT:FCU_SELECTOR, string",
+    --          "Value": "CRS",
+    --          "VariableIsCustom": true,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          }
+    --        }
+    --      ],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [],
+    --      "Repeat": 0
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 18,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [
+    --        {
+    --          "Variable": "INT:FCU_SELECTOR, string",
+    --          "Value": "HDG",
+    --          "VariableIsCustom": true,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          }
+    --        }
+    --      ],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [],
+    --      "Repeat": 0
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 19,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [
+    --        {
+    --          "Variable": "INT:FCU_SELECTOR, string",
+    --          "Value": "VS",
+    --          "VariableIsCustom": true,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          }
+    --        }
+    --      ],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [],
+    --      "Repeat": 0
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+    --{
+    --  "ButtonNumber": 20,
+    --  "PressEvent": [
+    --    {
+    --      "Variables": [
+    --        {
+    --          "Variable": "INT:FCU_SELECTOR, string",
+    --          "Value": "ALT",
+    --          "VariableIsCustom": true,
+    --          "VariableBoundaries": {
+    --            "MinValue": "",
+    --            "MaxValue": "",
+    --            "Clamp": false
+    --          }
+    --        }
+    --      ],
+    --      "Variable": "",
+    --      "Value": "",
+    --      "Name": "",
+    --      "Condition": "",
+    --      "ConditionValue": "",
+    --      "ConditionLogic": "",
+    --      "Conditions": [],
+    --      "Repeat": 0
+    --    }
+    --  ],
+    --  "ReleaseEvent": []
+    --},
+end
+
+
+function bravo.ap_panel_main()
+  --logMsg(string.format("Champ Debug: bravo start button: %d", start_button))
+  do_every_frame("apPanelCheck()")
 end
 
 return bravo

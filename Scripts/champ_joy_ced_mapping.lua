@@ -54,6 +54,7 @@ do
 
   if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
     btq.map(device_DB.db[HID_device]["xpos"])
+    btq.ap_panel_main()
     btq_led.bravo_led_main()
   end
 end
@@ -332,8 +333,6 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
-
   if (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
     --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
     btq_led.led_check(

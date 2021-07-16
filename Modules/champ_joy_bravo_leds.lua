@@ -378,8 +378,8 @@ function B.bravo_led_main()
     --logMsg(string.format("%x", variable5))
   end
   if ((nobr ~= 0) and (report_ID ~= 0)) then
-    do_often("ledDatarefCheck()")
-    do_often("ChampLedSpecificCheck()")
+    do_every_frame("ledDatarefCheck()")
+    do_every_frame("ChampLedSpecificCheck()")
     do_every_frame("updateLeds()")
   end
 end
