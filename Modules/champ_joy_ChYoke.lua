@@ -1,9 +1,14 @@
 local ChFlightSimYoke = {}
 
-function ChFlightSimYoke.map(joy_num)
+function ChFlightSimYoke.map(joy_num, joy_hid_pointer)
 
   start_axis   = joy_num * 25
   start_button = joy_num * 160
+
+  ChFlightSimYoke.connected = false
+  if (nil ~= joy_hid_pointer) then
+    ChFlightSimYoke.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a CH Product Flight Sim Yoke starting at (Axis=%i Buttons=%i)", start_axis, start_button))
 

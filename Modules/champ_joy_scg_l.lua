@@ -1,9 +1,14 @@
 local scg_l = {}
 
-function scg_l.map(joy_num)
+function scg_l.map(joy_num, joy_hid_pointer)
 
   start_axis   = joy_num * 25
   start_button = joy_num * 160
+
+  scg_l.connected = false
+  if (nil ~= joy_hid_pointer) then
+    scg_l.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a VKB Gunfighter Mk.2 w/ SCG Premium L starting at (Axis=%i Buttons=%i)", start_axis, start_button))
 

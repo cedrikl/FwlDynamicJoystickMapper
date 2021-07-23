@@ -1,72 +1,76 @@
 logMsg("Champion Info: Start of script")
 
--- AXIS    are in 25  blocks
--- Buttons are in 160 blocks
+local rift      = require("champ_joy_rift")
+local pedals    = require("champ_joy_ChPedals")
+local yoke      = require("champ_joy_ChYoke")
+local x55j      = require("champ_joy_x55j")
+local TPR       = require("champ_joy_tpr")
+local scgl      = require("champ_joy_scg_l")
+local stq       = require("champ_joy_saitek_tq")
+local btq       = require("champ_joy_bravo")
+local btq_led   = require("champ_joy_bravo_leds")
 
--- Declare a global instance of the DB in which we will publish the discovered device position from X-Plane Joystick Settings.prf
-device_DB = require("champ_joy_auto_detect")
-device_DB.detect("C:/Games/X-Plane 11/Output/preferences/X-Plane Joystick Settings.prf")
+local device_DB = require("champ_joy_auto_detect")
 
--- Script to map 1 button to different assignments based on aircraft
+function ChampInit()
+  clear_all_axis_assignments()
+  clear_all_button_assignments()
 
---Rift cannot be auto mapped but the rest can
-local rift    = require("champ_joy_rift")
-local pedals  = require("champ_joy_ChPedals")
-local yoke    = require("champ_joy_ChYoke")
-local x55j    = require("champ_joy_x55j")
-local TPR     = require("champ_joy_tpr")
-local scgl    = require("champ_joy_scg_l")
-local stq     = require("champ_joy_saitek_tq")
-local btq     = require("champ_joy_bravo")
-local btq_led = require("champ_joy_bravo_leds")
+  -- AXIS    are in 25  blocks
+  -- Buttons are in 160 blocks
 
---Rift controllers must be manually mapped as they do not appear as a USB device to X-Plane.
---find their position by searching <X-Plane Directory>\Output\preferences\X-Plane Joystick Settings.prf
---find the lines starting with _joy_location
---the oculus rift will be obvious, use the id as such, see example:
---_joy_location5 vr/Oculus/oculus_Left/WMHD315R200HC9_Controller_Left/none
---_joy_location6 vr/Oculus/oculus_Right/WMHD315R200HC9_Controller_Right/none
---thus the left controller is as positon 5 (_joy_location5) and the right controller is at position 6 (_joy_location6)
---rift.map(6,7)
+  -- Declare a global instance of the DB in which we will publish the discovered device position from X-Plane Joystick Settings.prf
+
+  device_DB.detect("C:/Games/X-Plane 11/Output/preferences/X-Plane Joystick Settings.prf")
+
+  -- Script to map 1 button to different assignments based on aircraft
+  --Rift cannot be auto mapped but the rest can
+
+  --Rift controllers must be manually mapped as they do not appear as a USB device to X-Plane.
+  --find their position by searching <X-Plane Directory>\Output\preferences\X-Plane Joystick Settings.prf
+  --find the lines starting with _joy_location
+  --the oculus rift will be obvious, use the id as such, see example:
+  --_joy_location5 vr/Oculus/oculus_Left/WMHD315R200HC9_Controller_Left/none
+  --_joy_location6 vr/Oculus/oculus_Right/WMHD315R200HC9_Controller_Right/none
+  --thus the left controller is as positon 5 (_joy_location5) and the right controller is at position 6 (_joy_location6)
+  --rift.map(6,7)
 
 
-for HID_device = 1,device_DB.size,1
-do
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_tpr" == device_DB.db[HID_device]["modu"])) then
-    TPR.map(device_DB.db[HID_device]["xpos"])
-  end
+  for HID_device = 1,device_DB.size,1
+  do
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_tpr" == device_DB.db[HID_device]["modu"])) then
+      TPR.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+    end
 
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_scg_l" == device_DB.db[HID_device]["modu"])) then
-    scgl.map(device_DB.db[HID_device]["xpos"])
-  end
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_scg_l" == device_DB.db[HID_device]["modu"])) then
+      scgl.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+    end
 
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_x55j" == device_DB.db[HID_device]["modu"])) then
-    x55j.map(device_DB.db[HID_device]["xpos"])
-  end
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_x55j" == device_DB.db[HID_device]["modu"])) then
+      x55j.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+    end
 
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_ChYoke" == device_DB.db[HID_device]["modu"])) then
-    yoke.map(device_DB.db[HID_device]["xpos"])
-  end
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_ChYoke" == device_DB.db[HID_device]["modu"])) then
+      yoke.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+    end
 
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_ChPedals" == device_DB.db[HID_device]["modu"])) then
-    pedals.map(device_DB.db[HID_device]["xpos"])
-  end
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_ChPedals" == device_DB.db[HID_device]["modu"])) then
+      pedals.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+    end
 
-  if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
-    btq.map(device_DB.db[HID_device]["xpos"])
-    btq.ap_panel_main()
-    btq_led.bravo_led_main()
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
+      btq.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+      btq.ap_panel_main()
+      btq_led.bravo_led_main()
+    end
   end
 end
-
 
 -------------------------
 -- Common Axis Mapping --
 -------------------------
 
 function ChampComAxis()
-  clear_all_axis_assignments()
-
   set_axis_assignment(scgl.axis_roll , "roll" , "normal")
   set_axis_assignment(scgl.axis_pitch, "pitch", "normal")
 
@@ -84,8 +88,6 @@ end
 ----------------------------
 
 function ChampComButtons()
-  clear_all_button_assignments()
-
   set_button_assignment(scgl.A2,            "sim/autopilot/servos_off_any")
   set_button_assignment(scgl.A1_Up,         "sim/general/hat_switch_up")
   set_button_assignment(scgl.A1_Up_Right,   "sim/general/hat_switch_up_right")
@@ -106,6 +108,7 @@ function ChampComButtons()
   set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
   set_button_assignment(btq.gear_up,        "sim/flight_controls/landing_gear_up")
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
+
 
   do_every_frame([[
     ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
@@ -226,8 +229,8 @@ function ChampComEngine()
     set_axis_assignment(btq.axis4, "throttle 2", "reverse")
 
     set_button_assignment(btq.axis3_toga, "sim/engines/TOGA_power")
-    set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_1")
-    set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_2")
+    --set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_1")
+    --set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_2")
 
     do_every_frame("normal_reverser_handler()")
   elseif ChampNbEngines >= 3 then
@@ -425,12 +428,15 @@ end
 -- Main Function --
 -------------------
 
-local init_completed = false
+ChampInit()
+if (btq.connected) then  --All devices with do_every_* loops are connected
+  local init_completed = false
 
-if init_completed == false then
-  do_every_draw("monitor()")
-else
-  do_sometimes("monitor()")
+  if init_completed == false then
+    do_every_draw("monitor()")
+  else
+    do_sometimes("monitor()")
+  end
 end
 
 logMsg("Champion Info: End of script")

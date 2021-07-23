@@ -10,6 +10,7 @@ joy_known.db[joy_known.size + 1]["pid"]  = 0x0c2d
 joy_known.db[joy_known.size + 1]["name"] = "Saitek Pro Flight Quadrant"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_saitek_tq"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -18,6 +19,7 @@ joy_known.db[joy_known.size + 1]["pid"]  = 0xb68f
 joy_known.db[joy_known.size + 1]["name"] = "T-Pendular-Rudder"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_tpr"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -26,6 +28,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0x0127
 joy_known.db[joy_known.size + 1]["name"] = "VKBsim Space Gunfighter L"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_scg_l"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -34,6 +37,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0x1901
 joy_known.db[joy_known.size + 1]["name"] = "Honeycomb Aeronautical Bravo Throttle Quadrant"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_bravo"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -42,6 +46,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0x00f2
 joy_known.db[joy_known.size + 1]["name"] = "CH Products Pro Pedals"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChPedals"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -50,6 +55,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0x00ff
 joy_known.db[joy_known.size + 1]["name"] = "CH Products Flight Sim Yoke"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChYoke"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -58,6 +64,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0x00fa
 joy_known.db[joy_known.size + 1]["name"] = "CH Products Throttle Quadrant"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_ChThrottleQuadrant"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -66,6 +73,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0xa215
 joy_known.db[joy_known.size + 1]["name"] = "Saitek X-55 HOTAS Throttle"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_x55t"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
@@ -74,6 +82,7 @@ joy_known.db[joy_known.size + 1]["pid"] = 0x2215
 joy_known.db[joy_known.size + 1]["name"] = "Saitek X-55 HOTAS Stick"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_x55j"
 joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 --CH Products w/o driver!?
@@ -153,8 +162,17 @@ function joy_known.detect (pref_file)
         --logMsg("\n")
 
         if ((xvid == (joy_known.db[known_HID_device]["vid"])) and (xpid == (joy_known.db[known_HID_device]["pid"]))) then
-          logMsg(string.format("Champion Info: Auto detected a %s at position %d (VID: %x, PID: %x). DB has been updated", joy_known.db[known_HID_device]["name"], xpos, xvid, xpid))
           joy_known.db[known_HID_device]["xpos"] = xpos
+
+          device_pointer = hid_open(xvid, xpid)
+          if device_pointer == nil then
+            logMsg(string.format("Champion Info: Auto detected a DISCONNECTED %s at position %d (VID: %x, PID: %x). DB has been updated", joy_known.db[known_HID_device]["name"], xpos, xvid, xpid))
+          else
+            joy_known.db[known_HID_device]["hidp"] = device_pointer
+            hid_close(device_pointer)
+            logMsg(string.format("Champion Info: Auto detected a connected %s at position %d (VID: %x, PID: %x). DB has been updated", joy_known.db[known_HID_device]["name"], xpos, xvid, xpid))
+          end
+          
         end
       end
     end

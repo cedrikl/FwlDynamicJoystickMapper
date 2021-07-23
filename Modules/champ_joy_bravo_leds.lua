@@ -365,7 +365,7 @@ function B.bravo_led_main()
   bravo_pointer = hid_open(0x294B, 0x1901)
 
   if bravo_pointer == nil then
-    logMsg("Oh, no! We can't access our Bravo Throttle directly")
+    logMsg("Champion Info: Oh, no! We can't access our Bravo Throttle directly")
   else
     novw=5
     nobr, report_ID, variable1, variable2, variable3, variable4, variable5 = hid_get_feature_report(bravo_pointer, novw)
@@ -381,6 +381,7 @@ function B.bravo_led_main()
     do_every_frame("ledDatarefCheck()")
     do_every_frame("ChampLedSpecificCheck()")
     do_every_frame("updateLeds()")
+    do_on_exit("shutdownLeds()")
   end
 end
 
@@ -391,6 +392,6 @@ function shutdownLeds()
   hid_close(bravo_pointer)
 end
 
-do_on_exit("shutdownLeds()")
+
 
 return B

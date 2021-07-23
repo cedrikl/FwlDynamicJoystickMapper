@@ -1,11 +1,16 @@
 local rift = {}
 
-function rift.map(joy_l_num, joy_r_num)
+function rift.map(joy_l_num, joy_r_num, joy_hid_pointer)
 
   start_l_axis   = joy_l_num * 25
   start_l_button = joy_l_num * 160
   start_r_axis   = joy_r_num * 25
   start_r_button = joy_r_num * 160
+
+  rift.connected = false
+  if (nil ~= joy_hid_pointer) then
+    rift.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a Oculus Rift Left Controller starting at (Axis=%i Buttons=%i)", start_l_axis, start_l_button))
   logMsg(string.format("Champion Info: Mapping a Oculus Rift Rightt Controller starting at (Axis=%i Buttons=%i)", start_r_axis, start_r_button))

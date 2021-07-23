@@ -1,9 +1,14 @@
 local stq = {}
 
-function stq.map(joy_num)
+function stq.map(joy_num, joy_hid_pointer)
 
   start_axis   = joy_num * 25
   start_button = joy_num * 160
+
+  stq.connected = false
+  if (nil ~= joy_hid_pointer) then
+    stq.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a Saitek Throttle Quadrant starting at (Axis=%i Buttons=%i)", start_axis, start_button))
 

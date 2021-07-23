@@ -1,8 +1,13 @@
 local tpr = {}
 
-function tpr.map(joy_num)
+function tpr.map(joy_num, joy_hid_pointer)
 
   start_axis = joy_num * 25
+
+  tpr.connected = false
+  if (nil ~= joy_hid_pointer) then
+    tpr.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a Thrustmaster TPR starting at %i", start_axis))
 

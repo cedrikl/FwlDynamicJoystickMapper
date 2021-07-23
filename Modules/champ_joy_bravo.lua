@@ -4,10 +4,15 @@ local lastTickTimestamp = 0
 local upticksRepetition = 0
 local downticksRepetition = 0
 
-function bravo.map(joy_num)
+function bravo.map(joy_num, joy_hid_pointer)
 
   start_axis   = joy_num * 25
   start_button = joy_num * 160
+  
+  bravo.connected = false
+  if (nil ~= joy_hid_pointer) then
+    bravo.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a Honeycomb Aeronautical Bravo Throttle Quadrant at (Axis=%i Buttons=%i)", start_axis, start_button))
 

@@ -1,9 +1,14 @@
 local ChThrottleQuadrant = {}
 
-function ChThrottleQuadrant.map(joy_num)
+function ChThrottleQuadrant.map(joy_num, joy_hid_pointer)
 
   start_axis   = joy_num * 25
   start_button = joy_num * 160
+
+  ChThrottleQuadrant.connected = false
+  if (nil ~= joy_hid_pointer) then
+    ChThrottleQuadrant.connected = true
+  end
 
   logMsg(string.format("Champion Info: Mapping a CH Product Throttle Quadrant starting at (Axis=%i Buttons=%i)", start_axis, start_button))
 
