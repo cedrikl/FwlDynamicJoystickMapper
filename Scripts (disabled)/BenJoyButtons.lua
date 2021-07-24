@@ -137,6 +137,14 @@ function ChampComButtons()
   set_button_assignment(btq.sw6_dn,         "sim/lights/taxi_lights_off")
   set_button_assignment(btq.sw7_up,         "sim/lights/landing_lights_on")
   set_button_assignment(btq.sw7_dn,         "sim/lights/landing_lights_off")
+  --sim/autopilot/heading
+  set_button_assignment(btq.ap_nav, "sim/autopilot/hdg_nav")
+  set_button_assignment(btq.ap_apr, "sim/autopilot/approach")
+  set_button_assignment(btq.ap_rev, "sim/autopilot/back_course")
+  set_button_assignment(btq.ap_alt, "sim/autopilot/altitude_hold")
+  set_button_assignment(btq.ap_vs, "sim/autopilot/vertical_speed")
+  set_button_assignment(btq.ap_ias, "sim/autopilot/autothrottle_toggle")
+  set_button_assignment(btq.ap_master, "sim/autopilot/servos_toggle")
 
   do_every_frame([[
     ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
@@ -337,20 +345,29 @@ function ChampAcSpecific()
     set_button_assignment(yoke.Red_Up,  "laminar/B738/autopilot/capt_disco_press")
     set_button_assignment(yoke.Sw_L_Dn, "laminar/B738/autopilot/left_at_dis_press")
     set_button_assignment(yoke.Red_Dn,  "laminar/B738/autopilot/left_toga_press")
-    set_button_assignment(btq.gear_up,  "laminar/B738/push_button/gear_off")
-    set_button_assignment(btq.gear_dn,  "laminar/B738/push_button/gear_down")
-    set_button_assignment(btq.sw1_up,   "laminar/B738/switch/battery_dn")
-    set_button_assignment(btq.sw1_dn,   "laminar/B738/switch/battery_up")
-    set_button_assignment(btq.sw2_up,   "laminar/B738/toggle_switch/gpu_dn")
-    set_button_assignment(btq.sw2_dn,   "laminar/B738/toggle_switch/gpu_up")
+    set_button_assignment(btq.ap_nav, "laminar/B738/autopilot/lnav_press")
+    set_button_assignment(btq.ap_hdg, "laminar/B738/autopilot/hdg_sel_press")
+    set_button_assignment(btq.ap_apr, "laminar/B738/autopilot/app_press")
     set_button_assignment(btq.sw6_up,   "laminar/B738/toggle_switch/taxi_light_brightness_on")
     set_button_assignment(btq.sw6_dn,   "laminar/B738/toggle_switch/taxi_light_brightness_off")
     set_axis_assignment(btq.axis1,      "speedbrakes", "reverse")
+    function bravo_Ap_CrsInc(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_up", numticks) end
+    function bravo_Ap_CrsDec(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_dn", numticks) end
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
     set_button_assignment(yoke.Red_Up,  "1-sim/comm/AP/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "1-sim/comm/AP/at_disc")
     set_button_assignment(yoke.Red_Dn,  "1-sim/comm/AP/at_toga")
+    function bravo_Ap_AltInc(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, 100) end
+    function bravo_Ap_AltDec(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, -100) end
+    function bravo_Ap_VsInc(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks, 10) end
+    function bravo_Ap_VsDec(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks -10) end
+    function bravo_Ap_HdgInc(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, 1) end
+    function bravo_Ap_HdgDec(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, -1) end
+    function bravo_Ap_CrsInc(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, 0.01) end
+    function bravo_Ap_CrsDec(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, -0.01) end
+    function bravo_Ap_IasInc(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, 1) end
+    function bravo_Ap_IasDec(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, -1) end
   elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320" or PLANE_ICAO == "A330") then
     set_axis_assignment(yoke.axis_roll,  "none", "normal")
     set_axis_assignment(yoke.axis_pitch, "none", "normal")
@@ -364,6 +381,68 @@ function ChampAcSpecific()
     elseif (PLANE_ICAO == "A320") then
     --Flight Factor A320 Ultimate
       set_button_assignment(x55j.V, "a320/Panel/SidestickTakeoverL_button")
+      --set_button_assignment(scgl.Trig_Aft, "a320/Pedestal/EngineDisconnect1_button")
+      function bravo_Ap_AltInc(numticks) bravo_command_multiple("a320/Panel/FCU_Altitude_switch+", numticks) end
+      function bravo_Ap_AltDec(numticks) bravo_command_multiple("a320/Panel/FCU_Altitude_switch-", numticks) end
+      function bravo_Ap_VsInc(numticks)  bravo_command_multiple("a320/Panel/FCU_Vertical_switch+", numticks) end
+      function bravo_Ap_VsDec(numticks)  bravo_command_multiple("a320/Panel/FCU_Vertical_switch-", numticks) end
+      function bravo_Ap_HdgInc(numticks) bravo_command_multiple("a320/Panel/FCU_Lateral_switch+", numticks) end
+      function bravo_Ap_HdgDec(numticks) bravo_command_multiple("a320/Panel/FCU_Lateral_switch-", numticks) end
+      function bravo_Ap_IasInc(numticks) bravo_command_multiple("a320/Panel/FCU_Speed_switch+", numticks) end
+      function bravo_Ap_IasDec(numticks) bravo_command_multiple("a320/Panel/FCU_Speed_switch-", numticks) end
+      set_button_assignment(btq.ap_nav, "sim/none/none")
+      set_button_assignment(btq.ap_apr, "sim/none/none")
+      set_button_assignment(btq.ap_rev, "sim/none/none")
+      set_button_assignment(btq.ap_alt, "sim/none/none")
+      set_button_assignment(btq.ap_vs, "sim/none/none")
+      set_button_assignment(btq.ap_ias, "sim/none/none")
+      set_button_assignment(btq.ap_master, "sim/none/none")
+      function apPanelCockpitHdgShort(status) 
+        --if (status == "begin") then set("a320/Panel/FCU_LateralMode", 1) elseif (status == "end") then set("a320/Panel/FCU_LateralMode", 0) end ... alternative with datarefs
+        if (status == "begin") then command_begin("a320/Panel/FCU_LateralMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_LateralMode_switch_push") end
+      end
+      function apPanelCockpitHdgLong(status) 
+        if (status == "begin") then command_begin("a320/Panel/FCU_LateralMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_LateralMode_switch_pull") end
+      end
+      function apPanelCockpitNavShort(status) 
+        --
+      end
+      function apPanelCockpitNavLong(status) 
+        --
+      end
+      function apPanelCockpitAprShort(status) 
+        if (status == "begin") then command_begin("a320/Panel/FCU_Approach_button") elseif (status == "end") then command_end("a320/Panel/FCU_Approach_button") end
+      end
+      function apPanelCockpitAprLong(status) 
+        if (status == "begin") then command_begin("a320/Panel/FCU_Localizer_button") elseif (status == "end") then command_end("a320/Panel/FCU_Localizer_button") end
+      end
+      function apPanelCockpitRevShort(status)    end
+      function apPanelCockpitRevLong(status)     end
+      function apPanelCockpitAltShort(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_AltitudeMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_AltitudeMode_switch_push") end
+      end
+      function apPanelCockpitAltLong(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_AltitudeMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_AltitudeMode_switch_pull") end
+      end
+      function apPanelCockpitVsShort(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_VerticalMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_VerticalMode_switch_push") end
+      end
+      function apPanelCockpitVsLong(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_VerticalMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_VerticalMode_switch_pull") end
+      end
+      function apPanelCockpitIasShort(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_SpeedMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_SpeedMode_switch_push") end
+      end
+      function apPanelCockpitIasLong(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_SpeedMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_SpeedMode_switch_pull") end
+      end
+      function apPanelCockpitMasterShort(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_AutoPilot1_button") elseif (status == "end") then command_end("a320/Panel/FCU_AutoPilot1_button") end
+      end
+      function apPanelCockpitMasterLong(status)
+        if (status == "begin") then command_begin("a320/Panel/FCU_AutoThrust_button") elseif (status == "end") then command_end("a320/Panel/FCU_AutoThrust_button") end
+      end
+      do_every_frame("apPanelDualHandler()")
     elseif (PLANE_ICAO == "A330") then
       --TBD
     end
@@ -377,6 +456,14 @@ function ChampAcSpecific()
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "777/at_disc")
     set_button_assignment(yoke.Red_Dn,  "777/at_toga")
+    function bravo_Ap_AltInc(numticks) bravo_command_multiple("777/spacial8", numticks) end
+    function bravo_Ap_AltDec(numticks) bravo_command_multiple("777/spacial7", numticks) end
+    function bravo_Ap_VsInc(numticks)  bravo_command_multiple("777/spacial6", numticks) end
+    function bravo_Ap_VsDec(numticks)  bravo_command_multiple("777/spacial5", numticks) end
+    function bravo_Ap_HdgInc(numticks) bravo_command_multiple("777/spacial4", numticks) end
+    function bravo_Ap_HdgDec(numticks) bravo_command_multiple("777/spacial3", numticks) end
+    function bravo_Ap_IasInc(numticks) bravo_command_multiple("777/spacial1", numticks) end
+    function bravo_Ap_IasDec(numticks) bravo_command_multiple("777/spacial2", numticks) end
   elseif (PLANE_ICAO == "B789") then
     --TBD
   elseif (PLANE_ICAO == "UH1") then
@@ -408,18 +495,42 @@ function ChampLedSpecificCheck()
         (get("laminar/B738/system/wing_anti_ice_valve", 0) == 1) or
         (get("laminar/B738/system/wing_anti_ice_valve", 1) == 1)
       ), btq_led, 'C', btq_led.block_C_LED.ANTI_ICE)
+    btq_led.led_check((get("laminar/B738/autopilot/hdg_sel_status") == 1), btq_led, 'A', btq_led.block_A_LED.HEADING)
+    btq_led.led_check((get("laminar/B738/autopilot/lnav_engaged") == 1), btq_led, 'A', btq_led.block_A_LED.NAV)
+    btq_led.led_check((get("laminar/autopilot/ap_on") == 1), btq_led, 'A', btq_led.block_A_LED.AP)
+    btq_led.led_check(
+      (
+        (get("laminar/B738/autopilot/vorloc_status") == 1) or
+        (get("laminar/B738/autopilot/app_status") == 1)
+      ), btq_led, 'A', btq_led.block_A_LED.APR)
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
   elseif (PLANE_ICAO == "A320") then
     --Flight Factor A320 Ultimate
+
+    --Need to add these lines to "*\FlightFactor A320 ultimate\data\publish.txt"
+    --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State
+    --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State 
+    --a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State
+    --a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State
+    btq_led.led_check(
+      (
+        (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State") == 1) or
+        (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State") == 1)
+      ), btq_led, 'A', btq_led.block_A_LED.AP)
+    btq_led.led_check(
+      (
+        (get("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State") == 1) or
+        (get("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State") == 1)
+      ), btq_led, 'A', btq_led.block_A_LED.APR)
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
   end
 end
 
-------------------------------
--- Specific Buttons Mapping --
-------------------------------
+---------------------------------
+-- Specific Buttons Checks --
+---------------------------------
 
 -- We should always ensure the required datarefs exist before attempting to map them in ChampAcSpecific() and ChampLedSpecificCheck()
 
@@ -437,14 +548,30 @@ function check_specific_datarefs()
         XPLMFindCommand("a320/Pedestal/EngineDisconnect1_button")  ~= nil and
         XPLMFindCommand("a320/Panel/EFIS_BaroModeL_switch_pull")   ~= nil and
         XPLMFindCommand("a320/Panel/EFIS_BaroModeL_switch_push")   ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_SpeedMode_switch_pull")    ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_SpeedMode_switch_push")    ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_LateralMode_switch_pull")  ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_LateralMode_switch_push")  ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_AltitudeMode_switch_pull") ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_AutoPilot1_button")        ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_AutoThrust_button")        ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Altitude_switch+")         ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Altitude_switch-")         ~= nil and
         XPLMFindCommand("a320/Panel/FCU_AltitudeMode_switch_push") ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_AltitudeMode_switch_pull") ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Vertical_switch+")         ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Vertical_switch-")         ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_VerticalMode_switch_push") ~= nil and
         XPLMFindCommand("a320/Panel/FCU_VerticalMode_switch_pull") ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_VerticalMode_switch_push") ~= nil) then
+        XPLMFindCommand("a320/Panel/FCU_Lateral_switch+")          ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Lateral_switch-")          ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_LateralMode_switch_push")  ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_LateralMode_switch_pull")  ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Speed_switch+")            ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Speed_switch-")            ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_SpeedMode_switch_push")    ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_SpeedMode_switch_pull")    ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Localizer_button")        ~= nil and
+        XPLMFindCommand("a320/Panel/FCU_Approach_button")         ~= nil and
+        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State") ~= nil and
+        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State") ~= nil and
+        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State")  ~= nil and
+        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State") ~= nil) then
       ac_ready = true
     end
   elseif (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
@@ -452,15 +579,19 @@ function check_specific_datarefs()
     if (XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")              ~= nil and
         XPLMFindCommand("laminar/B738/autopilot/left_at_dis_press")             ~= nil and
         XPLMFindCommand("laminar/B738/autopilot/left_toga_press")               ~= nil and
-        XPLMFindCommand("laminar/B738/push_button/gear_off")                    ~= nil and
-        XPLMFindCommand("laminar/B738/push_button/gear_down")                   ~= nil and
-        XPLMFindCommand("laminar/B738/switch/battery_dn")                       ~= nil and
-        XPLMFindCommand("laminar/B738/switch/battery_up")                       ~= nil and
-        XPLMFindCommand("laminar/B738/toggle_switch/gpu_dn")                    ~= nil and
-        XPLMFindCommand("laminar/B738/toggle_switch/gpu_up")                    ~= nil and
         XPLMFindCommand("laminar/B738/toggle_switch/taxi_light_brightness_on")  ~= nil and
         XPLMFindCommand("laminar/B738/toggle_switch/taxi_light_brightness_off") ~= nil and
-        XPLMFindDataRef("laminar/B738/system/wing_anti_ice_valve")  ~= nil) then
+        XPLMFindCommand("laminar/B738/autopilot/course_pilot_up")   ~= nil and
+        XPLMFindCommand("laminar/B738/autopilot/course_pilot_dn")   ~= nil and
+        XPLMFindCommand("laminar/B738/autopilot/lnav_press")        ~= nil and
+        XPLMFindCommand("laminar/B738/autopilot/hdg_sel_press")     ~= nil and
+        XPLMFindCommand("laminar/B738/autopilot/app_press")         ~= nil and
+        XPLMFindDataRef("laminar/autopilot/ap_on")                  ~= nil and
+        XPLMFindDataRef("laminar/B738/system/wing_anti_ice_valve")  ~= nil and
+        XPLMFindDataRef("laminar/B738/autopilot/lnav_engaged")      ~= nil and
+        XPLMFindDataRef("laminar/B738/autopilot/vorloc_status")     ~= nil and
+        XPLMFindDataRef("laminar/B738/autopilot/app_status")        ~= nil and
+        XPLMFindDataRef("laminar/B738/autopilot/hdg_sel_status")    ~= nil) then
       ac_ready = true
     end
   elseif (PLANE_ICAO == "B748") then
@@ -474,14 +605,32 @@ function check_specific_datarefs()
     --Flight Factor 767
     if (XPLMFindCommand("1-sim/comm/AP/ap_disc") ~= nil and
         XPLMFindCommand("1-sim/comm/AP/at_disc") ~= nil and
-        XPLMFindCommand("1-sim/comm/AP/at_toga") ~= nil) then
+        XPLMFindCommand("1-sim/comm/AP/at_toga") ~= nil and
+        XPLMFindDataRef("757Avionics/ap/alt_act") ~= nil and
+        XPLMFindDataRef("757Avionics/ap/alt_act") ~= nil and
+        XPLMFindDataRef("757Avionics/ap/vs_act")  ~= nil and
+        XPLMFindDataRef("757Avionics/ap/vs_act")  ~= nil and
+        XPLMFindDataRef("757Avionics/ap/hdg_act") ~= nil and
+        XPLMFindDataRef("757Avionics/ap/hdg_act") ~= nil and
+        XPLMFindDataRef("1-sim/vor1/crsRotary")   ~= nil and
+        XPLMFindDataRef("1-sim/vor1/crsRotary")   ~= nil and
+        XPLMFindDataRef("757Avionics/ap/spd_act") ~= nil and
+        XPLMFindDataRef("757Avionics/ap/spd_act") ~= nil) then
       ac_ready = true
     end
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
     if (XPLMFindCommand("777/ap_disc") ~= nil and
         XPLMFindCommand("777/at_disc") ~= nil and
-        XPLMFindCommand("777/at_toga") ~= nil) then
+        XPLMFindCommand("777/at_toga") ~= nil and
+        XPLMFindCommand("777/spacial8") ~= nil and
+        XPLMFindCommand("777/spacial7") ~= nil and
+        XPLMFindCommand("777/spacial6") ~= nil and
+        XPLMFindCommand("777/spacial5") ~= nil and
+        XPLMFindCommand("777/spacial4") ~= nil and
+        XPLMFindCommand("777/spacial3") ~= nil and
+        XPLMFindCommand("777/spacial2") ~= nil and
+        XPLMFindCommand("777/spacial1") ~= nil ) then
       ac_ready = true
     end
   else

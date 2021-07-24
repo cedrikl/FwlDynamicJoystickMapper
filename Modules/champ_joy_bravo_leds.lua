@@ -188,40 +188,40 @@ function ledDatarefCheck()
     --  ), B, 'A', B.block_A_LED.HEADING)
     --      "Condition": "sim/cockpit2/autopilot/heading_mode" is Deprecated,
 
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/nav_status") == 1)
-    --  ), B, 'A', B.block_A_LED.NAV)
-
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/approach_status") >= 1)
-    --  ), B, 'A', B.block_A_LED.APR)
-
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/backcourse_status") >= 1)
-    --  ), B, 'A', B.block_A_LED.REV)
-
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/altitude_hold_status") >= 1)
-    --  ), B, 'A', B.block_A_LED.ALT)
-
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/vvi_status") >= 1)
-    --  ), B, 'A', B.block_A_LED.VS)
-
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/speed_status") >= 1)
-    --  ), B, 'A', B.block_A_LED.IAS)
-
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/servos_on") >= 1)
-    --  ), B, 'A', B.block_A_LED.AP)
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/nav_status") == 1)
+      ), B, 'A', B.block_A_LED.NAV)
+    
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/approach_status") >= 1)
+      ), B, 'A', B.block_A_LED.APR)
+    
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/backcourse_status") >= 1)
+      ), B, 'A', B.block_A_LED.REV)
+    
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/altitude_hold_status") >= 1)
+      ), B, 'A', B.block_A_LED.ALT)
+    
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/vvi_status") >= 1)
+      ), B, 'A', B.block_A_LED.VS)
+    
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/speed_status") >= 1)
+      ), B, 'A', B.block_A_LED.IAS)
+    
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/servos_on") >= 1)
+      ), B, 'A', B.block_A_LED.AP)
 
     --LEFT MAIN GEAR
     B.led_check(
