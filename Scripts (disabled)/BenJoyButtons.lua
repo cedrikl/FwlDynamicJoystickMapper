@@ -199,7 +199,7 @@ function ChampComEngine()
   ChampEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
   logMsg(string.format("The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
 
-  if ((4 >= ChampEngineType) and (ChampNbEngines <= 2)) then  --Prop aircraft
+  if (((4 >= ChampEngineType) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
     set_axis_assignment(btq.axis1, "throttle 1", "reverse")
     set_axis_assignment(btq.axis2, "throttle 2", "reverse")
 
@@ -504,6 +504,7 @@ function ChampAcSpecific()
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "777/at_disc")
     set_button_assignment(yoke.Red_Dn,  "777/at_toga")
+
     function bravo_Ap_AltInc(numticks) bravo_command_multiple("777/spacial8", numticks) end
     function bravo_Ap_AltDec(numticks) bravo_command_multiple("777/spacial7", numticks) end
     function bravo_Ap_VsInc(numticks)  bravo_command_multiple("777/spacial6", numticks) end

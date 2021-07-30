@@ -180,7 +180,7 @@ function ChampComEngine()
   ChampEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
   logMsg(string.format("The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
 
-  if ((4 >= ChampEngineType) and (ChampNbEngines <= 2)) then  --Prop aircraft
+  if (((4 >= ChampEngineType) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
     set_axis_assignment(btq.axis1, "throttle 1", "reverse")
     set_axis_assignment(btq.axis2, "throttle 2", "reverse")
 
