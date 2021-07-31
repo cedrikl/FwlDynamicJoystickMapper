@@ -129,6 +129,10 @@ function ChampComButtons()
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
   set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
   set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
+  set_button_assignment(btq.sw4_up,         "sim/view/flashlight_wht")
+  set_button_assignment(btq.sw4_dn,         "sim/view/flashlight_wht")
+  --set_button_assignment(btq.sw5_up,         "")
+  --set_button_assignment(btq.sw5_dn,         "")
   set_button_assignment(btq.sw6_up,         "sim/lights/taxi_lights_on")
   set_button_assignment(btq.sw6_dn,         "sim/lights/taxi_lights_off")
   set_button_assignment(btq.sw7_up,         "sim/lights/landing_lights_on")
@@ -199,7 +203,7 @@ function ChampComEngine()
   ChampEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
   logMsg(string.format("The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
 
-  if (((4 >= ChampEngineType) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
+  if ((4 >= ChampEngineType) and (ChampNbEngines <= 2)) then  --Prop aircraft
     set_axis_assignment(btq.axis1, "throttle 1", "reverse")
     set_axis_assignment(btq.axis2, "throttle 2", "reverse")
 
@@ -339,9 +343,9 @@ function ChampAcSpecific()
 
   if (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
     --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
-    set_button_assignment(yoke.Red_Up,  "laminar/B738/autopilot/capt_disco_press")
-    set_button_assignment(yoke.Sw_L_Dn, "laminar/B738/autopilot/left_at_dis_press")
-    set_button_assignment(yoke.Red_Dn,  "laminar/B738/autopilot/left_toga_press")
+    set_button_assignment(yoke.Red_Up,    "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(yoke.Sw_L_Dn,   "laminar/B738/autopilot/left_at_dis_press")
+    set_button_assignment(yoke.Red_Dn,    "laminar/B738/autopilot/left_toga_press")
     set_button_assignment(btq.ap_nav,     "laminar/B738/autopilot/lnav_press")
     set_button_assignment(btq.ap_hdg,     "laminar/B738/autopilot/hdg_sel_press")
     set_button_assignment(btq.ap_apr,     "laminar/B738/autopilot/app_press")
@@ -504,7 +508,6 @@ function ChampAcSpecific()
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "777/at_disc")
     set_button_assignment(yoke.Red_Dn,  "777/at_toga")
-
     function bravo_Ap_AltInc(numticks) bravo_command_multiple("777/spacial8", numticks) end
     function bravo_Ap_AltDec(numticks) bravo_command_multiple("777/spacial7", numticks) end
     function bravo_Ap_VsInc(numticks)  bravo_command_multiple("777/spacial6", numticks) end
