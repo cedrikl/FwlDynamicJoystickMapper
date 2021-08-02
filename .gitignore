@@ -1,3 +1,5 @@
+/Scripts/*
+!/Scripts/champ_joy*
 /Modules/*
 !/Modules/champ_joy*
 /Scripts (disabled)/*

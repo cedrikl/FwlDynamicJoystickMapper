@@ -21,7 +21,7 @@ function ChampInit()
 
   -- Declare a global instance of the DB in which we will publish the discovered device position from X-Plane Joystick Settings.prf
 
-  device_DB.detect("X:/SteamLibrary/steamapps/common/X-Plane 11/Output/preferences/X-Plane Joystick Settings.prf")
+  device_DB.detect()
 
   -- Script to map 1 button to different assignments based on aircraft
   --Rift cannot be auto mapped but the rest can
