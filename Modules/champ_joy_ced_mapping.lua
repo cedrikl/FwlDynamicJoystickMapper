@@ -1,16 +1,20 @@
 logMsg("Champion Info: Start of script")
 
-local rift      = require("champ_joy_rift")
-local pedals    = require("champ_joy_ChPedals")
-local yoke      = require("champ_joy_ChYoke")
-local x55j      = require("champ_joy_x55j")
-local TPR       = require("champ_joy_tpr")
-local scgl      = require("champ_joy_scg_l")
-local stq       = require("champ_joy_saitek_tq")
-local btq       = require("champ_joy_bravo")
-local btq_led   = require("champ_joy_bravo_leds")
-
 local device_DB = require("champ_joy_auto_detect")
+
+rift      = require("champ_joy_rift")
+pedals    = require("champ_joy_ChPedals")
+yoke      = require("champ_joy_ChYoke")
+x55j      = require("champ_joy_x55j")
+TPR       = require("champ_joy_tpr")
+scgl      = require("champ_joy_scg_l")
+stq       = require("champ_joy_saitek_tq")
+btq       = require("champ_joy_bravo")
+btq_led   = require("champ_joy_bravo_leds")
+
+require("champ_joy_bravo_B738_zibo")
+
+ac_ready = false
 
 function ChampInit()
   clear_all_axis_assignments()
@@ -110,6 +114,34 @@ function ChampComButtons()
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
   --set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
   --set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
+  if ("B738" ~= PLANE_ICAO) then
+    do_every_frame([[
+      ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
+      SwPos = button(]]..btq.sw1_up..[[)
+
+      if (SwPos and (ParkPos < 0.0001)) then
+        command_once("sim/flight_controls/brakes_toggle_max")
+      elseif (not(SwPos) and (ParkPos > 0.9999)) then
+        command_once("sim/flight_controls/brakes_toggle_max")
+      end
+    ]])
+  end
+  --set_button_assignment(btq.sw2_up,         "")ENG AI
+  --set_button_assignment(btq.sw2_dn,         "")
+  --set_button_assignment(btq.sw3_up,         "")WING AI
+  --set_button_assignment(btq.sw3_dn,         "")
+  do_every_frame([[
+    LightPos = get("sim/graphics/misc/white_flashlight_on")
+    SwPos = button(]]..btq.sw4_up..[[)
+
+    if (SwPos and (LightPos < 0.0001)) then
+      command_once("sim/view/flashlight_wht")
+    elseif (not(SwPos) and (LightPos > 0.9999)) then
+      command_once("sim/view/flashlight_wht")
+    end
+  ]])
+  --set_button_assignment(btq.sw5_up,         "")STROBE
+  --set_button_assignment(btq.sw5_dn,         "")
   set_button_assignment(btq.sw6_up,         "sim/lights/taxi_lights_on")
   set_button_assignment(btq.sw6_dn,         "sim/lights/taxi_lights_off")
   set_button_assignment(btq.sw7_up,         "sim/lights/landing_lights_on")
@@ -123,17 +155,6 @@ function ChampComButtons()
   set_button_assignment(btq.ap_vs, "sim/autopilot/vertical_speed")
   set_button_assignment(btq.ap_ias, "sim/autopilot/autothrottle_toggle")
   set_button_assignment(btq.ap_master, "sim/autopilot/servos_toggle")
-
-  do_every_frame([[
-    ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
-    SwPos = button(]]..btq.sw1_up..[[)
-
-    if (SwPos and (ParkPos < 0.0001)) then
-      command_once("sim/flight_controls/brakes_toggle_max")
-    elseif (not(SwPos) and (ParkPos > 0.9999)) then
-      command_once("sim/flight_controls/brakes_toggle_max")
-    end
-  ]])
 end
 
 
@@ -318,19 +339,7 @@ end
 function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
-  if (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
-    --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
-    set_button_assignment(scgl.A2,        "laminar/B738/autopilot/capt_disco_press")
-    set_button_assignment(scgl.Trig_Aft,  "laminar/B738/autopilot/left_at_dis_press")
-    set_button_assignment(btq.axis3_toga, "laminar/B738/autopilot/left_toga_press")
-    set_button_assignment(btq.ap_nav,     "laminar/B738/autopilot/lnav_press")
-    set_button_assignment(btq.ap_hdg,     "laminar/B738/autopilot/hdg_sel_press")
-    set_button_assignment(btq.ap_apr,     "laminar/B738/autopilot/app_press")
-    set_button_assignment(btq.sw6_up,     "laminar/B738/toggle_switch/taxi_light_brightness_on")
-    set_button_assignment(btq.sw6_dn,     "laminar/B738/toggle_switch/taxi_light_brightness_off")
-    set_axis_assignment(btq.axis1,        "speedbrakes", "reverse")
-    function bravo_Ap_CrsInc(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_up", numticks) end
-    function bravo_Ap_CrsDec(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_dn", numticks) end
+  if (PLANE_ICAO == "B738") then ChampAcSpecific_B738_zibo()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
     set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
@@ -598,21 +607,7 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  if (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
-    --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
-    btq_led.led_check(
-      (
-        (get("laminar/B738/system/wing_anti_ice_valve", 0) == 1) or
-        (get("laminar/B738/system/wing_anti_ice_valve", 1) == 1)
-      ), btq_led, 'C', btq_led.block_C_LED.ANTI_ICE)
-    btq_led.led_check((get("laminar/B738/autopilot/hdg_sel_status") == 1), btq_led, 'A', btq_led.block_A_LED.HEADING)
-    btq_led.led_check((get("laminar/B738/autopilot/lnav_engaged") == 1), btq_led, 'A', btq_led.block_A_LED.NAV)
-    btq_led.led_check((get("laminar/autopilot/ap_on") == 1), btq_led, 'A', btq_led.block_A_LED.AP)
-    btq_led.led_check(
-      (
-        (get("laminar/B738/autopilot/vorloc_status") == 1) or
-        (get("laminar/B738/autopilot/app_status") == 1)
-      ), btq_led, 'A', btq_led.block_A_LED.APR)
+  if (PLANE_ICAO == "B738") then ChampLedSpecificCheck_B738_zibo()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
   elseif (PLANE_ICAO == "A320") then
@@ -669,8 +664,7 @@ end
 -- We should always ensure the required datarefs exist before attempting to map them in ChampAcSpecific() and ChampLedSpecificCheck()
 
 function check_specific_datarefs()
-  local ac_ready = false
-  
+
   if (PLANE_ICAO == "A300" or PLANE_ICAO == "A310") then
     if (XPLMFindCommand("A300/LIGHTS/landing_lights_on")  ~= nil and
         XPLMFindCommand("A300/LIGHTS/landing_lights_off") ~= nil and
@@ -718,26 +712,7 @@ function check_specific_datarefs()
         XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State")   ~= nil) then
       ac_ready = true
     end
-  elseif (PLANE_ICAO == "B737" or PLANE_ICAO == "B738" or PLANE_ICAO == "B739") then
-    --Zibo 737-800 or 737-700 Ultimate or 737-900 Ultimate
-    if (XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")              ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/left_at_dis_press")             ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/left_toga_press")               ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/course_pilot_up")               ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/course_pilot_dn")               ~= nil and
-        XPLMFindCommand("laminar/B738/toggle_switch/taxi_light_brightness_on")  ~= nil and
-        XPLMFindCommand("laminar/B738/toggle_switch/taxi_light_brightness_off") ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/lnav_press")                    ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/hdg_sel_press")                 ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/app_press")                     ~= nil and
-        XPLMFindDataRef("laminar/autopilot/ap_on")                              ~= nil and
-        XPLMFindDataRef("laminar/B738/system/wing_anti_ice_valve")              ~= nil and
-        XPLMFindDataRef("laminar/B738/autopilot/lnav_engaged")                  ~= nil and
-        XPLMFindDataRef("laminar/B738/autopilot/vorloc_status")                 ~= nil and
-        XPLMFindDataRef("laminar/B738/autopilot/app_status")                    ~= nil and
-        XPLMFindDataRef("laminar/B738/autopilot/hdg_sel_status")                ~= nil) then
-      ac_ready = true
-    end
+  elseif (PLANE_ICAO == "B738") then check_specific_datarefs_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     if (XPLMFindCommand("SSG/UFMC/AP_discon_Button") ~= nil and
