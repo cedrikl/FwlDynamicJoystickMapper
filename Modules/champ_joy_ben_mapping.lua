@@ -13,6 +13,7 @@ btq       = require("champ_joy_bravo")
 btq_led   = require("champ_joy_bravo_leds")
 
 require("champ_joy_bravo_B738_zibo")
+require("champ_joy_bravo_A320_FF")
 
 ac_ready = false
 
@@ -65,7 +66,6 @@ function ChampInit()
     if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
       btq.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
       btq.ap_panel_main()
-      btq_led.bravo_led_main()
     end
   end
 end
@@ -145,10 +145,10 @@ function ChampComButtons()
       end
     ]])
   end
-  --set_button_assignment(btq.sw2_up,         "")ENG AI
-  --set_button_assignment(btq.sw2_dn,         "")
-  --set_button_assignment(btq.sw3_up,         "")WING AI
-  --set_button_assignment(btq.sw3_dn,         "")
+  set_button_assignment(btq.sw2_up, "sim/ice/inlet_heat_on")
+  set_button_assignment(btq.sw2_dn, "sim/ice/inlet_heat_off")
+  set_button_assignment(btq.sw3_up, "sim/ice/wing_heat_on")
+  set_button_assignment(btq.sw3_dn, "sim/ice/wing_heat_off")
   do_every_frame([[
     LightPos = get("sim/graphics/misc/white_flashlight_on")
     SwPos = button(]]..btq.sw4_up..[[)
@@ -159,12 +159,12 @@ function ChampComButtons()
       command_once("sim/view/flashlight_wht")
     end
   ]])
-  --set_button_assignment(btq.sw5_up,         "")STROBE
-  --set_button_assignment(btq.sw5_dn,         "")
-  set_button_assignment(btq.sw6_up,         "sim/lights/taxi_lights_on")
-  set_button_assignment(btq.sw6_dn,         "sim/lights/taxi_lights_off")
-  set_button_assignment(btq.sw7_up,         "sim/lights/landing_lights_on")
-  set_button_assignment(btq.sw7_dn,         "sim/lights/landing_lights_off")
+  set_button_assignment(btq.sw5_up, "sim/lights/strobe_lights_on")
+  set_button_assignment(btq.sw5_dn, "sim/lights/strobe_lights_off")
+  set_button_assignment(btq.sw6_up, "sim/lights/taxi_lights_on")
+  set_button_assignment(btq.sw6_dn, "sim/lights/taxi_lights_off")
+  set_button_assignment(btq.sw7_up, "sim/lights/landing_lights_on")
+  set_button_assignment(btq.sw7_dn, "sim/lights/landing_lights_off")
 
   set_button_assignment(btq.ap_hdg, "sim/autopilot/heading")
   set_button_assignment(btq.ap_nav, "sim/autopilot/hdg_nav")
@@ -358,7 +358,10 @@ end
 function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
-  if (PLANE_ICAO == "B738") then ChampAcSpecific_B738_zibo()
+  if (PLANE_ICAO == "B738") then 
+    ChampBravoMapping_B738_zibo()
+    set_button_assignment(yoke.Red_Up,  "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(yoke.Sw_L_Dn, "laminar/B738/autopilot/left_at_dis_press")
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
     set_button_assignment(yoke.Red_Up,  "1-sim/comm/AP/ap_disc")
@@ -405,101 +408,7 @@ function ChampAcSpecific()
       --Flight Factor A320 Ultimate
       set_button_assignment(x55j.V, "a320/Panel/SidestickTakeoverL_button")
       --set_button_assignment(scgl.Trig_Aft, "a320/Pedestal/EngineDisconnect1_button")
-      set_button_assignment(btq.sw6_up,    "sim/none/none")
-      set_button_assignment(btq.sw6_dn,    "sim/none/none")
-      set_button_assignment(btq.sw7_up,    "sim/none/none")
-      set_button_assignment(btq.sw7_dn,    "sim/none/none")
-      do_every_frame([[
-        L_Pos = get("model/controls/light_land1")
-        LinGate = (L_Pos == 0.0) or (L_Pos == 0.5) or (L_Pos == 1.0)
-        C_Pos = get("model/controls/light_nose")
-        CinGate = (C_Pos == 0.0) or (C_Pos == 0.5) or (C_Pos == 1.0)
-        R_Pos = get("model/controls/light_land2")
-        RinGate = (R_Pos == 0.0) or (R_Pos == 0.5) or (R_Pos == 1.0)
-        SwPos6 = button(]]..btq.sw6_up..[[)
-        SwPos7 = button(]]..btq.sw7_up..[[)
-        
-        if (SwPos7 and (L_Pos ~= 1) and LinGate) then
-          command_once("a320/Overhead/LightLandL_switch+")
-        elseif (not(SwPos7) and (L_Pos ~= 0) and LinGate) then
-          command_once("a320/Overhead/LightLandL_switch+")
-        end
-
-        if (SwPos7 and (R_Pos ~= 1) and RinGate) then
-          command_once("a320/Overhead/LightLandR_switch+")
-        elseif (not(SwPos7) and (R_Pos ~= 0) and RinGate) then
-          command_once("a320/Overhead/LightLandR_switch+")
-        end
-
-        if (SwPos7 and (C_Pos ~= 1) and CinGate) then
-          command_once("a320/Overhead/LightNose_switch+")
-        elseif (SwPos6 and not(SwPos7) and (C_Pos ~= 0.5) and CinGate) then
-          command_once("a320/Overhead/LightNose_switch+")
-        elseif (not(SwPos6) and not(SwPos7) and (C_Pos ~= 0) and CinGate) then
-          command_once("a320/Overhead/LightNose_switch+")
-        end
-      ]])
-      function bravo_Ap_AltInc(numticks) bravo_command_multiple("a320/Panel/FCU_Altitude_switch+", numticks) end
-      function bravo_Ap_AltDec(numticks) bravo_command_multiple("a320/Panel/FCU_Altitude_switch-", numticks) end
-      function bravo_Ap_VsInc(numticks)  bravo_command_multiple("a320/Panel/FCU_Vertical_switch+", numticks) end
-      function bravo_Ap_VsDec(numticks)  bravo_command_multiple("a320/Panel/FCU_Vertical_switch-", numticks) end
-      function bravo_Ap_HdgInc(numticks) bravo_command_multiple("a320/Panel/FCU_Lateral_switch+", numticks) end
-      function bravo_Ap_HdgDec(numticks) bravo_command_multiple("a320/Panel/FCU_Lateral_switch-", numticks) end
-      function bravo_Ap_IasInc(numticks) bravo_command_multiple("a320/Panel/FCU_Speed_switch+", numticks) end
-      function bravo_Ap_IasDec(numticks) bravo_command_multiple("a320/Panel/FCU_Speed_switch-", numticks) end
-      set_button_assignment(btq.ap_nav, "sim/none/none")
-      set_button_assignment(btq.ap_apr, "sim/none/none")
-      set_button_assignment(btq.ap_rev, "sim/none/none")
-      set_button_assignment(btq.ap_alt, "sim/none/none")
-      set_button_assignment(btq.ap_vs, "sim/none/none")
-      set_button_assignment(btq.ap_ias, "sim/none/none")
-      set_button_assignment(btq.ap_master, "sim/none/none")
-      function apPanelCockpitHdgShort(status) 
-        --if (status == "begin") then set("a320/Panel/FCU_LateralMode", 1) elseif (status == "end") then set("a320/Panel/FCU_LateralMode", 0) end ... alternative with datarefs
-        if (status == "begin") then command_begin("a320/Panel/FCU_LateralMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_LateralMode_switch_push") end
-      end
-      function apPanelCockpitHdgLong(status) 
-        if (status == "begin") then command_begin("a320/Panel/FCU_LateralMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_LateralMode_switch_pull") end
-      end
-      function apPanelCockpitNavShort(status) 
-        --
-      end
-      function apPanelCockpitNavLong(status) 
-        --
-      end
-      function apPanelCockpitAprShort(status) 
-        if (status == "begin") then command_begin("a320/Panel/FCU_Approach_button") elseif (status == "end") then command_end("a320/Panel/FCU_Approach_button") end
-      end
-      function apPanelCockpitAprLong(status) 
-        if (status == "begin") then command_begin("a320/Panel/FCU_Localizer_button") elseif (status == "end") then command_end("a320/Panel/FCU_Localizer_button") end
-      end
-      function apPanelCockpitRevShort(status)    end
-      function apPanelCockpitRevLong(status)     end
-      function apPanelCockpitAltShort(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_AltitudeMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_AltitudeMode_switch_push") end
-      end
-      function apPanelCockpitAltLong(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_AltitudeMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_AltitudeMode_switch_pull") end
-      end
-      function apPanelCockpitVsShort(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_VerticalMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_VerticalMode_switch_push") end
-      end
-      function apPanelCockpitVsLong(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_VerticalMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_VerticalMode_switch_pull") end
-      end
-      function apPanelCockpitIasShort(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_SpeedMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_SpeedMode_switch_push") end
-      end
-      function apPanelCockpitIasLong(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_SpeedMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_SpeedMode_switch_pull") end
-      end
-      function apPanelCockpitMasterShort(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_AutoPilot1_button") elseif (status == "end") then command_end("a320/Panel/FCU_AutoPilot1_button") end
-      end
-      function apPanelCockpitMasterLong(status)
-        if (status == "begin") then command_begin("a320/Panel/FCU_AutoThrust_button") elseif (status == "end") then command_end("a320/Panel/FCU_AutoThrust_button") end
-      end
-      do_every_frame("apPanelDualHandler()")
+      ChampBravoMapping_A320_FF()
     elseif (PLANE_ICAO == "A330") then
       --TBD
     end
@@ -626,27 +535,10 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  if (PLANE_ICAO == "B738") then ChampLedSpecificCheck_B738_zibo()
+  if (PLANE_ICAO == "B738") then ChampBravoLed_B738_zibo()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
-  elseif (PLANE_ICAO == "A320") then
-    --Flight Factor A320 Ultimate
-
-    --Need to add these lines to "*\FlightFactor A320 ultimate\data\publish.txt"
-    --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State
-    --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State 
-    --a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State
-    --a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State") == 1) or
-        (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State") == 1)
-      ), btq_led, 'A', btq_led.block_A_LED.AP)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State") == 1) or
-        (get("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State") == 1)
-      ), btq_led, 'A', btq_led.block_A_LED.APR)
+  elseif (PLANE_ICAO == "A320") then ChampBravoLed_A320_FF()
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
     btq_led.led_check(
@@ -683,8 +575,7 @@ end
 -- We should always ensure the required datarefs exist before attempting to map them in ChampAcSpecific() and ChampLedSpecificCheck()
 
 function check_specific_datarefs()
-  local ac_ready = false
-  
+
   if (PLANE_ICAO == "A300" or PLANE_ICAO == "A310") then
     if (XPLMFindCommand("A300/LIGHTS/landing_lights_on")  ~= nil and
         XPLMFindCommand("A300/LIGHTS/landing_lights_off") ~= nil and
@@ -699,42 +590,17 @@ function check_specific_datarefs()
       ac_ready = true
     end
   elseif (PLANE_ICAO == "A320") then
-    --Flight Factor A320 Ultimate
-
-    if (XPLMFindCommand("a320/Panel/SidestickTakeoverL_button")    ~= nil and
-        XPLMFindCommand("a320/Pedestal/EngineDisconnect1_button")  ~= nil and
-        XPLMFindCommand("a320/Panel/EFIS_BaroModeL_switch_pull")   ~= nil and
-        XPLMFindCommand("a320/Panel/EFIS_BaroModeL_switch_push")   ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_AutoPilot1_button")        ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_AutoThrust_button")        ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Altitude_switch+")         ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Altitude_switch-")         ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_AltitudeMode_switch_push") ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_AltitudeMode_switch_pull") ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Vertical_switch+")         ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Vertical_switch-")         ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_VerticalMode_switch_push") ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_VerticalMode_switch_pull") ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Lateral_switch+")          ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Lateral_switch-")          ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_LateralMode_switch_push")  ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_LateralMode_switch_pull")  ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Speed_switch+")            ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Speed_switch-")            ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_SpeedMode_switch_push")    ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_SpeedMode_switch_pull")    ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Localizer_button")         ~= nil and
-        XPLMFindCommand("a320/Panel/FCU_Approach_button")          ~= nil and
-        XPLMFindCommand("a320/Overhead/LightLandL_switch+")        ~= nil and
-        XPLMFindCommand("a320/Overhead/LightLandR_switch+")        ~= nil and
-        XPLMFindCommand("a320/Overhead/LightNose_switch+")         ~= nil and
-        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State") ~= nil and
-        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State") ~= nil and
-        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State")  ~= nil and
-        XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State")   ~= nil) then
-      ac_ready = true
+    if (ChampBravoCheck_A320_FF()                                        and
+        XPLMFindCommand("a320/Panel/SidestickTakeoverL_button")   ~= nil and
+        XPLMFindCommand("a320/Pedestal/EngineDisconnect1_button") ~= nil
+       ) then ac_ready = true
     end
-  elseif (PLANE_ICAO == "B738") then check_specific_datarefs_B738_zibo()
+  elseif (PLANE_ICAO == "B738") then 
+    if (ChampBravoCheck_B738_zibo()                                        and
+        XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")  ~= nil and
+        XPLMFindCommand("laminar/B738/autopilot/left_at_dis_press") ~= nil
+       ) then ac_ready = true
+    end
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     if (XPLMFindCommand("SSG/UFMC/AP_discon_Button") ~= nil and
@@ -808,6 +674,7 @@ function monitor()
       ChampComEngine()
       ChampOculusRift()
       ChampAcSpecific()
+      btq_led.bravo_led_main()
       init_completed = true
     else
       draw_string_Helvetica_18(50, 500, "Waiting on ac specific commands/datarefs to be created!")
