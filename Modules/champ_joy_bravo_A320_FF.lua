@@ -79,8 +79,7 @@ function ChampBravoMapping_A320_FF()
       AcPos1 = get("model/controls/heat_engine1")
       AcPos2 = get("model/controls/heat_engine2")
       JoyPos = button(]]..btq.sw2_up..[[)
-  
-  
+
       if (JoyPos and (AcPos1 < 0.0001)) then
         command_once("a320/Overhead/HeatEngine1_button")
       elseif (not(JoyPos) and (AcPos1 > 0.4999)) then
@@ -160,6 +159,13 @@ end
 function ChampBravoLed_A320_FF()
     --Need to add these lines to "*\FlightFactor A320 ultimate\data\publish.txt"
 
+    --a320/Aircraft/Electric/BCL1/Powered
+    --a320/Aircraft/Electric/BCL2/Powered
+    --a320/Aircraft/Electric/GCU1/Powered
+    --a320/Aircraft/Electric/GCU2/Powered
+    --a320/Aircraft/Electric/GCU3/Powered
+    --a320/Aircraft/Electric/MGCU/Powered
+
     --a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State
     --a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State
     --a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State
@@ -184,6 +190,16 @@ function ChampBravoLed_A320_FF()
     --a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity
     --a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity
     --a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity
+    --a320/Aircraft/PowerPlant/EngineL/StarterValve/Position
+    --a320/Aircraft/PowerPlant/EngineR/StarterValve/Position
+    --a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity
+    --a320/Aircraft/PowerPlant/APU/APU_Rate
+    --a320/Aircraft/Pneumatic/Cabin/DoorClosedLF
+    --a320/Aircraft/Pneumatic/Cabin/DoorClosedRF
+    --a320/Aircraft/Pneumatic/Cabin/CargoClosedF
+    --a320/Aircraft/Pneumatic/Cabin/DoorClosedLB
+    --a320/Aircraft/Pneumatic/Cabin/DoorClosedRB
+    --a320/Aircraft/Pneumatic/Cabin/CargoClosedB
 
     btq_led.led_check(
       (
@@ -239,11 +255,45 @@ function ChampBravoLed_A320_FF()
         (get("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity") > 0.1) or
         (get("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity") > 0.1)
       ), btq_led, 'B', btq_led.block_B_LED.ENGINE_FIRE)
+    btq_led.led_check(
+      (
+        (get("a320/Aircraft/PowerPlant/EngineL/StarterValve/Position") > 0.9) or
+        (get("a320/Aircraft/PowerPlant/EngineR/StarterValve/Position") > 0.9)
+      ), btq_led, 'C', btq_led.block_C_LED.STARTER)
+    btq_led.led_check(
+      (
+        (get("a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity") > 0.1) or
+        (get("a320/Aircraft/PowerPlant/APU/APU_Rate") > 0.01)
+      ), btq_led, 'C', btq_led.block_C_LED.APU)
+    btq_led.led_check(
+      (
+        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLF") ~= 1.0) or
+        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRF") ~= 1.0) or
+        (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedF") ~= 1.0) or
+        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLB") ~= 1.0) or
+        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRB") ~= 1.0) or
+        (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedB") ~= 1.0)
+      ), btq_led, 'D', btq_led.block_D_LED.DOOR)
+    if (
+        get("a320/Aircraft/Electric/BCL1/Powered") == 0 and
+        get("a320/Aircraft/Electric/BCL2/Powered") == 0 and
+        get("a320/Aircraft/Electric/GCU1/Powered") == 0 and
+        get("a320/Aircraft/Electric/GCU2/Powered") == 0 and
+        get("a320/Aircraft/Electric/GCU3/Powered") == 0 and
+        get("a320/Aircraft/Electric/MGCU/Powered") == 0
+       ) then setAllToOff()
+    end
 end
 
 
 function ChampBravoCheck_A320_FF()
-  if (--AP Panel
+  if (XPLMFindDataRef("a320/Aircraft/Electric/BCL1/Powered")                         ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Electric/BCL2/Powered")                         ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Electric/GCU1/Powered")                         ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Electric/GCU2/Powered")                         ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Electric/GCU3/Powered")                         ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Electric/MGCU/Powered")                         ~= nil and
+      --AP Panel
       XPLMFindCommand("a320/Panel/FCU_Altitude_switch+")                             ~= nil and
       XPLMFindCommand("a320/Panel/FCU_Altitude_switch-")                             ~= nil and
       XPLMFindCommand("a320/Panel/FCU_Vertical_switch+")                             ~= nil and
@@ -304,11 +354,19 @@ function ChampBravoCheck_A320_FF()
       XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireAPU_LightA/Intensity")     ~= nil and
       XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity")     ~= nil and
       XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity") ~= nil and
-      XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity") ~= nil
+      XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity") ~= nil and
+      XPLMFindDataRef("a320/Aircraft/PowerPlant/EngineL/StarterValve/Position")      ~= nil and
+      XPLMFindDataRef("a320/Aircraft/PowerPlant/EngineR/StarterValve/Position")      ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity")       ~= nil and
+      XPLMFindDataRef("a320/Aircraft/PowerPlant/APU/APU_Rate")                       ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedLF")                  ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedRF")                  ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/CargoClosedF")                  ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedLB")                  ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedRB")                  ~= nil and
+      XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/CargoClosedB")                  ~= nil
      ) then return true
   else
     return false
   end
 end
-
-
