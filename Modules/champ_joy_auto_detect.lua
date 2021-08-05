@@ -117,9 +117,9 @@ function lines_from(file)
   return lines
 end
 
-function joy_known.detect (pref_file)
+function joy_known.detect()
 
-  local lines = lines_from(pref_file)
+  local lines = lines_from(SYSTEM_DIRECTORY .. "Output" .. DIRECTORY_SEPARATOR .. "preferences" .. DIRECTORY_SEPARATOR .. "X-Plane Joystick Settings.prf")
 
   -- print all line numbers and their contents
   for k,v in pairs(lines) do
