@@ -354,8 +354,8 @@ function ChampAcSpecific()
     set_axis_assignment(btq.axis1,        "speedbrakes", "reverse")
     function bravo_Ap_CrsInc(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_up", numticks) end
     function bravo_Ap_CrsDec(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_dn", numticks) end
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
-    --Flight Factor 767
+  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763" or PLANE_ICAO == "B752" or PLANE_ICAO == "B753") then
+    --Flight Factor 767 and 752 ??
     set_button_assignment(yoke.Red_Up,  "1-sim/comm/AP/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "1-sim/comm/AP/at_disc")
     set_button_assignment(yoke.Red_Dn,  "1-sim/comm/AP/at_toga")
@@ -386,7 +386,7 @@ function ChampAcSpecific()
           command_once("A300/LIGHTS/nose_light_down")
         end
       ]])
-  elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320" or PLANE_ICAO == "A330") then
+  elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320") then
     set_axis_assignment(yoke.axis_roll,  "none", "normal")
     set_axis_assignment(yoke.axis_pitch, "none", "normal")
     set_axis_assignment(yoke.axis_2,     "none", "reverse")
@@ -503,7 +503,7 @@ function ChampAcSpecific()
     set_button_assignment(yoke.Red_Up,  "SSG/UFMC/AP_discon_Button")
     set_button_assignment(yoke.Sw_L_Dn, "SSG/UFMC/AP_ARM_AT_Switch")
     set_button_assignment(yoke.Red_Dn,  "SSG/UFMC/TOGA_Button")
-  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
+  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L" or PLANE_ICAO == "B77F") then
     --Flight Factor 777
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "777/at_disc")
