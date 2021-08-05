@@ -354,7 +354,7 @@ function ChampAcSpecific()
     set_axis_assignment(btq.axis1,        "speedbrakes", "reverse")
     function bravo_Ap_CrsInc(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_up", numticks) end
     function bravo_Ap_CrsDec(numticks) bravo_command_multiple("laminar/B738/autopilot/course_pilot_dn", numticks) end
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763" or PLANE_ICAO == "B752" or PLANE_ICAO == "B753") then
+  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763" or PLANE_ICAO == "B767" or PLANE_ICAO == "B752" or PLANE_ICAO == "B753") then
     --Flight Factor 767 and 752 ??
     set_button_assignment(yoke.Red_Up,  "1-sim/comm/AP/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "1-sim/comm/AP/at_disc")
