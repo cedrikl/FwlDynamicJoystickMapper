@@ -503,7 +503,7 @@ function ChampAcSpecific()
     set_button_assignment(yoke.Red_Up,  "SSG/UFMC/AP_discon_Button")
     set_button_assignment(yoke.Sw_L_Dn, "SSG/UFMC/AP_ARM_AT_Switch")
     set_button_assignment(yoke.Red_Dn,  "SSG/UFMC/TOGA_Button")
-  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L" or PLANE_ICAO == "B77F") then
+  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "777/at_disc")
