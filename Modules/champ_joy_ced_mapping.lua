@@ -12,8 +12,9 @@ stq       = require("champ_joy_saitek_tq")
 btq       = require("champ_joy_bravo")
 btq_led   = require("champ_joy_bravo_leds")
 
-require("champ_joy_bravo_B738_zibo")
+require("champ_joy_bravo_A310_ini")
 require("champ_joy_bravo_A320_FF")
+require("champ_joy_bravo_B738_zibo")
 
 ac_ready = false
 
@@ -101,12 +102,13 @@ function ChampComButtons()
   set_button_assignment(scgl.A1_Down_Left,  "sim/general/hat_switch_down_left")
   set_button_assignment(scgl.A1_Left,       "sim/general/hat_switch_left")
   set_button_assignment(scgl.A1_Up_Left,    "sim/general/hat_switch_up_left")
-  set_button_assignment(scgl.B1,            "sim/view/default_view")
-  set_button_assignment(scgl.D1,            "sim/view/circle")
   set_button_assignment(scgl.A3_Up,         "sim/flight_controls/pitch_trim_down")
   set_button_assignment(scgl.A3_Down,       "sim/flight_controls/pitch_trim_up")
   set_button_assignment(scgl.A3_Left,       "sim/flight_controls/rudder_trim_left")
   set_button_assignment(scgl.A3_Right,      "sim/flight_controls/rudder_trim_right")
+  set_button_assignment(scgl.B1,            "sim/view/default_view")
+  set_button_assignment(scgl.D1,            "sim/view/circle")
+
 
   set_button_assignment(btq.flaps_up,       "sim/flight_controls/flaps_up")
   set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
@@ -199,7 +201,7 @@ function ChampComEngine()
   ChampNbEngines  = get("sim/aircraft/engine/acf_num_engines")
   ChampEngineType = get("sim/aircraft/prop/acf_en_type", 0)
   ChampEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
-  logMsg(string.format("The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
+  logMsg(string.format("Champion Info: The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
 
   if (((4 >= ChampEngineType) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
     set_axis_assignment(btq.axis1, "throttle 1", "reverse")
@@ -339,43 +341,9 @@ end
 function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
-  if (PLANE_ICAO == "B738") then 
-    ChampBravoMapping_B738_zibo()
-    set_button_assignment(scgl.A2,        "laminar/B738/autopilot/capt_disco_press")
-    set_button_assignment(scgl.Trig_Aft,  "laminar/B738/autopilot/left_at_dis_press")
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
-    --Flight Factor 767
-    set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
-    set_button_assignment(scgl.Trig_Aft, "1-sim/comm/AP/at_disc")
-    set_button_assignment(btq.axis3_toga, "1-sim/comm/AP/at_toga")
-    function bravo_Ap_AltInc(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, 100) end
-    function bravo_Ap_AltDec(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, -100) end
-    function bravo_Ap_VsInc(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks, 10) end
-    function bravo_Ap_VsDec(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks -10) end
-    function bravo_Ap_HdgInc(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, 1) end
-    function bravo_Ap_HdgDec(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, -1) end
-    function bravo_Ap_CrsInc(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, 0.01) end
-    function bravo_Ap_CrsDec(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, -0.01) end
-    function bravo_Ap_IasInc(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, 1) end
-    function bravo_Ap_IasDec(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, -1) end
-  elseif (PLANE_ICAO == "A300" or PLANE_ICAO == "A310") then
-    set_button_assignment(btq.sw7_up, "A300/LIGHTS/landing_lights_on")
-    set_button_assignment(btq.sw7_dn, "A300/LIGHTS/landing_lights_off")
-    do_every_frame([[
-        C_Pos = get("sim/cockpit2/switches/landing_lights_switch", 1)
-        CinGate = (C_Pos == 0.0) or (C_Pos == 1) or (C_Pos == 1.5)
-        SwPos6 = button(]]..btq.sw6_up..[[)
-        SwPos7 = button(]]..btq.sw7_up..[[)
-
-        if (SwPos7 and (C_Pos ~= 1.5) and CinGate) then
-          command_once("A300/LIGHTS/nose_light_up")
-        elseif (SwPos6 and not(SwPos7) and (C_Pos ~= 1.0) and CinGate) then
-          command_once("A300/LIGHTS/nose_light_taxi")
-        elseif (not(SwPos6) and not(SwPos7) and (C_Pos ~= 0) and CinGate) then
-          command_once("A300/LIGHTS/nose_light_down")
-        end
-      ]])
-  elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320" or PLANE_ICAO == "A330") then
+  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
+    ChampBravoMapping_A310_ini()
+  elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320" or PLANE_ICAO == "A330") then --Airbus Sidesticks
     --set_axis_assignment(yoke.axis_roll,  "none", "normal")
     --set_axis_assignment(yoke.axis_pitch, "none", "normal")
     --set_axis_assignment(yoke.axis_2,     "none", "reverse")
@@ -393,11 +361,30 @@ function ChampAcSpecific()
     elseif (PLANE_ICAO == "A330") then
       --TBD
     end
+  elseif (PLANE_ICAO == "B738") then 
+    ChampBravoMapping_B738_zibo()
+    set_button_assignment(scgl.A2,        "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(scgl.Trig_Aft,  "laminar/B738/autopilot/left_at_dis_press")
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     --set_button_assignment(yoke.Red_Up,  "SSG/UFMC/AP_discon_Button")
     --set_button_assignment(yoke.Sw_L_Dn, "SSG/UFMC/AP_ARM_AT_Switch")
     --set_button_assignment(yoke.Red_Dn,  "SSG/UFMC/TOGA_Button")
+  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
+    --Flight Factor 767
+    set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
+    set_button_assignment(scgl.Trig_Aft, "1-sim/comm/AP/at_disc")
+    set_button_assignment(btq.axis3_toga, "1-sim/comm/AP/at_toga")
+    function bravo_Ap_AltInc(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, 100) end
+    function bravo_Ap_AltDec(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, -100) end
+    function bravo_Ap_VsInc(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks, 10) end
+    function bravo_Ap_VsDec(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks -10) end
+    function bravo_Ap_HdgInc(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, 1) end
+    function bravo_Ap_HdgDec(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, -1) end
+    function bravo_Ap_CrsInc(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, 0.01) end
+    function bravo_Ap_CrsDec(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, -0.01) end
+    function bravo_Ap_IasInc(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, 1) end
+    function bravo_Ap_IasDec(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, -1) end
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
     set_button_assignment(scgl.A2,       "777/ap_disc")
@@ -516,10 +503,10 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  if (PLANE_ICAO == "B738") then ChampBravoLed_B738_zibo()
+  if (PLANE_ICAO == "A320") then ChampBravoLed_A320_FF()
+  elseif (PLANE_ICAO == "B738") then ChampBravoLed_B738_zibo()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
-  elseif (PLANE_ICAO == "A320") then ChampBravoLed_A320_FF()
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
     btq_led.led_check(
@@ -557,12 +544,8 @@ end
 
 function check_specific_datarefs()
 
-  if (PLANE_ICAO == "A300" or PLANE_ICAO == "A310") then
-    if (XPLMFindCommand("A300/LIGHTS/landing_lights_on")  ~= nil and
-        XPLMFindCommand("A300/LIGHTS/landing_lights_off") ~= nil and
-        XPLMFindCommand("A300/LIGHTS/nose_light_up")      ~= nil and
-        XPLMFindCommand("A300/LIGHTS/nose_light_taxi")    ~= nil and
-        XPLMFindCommand("A300/LIGHTS/nose_light_down")    ~= nil) then
+  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
+    if (ChampBravoCheck_A310_ini()) then
       ac_ready = true
     end
   elseif (PLANE_ICAO == "A319") then

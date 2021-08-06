@@ -175,7 +175,7 @@ function ChampBravoLed_A320_FF()
     --a320/Aircraft/Cockpit/Panel/FCU_SpeedDigit5/State
     --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State
     --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State
-    
+
     --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLA/Intensity
     --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLB/Intensity
     --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRA/Intensity
