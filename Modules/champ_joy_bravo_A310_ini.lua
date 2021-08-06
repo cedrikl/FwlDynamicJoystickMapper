@@ -1,6 +1,65 @@
 --iniBuilds A300-600R & A310-300
 
 function ChampBravoMapping_A310_ini()
+  function bravo_Ap_AltInc(numticks) bravo_command_multiple("A300/MCDU/altitude_up", numticks) end
+  function bravo_Ap_AltDec(numticks) bravo_command_multiple("A300/MCDU/altitude_down", numticks) end
+  function bravo_Ap_VsInc(numticks)  bravo_command_multiple("A300/MCDU/vvi_up", numticks) end
+  function bravo_Ap_VsDec(numticks)  bravo_command_multiple("A300/MCDU/vvi_down", numticks) end
+  function bravo_Ap_HdgInc(numticks) bravo_command_multiple("A300/MCDU/heading_up", numticks) end
+  function bravo_Ap_HdgDec(numticks) bravo_command_multiple("A300/MCDU/heading_down", numticks) end
+  function bravo_Ap_CrsInc(numticks) bravo_command_multiple("A300/radios/ILS/course/dial_up", numticks) end
+  function bravo_Ap_CrsDec(numticks) bravo_command_multiple("A300/radios/ILS/course/dial_down", numticks) end
+  function bravo_Ap_IasInc(numticks) bravo_command_multiple("A300/MCDU/airspeed_up", numticks) end
+  function bravo_Ap_IasDec(numticks) bravo_command_multiple("A300/MCDU/airspeed_down", numticks) end
+
+  set_button_assignment(btq.ap_hdg, "A300/MCDU/heading_pull")
+  function apPanelCockpitHdgShort(status) end
+  function apPanelCockpitHdgLong(status) end
+
+  set_button_assignment(btq.ap_nav, "sim/none/none")
+  function apPanelCockpitNavShort(status)
+    if (status == "begin") then command_begin("A300/MCDU/nav_mode") elseif (status == "end") then command_end("A300/MCDU/nav_mode") end
+  end
+  function apPanelCockpitNavLong(status)
+    if (status == "begin") then command_begin("A300/MCDU/profile_mode") elseif (status == "end") then command_end("A300/MCDU/profile_mode") end
+  end
+
+  set_button_assignment(btq.ap_apr, "sim/none/none")
+  function apPanelCockpitAprShort(status)
+    if (status == "begin") then command_begin("A300/MCDU/approach_mode") elseif (status == "end") then command_end("A300/MCDU/approach_mode") end
+  end
+  function apPanelCockpitAprLong(status)
+    if (status == "begin") then command_begin("A300/MCDU/loc_toggle") elseif (status == "end") then command_end("A300/MCDU/loc_toggle") end
+ end
+
+  set_button_assignment(btq.ap_rev, "sim/none/none")
+
+  set_button_assignment(btq.ap_alt, "sim/none/none")
+  function apPanelCockpitAltShort(status)
+    if (status == "begin") then command_begin("A300/MCDU/level_change") elseif (status == "end") then command_end("A300/MCDU/level_change") end
+  end
+  function apPanelCockpitAltLong(status)
+    if (status == "begin") then command_begin("A300/MCDU/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCDU/altitude_hold_engage") end
+  end
+
+  set_button_assignment(btq.ap_vs, "A300/MCDU/vvi_engage")
+  function apPanelCockpitVsShort(status) end
+  function apPanelCockpitVsLong(status) end
+
+  set_button_assignment(btq.ap_ias, "A300/MCDU/autothrottle_toggle")
+  function apPanelCockpitIasShort(status) end
+  function apPanelCockpitIasLong(status) end
+
+  set_button_assignment(btq.ap_master, "sim/none/none")
+  function apPanelCockpitMasterShort(status)
+    if (status == "begin") then command_begin("A300/MCDU/ap1_engage") elseif (status == "end") then command_end("A300/MCDU/ap1_engage") end
+  end
+  function apPanelCockpitMasterLong(status)
+    if (status == "begin") then command_begin("A300/MCDU/autothrottle_toggle") elseif (status == "end") then command_end("A300/MCDU/autothrottle_toggle") end
+  end
+
+  do_every_frame("apPanelDualHandler()")
+
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
   do_every_frame([[
@@ -100,38 +159,99 @@ end
 
 
 function ChampBravoLed_A310_ini()
-
+  btq_led.led_check(
+    (
+      (get("A300/MCDU/animations/lights/heading_sel") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.HEADING)
+  btq_led.led_check(
+    (
+      (get("A300/MCDU/animations/lights/nav") == 1) or
+      (get("A300/MCDU/animations/lights/profile_mode") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.NAV)
+  btq_led.led_check(
+    (
+      (get("A300/MCDU/animations/lights/approach") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.APR)
+  btq_led.led_check(
+    (
+      (get("A300/MCDU/animations/lights/level_change") == 1) or
+      (get("A300/MCDU/animations/lights/altitude_hold") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.ALT)
+  btq_led.led_check(
+    (
+      (false)
+    ), btq_led, 'A', btq_led.block_A_LED.VS)
+  btq_led.led_check(
+    (
+      (get("A300/MCDU/animations/lights/autothrottle") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.IAS)
+  if (
+      (get("A300/elec/battery_on")      == 0) and
+      (get("A300/elec/dc_norm_bus_off") == 1) and
+      (get("A300/elec/ac_bus1_off")     == 1) and
+      (get("A300/elec/ac_bus2_off")     == 1)
+     ) then setAllToOff()
+  end
 end
 
 
 function ChampBravoCheck_A310_ini()
-  if (--XPLMFindDataRef("a320/Aircraft/Electric/BCL1/Powered")                         ~= nil and
+  if (XPLMFindDataRef("A300/elec/battery_on")                               ~= nil and
+      XPLMFindDataRef("A300/elec/dc_norm_bus_off")                          ~= nil and
+      XPLMFindDataRef("A300/elec/ac_bus1_off")                              ~= nil and
+      XPLMFindDataRef("A300/elec/ac_bus2_off")                              ~= nil and
 
       --AP Panel
-      --XPLMFindCommand("a320/Panel/FCU_Altitude_switch+")                             ~= nil and
+      XPLMFindCommand("A300/MCDU/altitude_up")                              ~= nil and
+      XPLMFindCommand("A300/MCDU/altitude_down")                            ~= nil and
+      XPLMFindCommand("A300/MCDU/vvi_up")                                   ~= nil and
+      XPLMFindCommand("A300/MCDU/vvi_down")                                 ~= nil and
+      XPLMFindCommand("A300/MCDU/heading_up")                               ~= nil and
+      XPLMFindCommand("A300/MCDU/heading_down")                             ~= nil and
+      XPLMFindCommand("A300/radios/ILS/course/dial_up")                     ~= nil and
+      XPLMFindCommand("A300/radios/ILS/course/dial_down")                   ~= nil and
+      XPLMFindCommand("A300/MCDU/airspeed_up")                              ~= nil and
+      XPLMFindCommand("A300/MCDU/airspeed_down")                            ~= nil and
+
+      XPLMFindCommand("A300/MCDU/heading_pull")                             ~= nil and
+      XPLMFindCommand("A300/MCDU/nav_mode")                                 ~= nil and
+      XPLMFindCommand("A300/MCDU/loc_toggle")                               ~= nil and
+      XPLMFindCommand("A300/MCDU/profile_mode")                             ~= nil and
+      XPLMFindCommand("A300/MCDU/approach_mode")                            ~= nil and
+      XPLMFindCommand("A300/MCDU/level_change")                             ~= nil and
+      XPLMFindCommand("A300/MCDU/altitude_hold_engage")                     ~= nil and
+      XPLMFindCommand("A300/MCDU/vvi_engage")                               ~= nil and
+      XPLMFindCommand("A300/MCDU/ap1_engage")                               ~= nil and
+      XPLMFindCommand("A300/MCDU/autothrottle_toggle")                      ~= nil and
 
       --Axis
 
       --Switches
-      XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E1")                       ~= nil and
-      XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E2")                       ~= nil and
-      XPLMFindCommand("A300/ICE/eng1_toggle")                                      ~= nil and
-      XPLMFindCommand("A300/ICE/eng2_toggle")                                      ~= nil and
-      XPLMFindDataRef("A300/animations/buttons/WING_SUPPLY")                       ~= nil and
-      XPLMFindCommand("A300/ICE/wing_supply_toggle")                               ~= nil and
-      XPLMFindDataRef("A300/switches/animations_current")                          ~= nil and
-      XPLMFindCommand("A300/LIGHTS/strobe_light_up")                               ~= nil and
-      XPLMFindCommand("A300/LIGHTS/strobe_light_down")                             ~= nil and
-      XPLMFindCommand("A300/LIGHTS/landing_light1_up")                             ~= nil and
-      XPLMFindCommand("A300/LIGHTS/landing_light2_up")                             ~= nil and
-      XPLMFindCommand("A300/LIGHTS/landing_light1_down")                           ~= nil and
-      XPLMFindCommand("A300/LIGHTS/landing_light2_down")                           ~= nil and
-      XPLMFindCommand("A300/LIGHTS/nose_light_up")                                 ~= nil and
-      XPLMFindCommand("A300/LIGHTS/nose_light_down")                               ~= nil
+      XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E1")                ~= nil and
+      XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E2")                ~= nil and
+      XPLMFindCommand("A300/ICE/eng1_toggle")                               ~= nil and
+      XPLMFindCommand("A300/ICE/eng2_toggle")                               ~= nil and
+      XPLMFindDataRef("A300/animations/buttons/WING_SUPPLY")                ~= nil and
+      XPLMFindCommand("A300/ICE/wing_supply_toggle")                        ~= nil and
+      XPLMFindDataRef("A300/switches/animations_current")                   ~= nil and
+      XPLMFindCommand("A300/LIGHTS/strobe_light_up")                        ~= nil and
+      XPLMFindCommand("A300/LIGHTS/strobe_light_down")                      ~= nil and
+      XPLMFindCommand("A300/LIGHTS/landing_light1_up")                      ~= nil and
+      XPLMFindCommand("A300/LIGHTS/landing_light2_up")                      ~= nil and
+      XPLMFindCommand("A300/LIGHTS/landing_light1_down")                    ~= nil and
+      XPLMFindCommand("A300/LIGHTS/landing_light2_down")                    ~= nil and
+      XPLMFindCommand("A300/LIGHTS/nose_light_up")                          ~= nil and
+      XPLMFindCommand("A300/LIGHTS/nose_light_down")                        ~= nil and
 
       --LEDs
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State")         ~= nil and
+      XPLMFindDataRef("A300/MCDU/animations/lights/heading_sel")            ~= nil and
+      XPLMFindDataRef("A300/MCDU/animations/lights/nav")                    ~= nil and
+      XPLMFindDataRef("A300/MCDU/animations/lights/profile_mode")           ~= nil and
+      XPLMFindDataRef("A300/MCDU/animations/lights/approach")               ~= nil and
+      XPLMFindDataRef("A300/MCDU/animations/lights/level_change")           ~= nil and
+      XPLMFindDataRef("A300/MCDU/animations/lights/altitude_hold")          ~= nil and
       --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/CargoClosedB")                  ~= nil
+      true
      ) then return true
   else
     return false

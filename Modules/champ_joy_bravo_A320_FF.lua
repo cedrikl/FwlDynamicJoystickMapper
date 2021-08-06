@@ -157,132 +157,132 @@ end
 
 
 function ChampBravoLed_A320_FF()
-    --Need to add these lines to "*\FlightFactor A320 ultimate\data\publish.txt"
+  --Need to add these lines to "*\FlightFactor A320 ultimate\data\publish.txt"
 
-    --a320/Aircraft/Electric/BCL1/Powered
-    --a320/Aircraft/Electric/BCL2/Powered
-    --a320/Aircraft/Electric/GCU1/Powered
-    --a320/Aircraft/Electric/GCU2/Powered
-    --a320/Aircraft/Electric/GCU3/Powered
-    --a320/Aircraft/Electric/MGCU/Powered
+  --a320/Aircraft/Electric/BCL1/Powered
+  --a320/Aircraft/Electric/BCL2/Powered
+  --a320/Aircraft/Electric/GCU1/Powered
+  --a320/Aircraft/Electric/GCU2/Powered
+  --a320/Aircraft/Electric/GCU3/Powered
+  --a320/Aircraft/Electric/MGCU/Powered
 
-    --a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State
-    --a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State
-    --a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State
-    --a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State
-    --a320/Aircraft/Cockpit/Panel/FCU_AltitudeDigit6/State
-    --a320/Aircraft/Cockpit/Panel/FCU_VerticalDigit6/State
-    --a320/Aircraft/Cockpit/Panel/FCU_SpeedDigit5/State
-    --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State
-    --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State
+  --a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State
+  --a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State
+  --a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State
+  --a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State
+  --a320/Aircraft/Cockpit/Panel/FCU_AltitudeDigit6/State
+  --a320/Aircraft/Cockpit/Panel/FCU_VerticalDigit6/State
+  --a320/Aircraft/Cockpit/Panel/FCU_SpeedDigit5/State
+  --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State
+  --a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State
 
-    --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLA/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLB/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRA/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRB/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLA/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLB/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRA/Intensity
-    --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRB/Intensity
-    --a320/Aircraft/Cockpit/Overhead/FireEngine1_LightA/Intensity
-    --a320/Aircraft/Cockpit/Overhead/FireEngine1_LightB/Intensity
-    --a320/Aircraft/Cockpit/Overhead/FireAPU_LightA/Intensity
-    --a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity
-    --a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity
-    --a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity
-    --a320/Aircraft/PowerPlant/EngineL/StarterValve/Position
-    --a320/Aircraft/PowerPlant/EngineR/StarterValve/Position
-    --a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity
-    --a320/Aircraft/PowerPlant/APU/APU_Rate
-    --a320/Aircraft/Pneumatic/Cabin/DoorClosedLF
-    --a320/Aircraft/Pneumatic/Cabin/DoorClosedRF
-    --a320/Aircraft/Pneumatic/Cabin/CargoClosedF
-    --a320/Aircraft/Pneumatic/Cabin/DoorClosedLB
-    --a320/Aircraft/Pneumatic/Cabin/DoorClosedRB
-    --a320/Aircraft/Pneumatic/Cabin/CargoClosedB
+  --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLA/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLB/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRA/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRB/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLA/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLB/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRA/Intensity
+  --a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRB/Intensity
+  --a320/Aircraft/Cockpit/Overhead/FireEngine1_LightA/Intensity
+  --a320/Aircraft/Cockpit/Overhead/FireEngine1_LightB/Intensity
+  --a320/Aircraft/Cockpit/Overhead/FireAPU_LightA/Intensity
+  --a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity
+  --a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity
+  --a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity
+  --a320/Aircraft/PowerPlant/EngineL/StarterValve/Position
+  --a320/Aircraft/PowerPlant/EngineR/StarterValve/Position
+  --a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity
+  --a320/Aircraft/PowerPlant/APU/APU_Rate
+  --a320/Aircraft/Pneumatic/Cabin/DoorClosedLF
+  --a320/Aircraft/Pneumatic/Cabin/DoorClosedRF
+  --a320/Aircraft/Pneumatic/Cabin/CargoClosedF
+  --a320/Aircraft/Pneumatic/Cabin/DoorClosedLB
+  --a320/Aircraft/Pneumatic/Cabin/DoorClosedRB
+  --a320/Aircraft/Pneumatic/Cabin/CargoClosedB
 
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State") == 0)
-      ), btq_led, 'A', btq_led.block_A_LED.HEADING)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State") ~= 0)
-      ), btq_led, 'A', btq_led.block_A_LED.NAV)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State") == 1) or
-        (get("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State") == 1)
-      ), btq_led, 'A', btq_led.block_A_LED.APR)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_AltitudeDigit6/State") ~= 0)
-      ), btq_led, 'A', btq_led.block_A_LED.ALT)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_VerticalDigit6/State") ~= 13)
-      ), btq_led, 'A', btq_led.block_A_LED.VS)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_SpeedDigit5/State") ~= 0)
-      ), btq_led, 'A', btq_led.block_A_LED.IAS)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State") == 1) or
-        (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State") == 1)
-      ), btq_led, 'A', btq_led.block_A_LED.AP)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State") == 0)
+    ), btq_led, 'A', btq_led.block_A_LED.HEADING)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State") ~= 0)
+    ), btq_led, 'A', btq_led.block_A_LED.NAV)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State") == 1) or
+      (get("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.APR)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_AltitudeDigit6/State") ~= 0)
+    ), btq_led, 'A', btq_led.block_A_LED.ALT)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_VerticalDigit6/State") ~= 13)
+    ), btq_led, 'A', btq_led.block_A_LED.VS)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_SpeedDigit5/State") ~= 0)
+    ), btq_led, 'A', btq_led.block_A_LED.IAS)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State") == 1) or
+      (get("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State") == 1)
+    ), btq_led, 'A', btq_led.block_A_LED.AP)
 
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLA/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLB/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRA/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRB/Intensity") > 0.1)
-      ), btq_led, 'C', btq_led.block_C_LED.MASTER_CAUTION)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLA/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLB/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRA/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRB/Intensity") > 0.1)
-      ), btq_led, 'B', btq_led.block_B_LED.MASTER_WARNING)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Overhead/FireEngine1_LightA/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Overhead/FireEngine1_LightB/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Overhead/FireAPU_LightA/Intensity")     > 0.1) or
-        (get("a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity")     > 0.1) or
-        (get("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity") > 0.1) or
-        (get("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity") > 0.1)
-      ), btq_led, 'B', btq_led.block_B_LED.ENGINE_FIRE)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/PowerPlant/EngineL/StarterValve/Position") > 0.9) or
-        (get("a320/Aircraft/PowerPlant/EngineR/StarterValve/Position") > 0.9)
-      ), btq_led, 'C', btq_led.block_C_LED.STARTER)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity") > 0.1) or
-        (get("a320/Aircraft/PowerPlant/APU/APU_Rate") > 0.01)
-      ), btq_led, 'C', btq_led.block_C_LED.APU)
-    btq_led.led_check(
-      (
-        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLF") ~= 1.0) or
-        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRF") ~= 1.0) or
-        (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedF") ~= 1.0) or
-        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLB") ~= 1.0) or
-        (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRB") ~= 1.0) or
-        (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedB") ~= 1.0)
-      ), btq_led, 'D', btq_led.block_D_LED.DOOR)
-    if (
-        get("a320/Aircraft/Electric/BCL1/Powered") == 0 and
-        get("a320/Aircraft/Electric/BCL2/Powered") == 0 and
-        get("a320/Aircraft/Electric/GCU1/Powered") == 0 and
-        get("a320/Aircraft/Electric/GCU2/Powered") == 0 and
-        get("a320/Aircraft/Electric/GCU3/Powered") == 0 and
-        get("a320/Aircraft/Electric/MGCU/Powered") == 0
-       ) then setAllToOff()
-    end
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLA/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLB/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRA/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRB/Intensity") > 0.1)
+    ), btq_led, 'C', btq_led.block_C_LED.MASTER_CAUTION)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLA/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLB/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRA/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRB/Intensity") > 0.1)
+    ), btq_led, 'B', btq_led.block_B_LED.MASTER_WARNING)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Overhead/FireEngine1_LightA/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Overhead/FireEngine1_LightB/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Overhead/FireAPU_LightA/Intensity")     > 0.1) or
+      (get("a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity")     > 0.1) or
+      (get("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity") > 0.1) or
+      (get("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity") > 0.1)
+    ), btq_led, 'B', btq_led.block_B_LED.ENGINE_FIRE)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/PowerPlant/EngineL/StarterValve/Position") > 0.9) or
+      (get("a320/Aircraft/PowerPlant/EngineR/StarterValve/Position") > 0.9)
+    ), btq_led, 'C', btq_led.block_C_LED.STARTER)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity") > 0.1) or
+      (get("a320/Aircraft/PowerPlant/APU/APU_Rate") > 0.01)
+    ), btq_led, 'C', btq_led.block_C_LED.APU)
+  btq_led.led_check(
+    (
+      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLF") ~= 1.0) or
+      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRF") ~= 1.0) or
+      (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedF") ~= 1.0) or
+      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLB") ~= 1.0) or
+      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRB") ~= 1.0) or
+      (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedB") ~= 1.0)
+    ), btq_led, 'D', btq_led.block_D_LED.DOOR)
+  if (
+      get("a320/Aircraft/Electric/BCL1/Powered") == 0 and
+      get("a320/Aircraft/Electric/BCL2/Powered") == 0 and
+      get("a320/Aircraft/Electric/GCU1/Powered") == 0 and
+      get("a320/Aircraft/Electric/GCU2/Powered") == 0 and
+      get("a320/Aircraft/Electric/GCU3/Powered") == 0 and
+      get("a320/Aircraft/Electric/MGCU/Powered") == 0
+     ) then setAllToOff()
+  end
 end
 
 

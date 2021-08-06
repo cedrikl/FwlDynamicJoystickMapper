@@ -503,7 +503,8 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  if (PLANE_ICAO == "A320") then ChampBravoLed_A320_FF()
+  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then ChampBravoLed_A310_ini()
+  elseif (PLANE_ICAO == "A320") then ChampBravoLed_A320_FF()
   elseif (PLANE_ICAO == "B738") then ChampBravoLed_B738_zibo()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
