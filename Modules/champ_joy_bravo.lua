@@ -169,10 +169,12 @@ function apPanelWheelCheck()
         downticksRepetition = 0
         upticksRepetition = upticksRepetition + 1
 
-        if (upticksRepetition < 5) then
+        if (upticksRepetition < 4) then
           apPanelHandleUpticks(1)
-        elseif (upticksRepetition < 20) then
+        elseif (upticksRepetition < 8) then
           apPanelHandleUpticks(2)
+        elseif (upticksRepetition < 12) then
+          apPanelHandleUpticks(5)
         else
           apPanelHandleUpticks(10)
         end
@@ -180,17 +182,19 @@ function apPanelWheelCheck()
         upticksRepetition = 0
         downticksRepetition = downticksRepetition + 1
 
-        if (downticksRepetition < 5) then
+        if (downticksRepetition < 4) then
           apPanelHandleDownticks(1)
-        elseif (downticksRepetition < 10) then
+        elseif (downticksRepetition < 8) then
           apPanelHandleDownticks(2)
+        elseif (downticksRepetition < 12) then
+          apPanelHandleDownticks(5)
         else
           apPanelHandleDownticks(10)
         end
       end
     end
 
-    if (timeSinceLastTick > 0.5) then
+    if (timeSinceLastTick > 0.4) then
       upticksRepetition = 0
       downticksRepetition = 0
     end
