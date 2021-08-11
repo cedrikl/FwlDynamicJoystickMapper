@@ -15,6 +15,7 @@ btq_led   = require("champ_joy_bravo_leds")
 require("champ_joy_bravo_A310_ini")
 require("champ_joy_bravo_A320_FF")
 require("champ_joy_bravo_B738_zibo")
+require("champ_joy_bravo_B777_FF")
 
 ac_ready = false
 
@@ -380,9 +381,9 @@ function ChampAcSpecific()
       --TBD
     end
   elseif (PLANE_ICAO == "B738") then 
-    ChampBravoMapping_B738_zibo()
     set_button_assignment(yoke.Red_Up,  "laminar/B738/autopilot/capt_disco_press")
     set_button_assignment(yoke.Sw_L_Dn, "laminar/B738/autopilot/left_at_dis_press")
+    ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     set_button_assignment(yoke.Red_Up,  "SSG/UFMC/AP_discon_Button")
@@ -404,99 +405,9 @@ function ChampAcSpecific()
     function bravo_Ap_IasInc(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, 1) end
     function bravo_Ap_IasDec(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, -1) end
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
-    --Flight Factor 777
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     set_button_assignment(yoke.Sw_L_Dn, "777/at_disc")
-    set_button_assignment(yoke.Red_Dn,  "777/at_toga")
-
-    function bravo_Ap_AltInc(numticks) bravo_command_multiple("777/spacial8", numticks) end
-    function bravo_Ap_AltDec(numticks) bravo_command_multiple("777/spacial7", numticks) end
-    function bravo_Ap_VsInc(numticks)  bravo_command_multiple("777/spacial6", numticks) end
-    function bravo_Ap_VsDec(numticks)  bravo_command_multiple("777/spacial5", numticks) end
-    function bravo_Ap_HdgInc(numticks) bravo_command_multiple("777/spacial4", numticks) end
-    function bravo_Ap_HdgDec(numticks) bravo_command_multiple("777/spacial3", numticks) end
-    function bravo_Ap_IasInc(numticks) bravo_command_multiple("777/spacial1", numticks) end
-    function bravo_Ap_IasDec(numticks) bravo_command_multiple("777/spacial2", numticks) end
-    do_every_frame([[
-      T_Pos = get("anim/44/switch")
-      SwPos6 = button(]]..btq.sw6_up..[[)
-
-      if (SwPos6 and (T_Pos ~= 1)) then
-        set("anim/44/switch", 1)
-      elseif (not(SwPos6) and (T_Pos ~= 0)) then
-        set("anim/44/switch", 0)
-      end
-    ]])
-    do_every_frame([[
-      L_Pos = get("anim/40/switch")
-      C_Pos = get("anim/88/switch")
-      R_Pos = get("anim/89/switch")
-      SwPos7 = button(]]..btq.sw7_up..[[)
-
-      if (SwPos7 and (L_Pos ~= 1)) then
-        set("anim/40/switch", 1)
-      elseif (not(SwPos7) and (L_Pos ~= 0)) then
-        set("anim/40/switch", 0)
-      end
-
-      if (SwPos7 and (C_Pos ~= 1)) then
-        set("anim/88/switch", 1)
-      elseif (not(SwPos7) and (C_Pos ~= 0)) then
-        set("anim/88/switch", 0)
-      end
-
-      if (SwPos7 and (R_Pos ~= 1)) then
-        set("anim/89/switch", 1)
-      elseif (not(SwPos7) and (R_Pos ~= 0)) then
-        set("anim/89/switch", 0)
-      end
-    ]])
-    set_button_assignment(btq.ap_hdg,    "sim/none/none")
-    set_button_assignment(btq.ap_nav,    "sim/none/none")
-    set_button_assignment(btq.ap_apr,    "sim/none/none")
-    set_button_assignment(btq.ap_rev,    "sim/none/none")
-    set_button_assignment(btq.ap_alt,    "sim/none/none")
-    set_button_assignment(btq.ap_vs,     "sim/none/none")
-    set_button_assignment(btq.ap_ias,    "sim/none/none")
-    function apPanelCockpitHdgShort(status) 
-      if (status == "begin") then set("anim/173/button", (1 - get("anim/173/button"))) end
-    end
-    function apPanelCockpitHdgLong(status) 
-      if (status == "begin") then set("anim/22/button", (1 - get("anim/22/button"))) end
-    end
-    function apPanelCockpitNavShort(status) 
-      if (status == "begin") then set("anim/16/button", (1 - get("anim/16/button"))) end
-    end
-    function apPanelCockpitNavLong(status) 
-      if (status == "begin") then set("anim/17/button", (1 - get("anim/17/button"))) end
-    end
-    function apPanelCockpitAprShort(status) 
-      if (status == "begin") then set("anim/27/button", (1 - get("anim/27/button"))) end
-    end
-    function apPanelCockpitAprLong(status) 
-      if (status == "begin") then set("anim/26/button", (1 - get("anim/26/button"))) end
-    end
-    --function apPanelCockpitRevShort(status)    end
-    --function apPanelCockpitRevLong(status)     end
-    function apPanelCockpitAltShort(status)
-      if (status == "begin") then set("anim/18/button", (1 - get("anim/18/button"))) end
-    end
-    function apPanelCockpitAltLong(status)
-      if (status == "begin") then set("anim/25/button", (1 - get("anim/25/button"))) end
-    end
-    function apPanelCockpitVsShort(status)
-      if (status == "begin") then set("anim/24/button", (1 - get("anim/24/button"))) end
-    end
-    function apPanelCockpitVsLong(status)
-      if (status == "begin") then set("anim/14/button", (1 - get("anim/14/button"))) end
-    end
-    --function apPanelCockpitIasShort(status)
-    --  if (status == "begin") then command_begin("a320/Panel/FCU_SpeedMode_switch_push") elseif (status == "end") then command_end("a320/Panel/FCU_SpeedMode_switch_push") end
-    --end
-    --function apPanelCockpitIasLong(status)
-    --  if (status == "begin") then command_begin("a320/Panel/FCU_SpeedMode_switch_pull") elseif (status == "end") then command_end("a320/Panel/FCU_SpeedMode_switch_pull") end
-    --end
-    do_every_frame("apPanelDualHandler()")
+    ChampBravoMapping_B777_FF()
   elseif (PLANE_ICAO == "B789") then
     --TBD
   elseif (PLANE_ICAO == "UH1") then
@@ -526,32 +437,7 @@ function ChampLedSpecificCheck()
   elseif (PLANE_ICAO == "B738") then ChampBravoLed_B738_zibo()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
-  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
-    --Flight Factor 777
-    btq_led.led_check(
-      (
-        (get("sim/flightmodel2/gear/deploy_ratio", 3) == 1.0)
-      ), btq_led, 'B', btq_led.block_B_LED.RIGHT_GEAR_GREEN)
-    btq_led.led_check(
-      (
-        (get("sim/flightmodel2/gear/deploy_ratio", 3) < 1.0) and
-        (get("sim/flightmodel2/gear/deploy_ratio", 3) > 0)
-      ), btq_led, 'B', btq_led.block_B_LED.RIGHT_GEAR_RED)
-    btq_led.led_check(
-      (
-        (get("lamps/257") > 0.8) or
-        (get("T7Avionics/ap/roll_mode_engaged") == 1) or
-        (get("T7Avionics/ap/roll_mode_engaged") == 6)
-      ), btq_led, 'A', btq_led.block_A_LED.HEADING)
-    btq_led.led_check(
-      (
-        (get("lamps/253") >= 0.8) or
-        (get("lamps/254") == 0.8)
-      ), btq_led, 'A', btq_led.block_A_LED.NAV)
-    btq_led.led_check(
-      (
-        (get("lamps/252") >= 0.8)
-      ), btq_led, 'A', btq_led.block_A_LED.IAS)
+  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then ChampBravoLed_B777_FF()
   end
 end
 
@@ -564,8 +450,7 @@ end
 function check_specific_datarefs()
 
   if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
-    if (ChampBravoCheck_A310_ini()) then
-      ac_ready = true
+    if (ChampBravoCheck_A310_ini()) then ac_ready = true
     end
   elseif (PLANE_ICAO == "A319") then
     --Toliss A319
@@ -610,37 +495,10 @@ function check_specific_datarefs()
     end
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
-    if (XPLMFindCommand("777/ap_disc") ~= nil and
-        XPLMFindCommand("777/at_disc") ~= nil and
-        XPLMFindCommand("777/at_toga") ~= nil and
-        XPLMFindCommand("777/spacial8") ~= nil and
-        XPLMFindCommand("777/spacial7") ~= nil and
-        XPLMFindCommand("777/spacial6") ~= nil and
-        XPLMFindCommand("777/spacial5") ~= nil and
-        XPLMFindCommand("777/spacial4") ~= nil and
-        XPLMFindCommand("777/spacial3") ~= nil and
-        XPLMFindCommand("777/spacial2") ~= nil and
-        XPLMFindCommand("777/spacial1") ~= nil and
-        XPLMFindDataRef("anim/44/switch") ~= nil and
-        XPLMFindDataRef("anim/40/switch") ~= nil and
-        XPLMFindDataRef("anim/88/switch") ~= nil and
-        XPLMFindDataRef("anim/89/switch") ~= nil and
-        XPLMFindDataRef("anim/13/button") ~= nil and
-        XPLMFindDataRef("anim/176/button") ~= nil and
-        XPLMFindDataRef("anim/22/button") ~= nil and
-        XPLMFindDataRef("anim/173/button") ~= nil and
-        XPLMFindDataRef("anim/16/button") ~= nil and
-        XPLMFindDataRef("anim/17/button") ~= nil and
-        XPLMFindDataRef("anim/26/button") ~= nil and
-        XPLMFindDataRef("anim/27/button") ~= nil and
-        XPLMFindDataRef("anim/24/button") ~= nil and
-        XPLMFindDataRef("anim/14/button") ~= nil and
-        XPLMFindDataRef("T7Avionics/ap/roll_mode_engaged") ~= nil and
-        XPLMFindDataRef("lamps/257") ~= nil and
-        XPLMFindDataRef("lamps/253") ~= nil and
-        XPLMFindDataRef("lamps/254") ~= nil and
-        XPLMFindDataRef("lamps/252") ~= nil) then
-      ac_ready = true
+    if (ChampBravoCheck_B777_FF() and
+        XPLMFindCommand("777/ap_disc") ~= nil and
+        XPLMFindCommand("777/at_disc") ~= nil
+       ) then ac_ready = true
     end
   else
     ac_ready = true
