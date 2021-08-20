@@ -182,11 +182,10 @@ function ledDatarefCheck()
 
     --All normal mapping starts here
 
-    --B.led_check(
-    --  (
-    --    (get("sim/cockpit2/autopilot/heading_mode") == 1)
-    --  ), B, 'A', B.block_A_LED.HEADING)
-    --      "Condition": "sim/cockpit2/autopilot/heading_mode" is Deprecated,
+    B.led_check(
+      (
+        (get("sim/cockpit2/autopilot/heading_mode") == 1)
+      ), B, 'A', B.block_A_LED.HEADING)
 
     B.led_check(
       (

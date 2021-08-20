@@ -15,6 +15,7 @@ btq_led   = require("champ_joy_bravo_leds")
 require("champ_joy_bravo_A310_ini")
 require("champ_joy_bravo_A320_FF")
 require("champ_joy_bravo_B738_zibo")
+require("champ_joy_bravo_B767_FF")
 require("champ_joy_bravo_B777_FF")
 
 ac_ready = false
@@ -375,17 +376,7 @@ function ChampAcSpecific()
     --Flight Factor 767
     set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
     set_button_assignment(scgl.Trig_Aft, "1-sim/comm/AP/at_disc")
-    set_button_assignment(btq.axis3_toga, "1-sim/comm/AP/at_toga")
-    function bravo_Ap_AltInc(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, 100) end
-    function bravo_Ap_AltDec(numticks) bravo_dataref_multiple("757Avionics/ap/alt_act", numticks, -100) end
-    function bravo_Ap_VsInc(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks, 10) end
-    function bravo_Ap_VsDec(numticks)  bravo_dataref_multiple("757Avionics/ap/vs_act", numticks -10) end
-    function bravo_Ap_HdgInc(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, 1) end
-    function bravo_Ap_HdgDec(numticks) bravo_dataref_multiple("757Avionics/ap/hdg_act", numticks, -1) end
-    function bravo_Ap_CrsInc(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, 0.01) end
-    function bravo_Ap_CrsDec(numticks) bravo_dataref_multiple("1-sim/vor1/crsRotary", numticks, -0.01) end
-    function bravo_Ap_IasInc(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, 1) end
-    function bravo_Ap_IasDec(numticks) bravo_dataref_multiple("757Avionics/ap/spd_act", numticks, -1) end
+    ChampBravoMapping_B767_FF()
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     set_button_assignment(scgl.A2,       "777/ap_disc")
     set_button_assignment(scgl.Trig_Aft, "777/at_disc")
@@ -414,11 +405,10 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then ChampBravoLed_A310_ini()
-  elseif (PLANE_ICAO == "A320") then ChampBravoLed_A320_FF()
-  elseif (PLANE_ICAO == "B738") then ChampBravoLed_B738_zibo()
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
-    --Flight Factor 767
+  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310")                             then ChampBravoLed_A310_ini()
+  elseif (PLANE_ICAO == "A320")                                                 then ChampBravoLed_A320_FF()
+  elseif (PLANE_ICAO == "B738")                                                 then ChampBravoLed_B738_zibo()
+  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763")                         then ChampBravoLed_B767_FF()
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then ChampBravoLed_B777_FF()
   end
 end
@@ -460,20 +450,10 @@ function check_specific_datarefs()
     end
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
-    if (XPLMFindCommand("1-sim/comm/AP/ap_disc") ~= nil and
-        XPLMFindCommand("1-sim/comm/AP/at_disc") ~= nil and
-        XPLMFindCommand("1-sim/comm/AP/at_toga") ~= nil and
-        XPLMFindDataRef("757Avionics/ap/alt_act") ~= nil and
-        XPLMFindDataRef("757Avionics/ap/alt_act") ~= nil and
-        XPLMFindDataRef("757Avionics/ap/vs_act")  ~= nil and
-        XPLMFindDataRef("757Avionics/ap/vs_act")  ~= nil and
-        XPLMFindDataRef("757Avionics/ap/hdg_act") ~= nil and
-        XPLMFindDataRef("757Avionics/ap/hdg_act") ~= nil and
-        XPLMFindDataRef("1-sim/vor1/crsRotary")   ~= nil and
-        XPLMFindDataRef("1-sim/vor1/crsRotary")   ~= nil and
-        XPLMFindDataRef("757Avionics/ap/spd_act") ~= nil and
-        XPLMFindDataRef("757Avionics/ap/spd_act") ~= nil) then
-      ac_ready = true
+    if (ChampBravoCheck_B767_FF()                       and
+        XPLMFindCommand("1-sim/comm/AP/ap_disc") ~= nil and
+        XPLMFindCommand("1-sim/comm/AP/at_disc") ~= nil
+        ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
