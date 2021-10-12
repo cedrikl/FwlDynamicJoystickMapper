@@ -3,6 +3,7 @@ logMsg("Champion Info: Start of script")
 local device_DB = require("champ_joy_auto_detect")
 
 rift      = require("champ_joy_rift")
+reverbG2  = require("champ_joy_reverbG2")
 pedals    = require("champ_joy_ChPedals")
 yoke      = require("champ_joy_ChYoke")
 x55j      = require("champ_joy_x55j")
@@ -42,6 +43,8 @@ function ChampInit()
   --_joy_location6 vr/Oculus/oculus_Right/WMHD315R200HC9_Controller_Right/none
   --thus the left controller is as positon 5 (_joy_location5) and the right controller is at position 6 (_joy_location6)
   --rift.map(6,7, true)
+
+  reverbG2.map(3,4, false)
 
 
   for HID_device = 1,device_DB.size,1
@@ -95,6 +98,9 @@ end
 ----------------------------
 
 function ChampComButtons()
+  --rift.mapDefault()
+  reverbG2.mapDefault()
+
   set_button_assignment(scgl.A2,            "sim/autopilot/servos_off_any")
   set_button_assignment(scgl.A1_Up,         "sim/general/hat_switch_up")
   set_button_assignment(scgl.A1_Up_Right,   "sim/general/hat_switch_up_right")
@@ -110,7 +116,8 @@ function ChampComButtons()
   set_button_assignment(scgl.A3_Right,      "sim/flight_controls/rudder_trim_right")
   set_button_assignment(scgl.B1,            "sim/view/default_view")
   set_button_assignment(scgl.D1,            "sim/view/circle")
-
+  set_button_assignment(scgl.C1_Right,      "sim/VR/toggle_vr")
+  set_button_assignment(scgl.C1_Left,       "sim/VR/general/reset_view")
 
   set_button_assignment(btq.flaps_up,       "sim/flight_controls/flaps_up")
   set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
@@ -262,12 +269,13 @@ function ChampComEngine()
     set_axis_assignment(btq.axis5, "mixture 1", "normal")
     set_axis_assignment(btq.axis6, "mixture 2", "normal")
 
-    set_button_assignment(btq.axis1_special, "sim/autopilot/take_off_go_around")
+    set_button_assignment(btq.axis12_2nd_func, "sim/autopilot/take_off_go_around")
   elseif ChampNbEngines == 2 then
     set_axis_assignment(btq.axis3, "throttle 1", "reverse")
     set_axis_assignment(btq.axis4, "throttle 2", "reverse")
 
-    set_button_assignment(btq.axis3_toga, "sim/engines/TOGA_power")
+    set_button_assignment(btq.axis3_2nd_func, "sim/autopilot/autothrottle_off")
+    set_button_assignment(btq.axis4_2nd_func, "sim/engines/TOGA_power")
     --set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_1")
     --set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_2")
 
@@ -278,7 +286,7 @@ function ChampComEngine()
     set_axis_assignment(btq.axis4, "throttle 3", "reverse")
     set_axis_assignment(btq.axis5, "throttle 4", "reverse")
 
-    set_button_assignment(btq.axis2_toga, "sim/engines/TOGA_power")
+    set_button_assignment(btq.axis12_2nd_func, "sim/engines/TOGA_power")
     set_button_assignment(btq.axis2_rev_zone, "sim/engines/thrust_reverse_toggle_1")
     set_button_assignment(btq.axis3_rev_zone, "sim/engines/thrust_reverse_toggle_2")
     set_button_assignment(btq.axis4_rev_zone, "sim/engines/thrust_reverse_toggle_3")
@@ -312,27 +320,6 @@ function ChampComEngine()
   end
 end
 
-
-function ChampOculusRift()
-  set_axis_assignment(rift.L_Joy_X,      "VR Touchpad X", "normal")
-  set_axis_assignment(rift.L_Joy_Y,      "VR Touchpad Y", "normal")
-  set_axis_assignment(rift.L_Joy_Index , "VR Trigger",    "normal")
-
-  set_axis_assignment(rift.R_Joy_X,      "VR Touchpad X"  , "normal")
-  set_axis_assignment(rift.R_Joy_Y,      "VR Touchpad Y"  , "normal")
-  set_axis_assignment(rift.R_Joy_Index,  "VR Trigger"     , "normal")
-
-  set_button_assignment(rift.L_Y,        "sim/VR/reserved/menu")
-  set_button_assignment(rift.L_X,        "sim/VR/general/reset_view")
-  set_button_assignment(rift.L_Touchpad, "sim/VR/reserved/touchpad")
-  set_button_assignment(rift.L_Index,    "sim/VR/reserved/select")
-
-  set_button_assignment(rift.R_Y,        "sim/VR/reserved/menu")
-  set_button_assignment(rift.R_X,        "sim/VR/quick_zoom_view")
-  set_button_assignment(rift.R_Touchpad, "sim/VR/reserved/touchpad")
-  set_button_assignment(rift.R_Index,    "sim/VR/reserved/select")
-end
-
 ------------------------------
 -- Specific Buttons Mapping --
 ------------------------------
@@ -344,6 +331,7 @@ function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
   if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
+    set_button_assignment(scgl.A2,       "A300/MCDU/yoke_ap_disconnect_captain")
     ChampBravoMapping_A310_ini()
   elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320" or PLANE_ICAO == "A330") then --Airbus Sidesticks
     --set_axis_assignment(yoke.axis_roll,  "none", "normal")
@@ -358,14 +346,12 @@ function ChampAcSpecific()
     elseif (PLANE_ICAO == "A320") then
       --Flight Factor A320 Ultimate
       set_button_assignment(scgl.A2,       "a320/Panel/SidestickTakeoverL_button")
-      set_button_assignment(scgl.Trig_Aft, "a320/Pedestal/EngineDisconnect1_button")
       ChampBravoMapping_A320_FF()
     elseif (PLANE_ICAO == "A330") then
       --TBD
     end
   elseif (PLANE_ICAO == "B738") then 
     set_button_assignment(scgl.A2,        "laminar/B738/autopilot/capt_disco_press")
-    set_button_assignment(scgl.Trig_Aft,  "laminar/B738/autopilot/left_at_dis_press")
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
@@ -375,11 +361,9 @@ function ChampAcSpecific()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
     set_button_assignment(scgl.A2,       "1-sim/comm/AP/ap_disc")
-    set_button_assignment(scgl.Trig_Aft, "1-sim/comm/AP/at_disc")
     ChampBravoMapping_B767_FF()
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
-    set_button_assignment(scgl.A2,       "777/ap_disc")
-    set_button_assignment(scgl.Trig_Aft, "777/at_disc")
+    set_button_assignment(scgl.A2, "777/ap_disc")
     ChampBravoMapping_B777_FF()
   elseif (PLANE_ICAO == "B789") then
     --TBD
@@ -422,7 +406,9 @@ end
 function check_specific_datarefs()
 
   if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
-    if (ChampBravoCheck_A310_ini()) then ac_ready = true
+    if (ChampBravoCheck_A310_ini() and
+        XPLMFindCommand("A300/MCDU/yoke_ap_disconnect_captain") ~= nil
+       ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "A319") then
     --Toliss A319
@@ -431,14 +417,12 @@ function check_specific_datarefs()
     end
   elseif (PLANE_ICAO == "A320") then
     if (ChampBravoCheck_A320_FF()                                        and
-        XPLMFindCommand("a320/Panel/SidestickTakeoverL_button")   ~= nil and
-        XPLMFindCommand("a320/Pedestal/EngineDisconnect1_button") ~= nil
+        XPLMFindCommand("a320/Panel/SidestickTakeoverL_button")   ~= nil
        ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "B738") then 
     if (ChampBravoCheck_B738_zibo()                                        and
-        XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")  ~= nil and
-        XPLMFindCommand("laminar/B738/autopilot/left_at_dis_press") ~= nil
+        XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")  ~= nil
        ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "B748") then
@@ -451,15 +435,13 @@ function check_specific_datarefs()
   elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
     --Flight Factor 767
     if (ChampBravoCheck_B767_FF()                       and
-        XPLMFindCommand("1-sim/comm/AP/ap_disc") ~= nil and
-        XPLMFindCommand("1-sim/comm/AP/at_disc") ~= nil
-        ) then ac_ready = true
+        XPLMFindCommand("1-sim/comm/AP/ap_disc") ~= nil
+       ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
     --Flight Factor 777
     if (ChampBravoCheck_B777_FF() and
-        XPLMFindCommand("777/ap_disc") ~= nil and
-        XPLMFindCommand("777/at_disc") ~= nil
+        XPLMFindCommand("777/ap_disc") ~= nil
        ) then ac_ready = true
     end
   else
@@ -469,13 +451,22 @@ function check_specific_datarefs()
 end
 
 
+function utc_check()
+  if (0 == get("sim/time/use_system_time")) then
+
+    draw_string_Helvetica_10(10, 30, "Sim is not synced to real time!")
+    draw_string_Helvetica_10(10, 20, string.format("Real time (UTC): %s", os.date("!%H:%M")))
+    draw_string_Helvetica_10(10, 10, string.format("Sim time (UTC): %s", os.date("!%H:%M", get("sim/time/zulu_time_sec"))))
+  end
+end
+
+
 function monitor()
   if not init_completed then
     if check_specific_datarefs() then
       ChampComAxis()
       ChampComButtons()
       ChampComEngine()
-      --ChampOculusRift()
       ChampAcSpecific()
       btq_led.bravo_led_main()
       init_completed = true
@@ -500,5 +491,6 @@ if (btq.connected) then  --All devices with do_every_* loops are connected
     do_sometimes("monitor()")
   end
 end
+do_every_draw("utc_check()")
 
 logMsg("Champion Info: End of script")

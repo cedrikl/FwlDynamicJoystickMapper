@@ -73,6 +73,9 @@ function ChampBravoMapping_A320_FF()
 
   do_every_frame("apPanelDualHandler()")
 
+  set_button_assignment(btq.axis3_2nd_func, "a320/Pedestal/EngineDisconnect1_button")
+  set_button_assignment(btq.axis4_2nd_func, "sim/none/none")
+
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
   do_every_frame([[
@@ -316,6 +319,7 @@ function ChampBravoCheck_A320_FF()
       XPLMFindCommand("a320/Panel/FCU_AutoPilot1_button")                            ~= nil and
       XPLMFindCommand("a320/Panel/FCU_AutoThrust_button")                            ~= nil and
       --Axis
+      XPLMFindCommand("a320/Pedestal/EngineDisconnect1_button")                      ~= nil and
 
       --Switches
       XPLMFindDataRef("model/controls/heat_engine1")                                 ~= nil and

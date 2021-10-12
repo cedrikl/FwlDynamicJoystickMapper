@@ -72,7 +72,8 @@ function ChampBravoMapping_B777_FF()
 
   do_every_frame("apPanelDualHandler()")
 
-  set_button_assignment(btq.axis3_toga, "777/at_toga")
+  set_button_assignment(btq.axis3_2nd_func, "777/at_disc")
+  set_button_assignment(btq.axis4_2nd_func, "777/at_toga")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
@@ -256,6 +257,7 @@ function ChampBravoCheck_B777_FF()
 
       --Axis
       XPLMFindCommand("777/at_toga") ~= nil and
+      XPLMFindCommand("777/at_disc") ~= nil and
 
       --Switches
       XPLMFindDataRef("anim/15/switch") ~= nil and

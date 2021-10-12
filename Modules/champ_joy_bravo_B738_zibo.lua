@@ -52,8 +52,9 @@ function ChampBravoMapping_B738_zibo()
 
   do_every_frame("apPanelDualHandler()")
 
-  set_axis_assignment(btq.axis1,        "speedbrakes", "reverse")
-  set_button_assignment(btq.axis3_toga, "laminar/B738/autopilot/left_toga_press")
+  set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
+  set_button_assignment(btq.axis3_2nd_func, "laminar/B738/autopilot/left_at_dis_press")
+  set_button_assignment(btq.axis4_2nd_func, "laminar/B738/autopilot/left_toga_press")
 
   set_button_assignment(btq.sw1_up, "sim/none/none")
   set_button_assignment(btq.sw1_dn, "sim/none/none")
@@ -198,6 +199,7 @@ function ChampBravoCheck_B738_zibo()
       XPLMFindCommand("laminar/B738/autopilot/cws_a_press")                   ~= nil and
       --Axis
       XPLMFindCommand("laminar/B738/autopilot/left_toga_press")               ~= nil and
+      XPLMFindCommand("laminar/B738/autopilot/left_at_dis_press")             ~= nil and
       --Switches
       XPLMFindDataRef("laminar/B738/fms/chock_status")                        ~= nil and
       XPLMFindDataRef("laminar/B738/antiice_sw")                              ~= nil and

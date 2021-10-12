@@ -65,11 +65,10 @@ function bravo.map(joy_num, joy_hid_pointer)
   bravo.axis4_rev_zone   = start_button + 26
   bravo.axis5_rev_zone   = start_button + 27
 
-  --These next two share electrical discrete input
-  bravo.axis1_special    = start_button + 28
-  bravo.axis2_toga       = start_button + 28
+  --Axis 1-2 share the same alternate digital input
+  bravo.axis12_2nd_func  = start_button + 28
 
-  bravo.axis3_toga       = start_button + 29
+  bravo.axis3_2nd_func   = start_button + 29
   bravo.gear_up          = start_button + 30  --sim/flight_controls/landing_gear_up
   bravo.gear_dn          = start_button + 31  --sim/flight_controls/landing_gear_down
   bravo.axis6_rev_zone   = start_button + 32
@@ -87,6 +86,8 @@ function bravo.map(joy_num, joy_hid_pointer)
   bravo.sw6_dn           = start_button + 44
   bravo.sw7_up           = start_button + 45
   bravo.sw7_dn           = start_button + 46
+  
+  bravo.axis4_2nd_func   = start_button + 47
 end
 
 

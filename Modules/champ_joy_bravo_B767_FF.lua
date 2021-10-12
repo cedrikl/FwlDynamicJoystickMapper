@@ -74,7 +74,8 @@ function ChampBravoMapping_B767_FF()
 
   do_every_frame("apPanelDualHandler()")
 
-  set_button_assignment(btq.axis3_toga, "1-sim/comm/AP/at_toga")
+  set_button_assignment(btq.axis3_2nd_func, "sim/autopilot/autothrottle_off")
+  set_button_assignment(btq.axis4_2nd_func, "1-sim/comm/AP/at_toga")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
@@ -306,6 +307,7 @@ function ChampBravoCheck_B767_FF()
 
       --Axis
       XPLMFindCommand("1-sim/comm/AP/at_toga")                        ~= nil and
+      XPLMFindCommand("1-sim/comm/AP/at_disc")                        ~= nil and
 
       --Switches
       XPLMFindDataRef("anim/41/button")                               ~= nil and

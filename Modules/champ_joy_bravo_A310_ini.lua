@@ -39,7 +39,11 @@ function ChampBravoMapping_A310_ini()
     if (status == "begin") then command_begin("A300/MCDU/level_change") elseif (status == "end") then command_end("A300/MCDU/level_change") end
   end
   function apPanelCockpitAltLong(status)
-    if (status == "begin") then command_begin("A300/MCDU/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCDU/altitude_hold_engage") end
+    if (PLANE_ICAO == "A306") then
+      if (status == "begin") then command_begin("A300/MCDU/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCDU/altitude_hold_engage") end
+    else
+      if (status == "begin") then command_begin("A300/MCUD/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCUD/altitude_hold_engage") end
+    end
   end
 
   set_button_assignment(btq.ap_vs, "A300/MCDU/vvi_engage")
@@ -60,7 +64,8 @@ function ChampBravoMapping_A310_ini()
 
   do_every_frame("apPanelDualHandler()")
 
-  set_button_assignment(btq.axis3_toga, "A300/MCDU/takeoff_goaround_trigger")
+  set_button_assignment(btq.axis3_2nd_func, "A300/MCDU/disconnect_at")
+  set_button_assignment(btq.axis4_2nd_func, "A300/MCDU/takeoff_goaround_trigger")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
@@ -266,6 +271,13 @@ function ChampBravoLed_A310_ini()
   end
 end
 
+function ChampBravoTypoMgr_A310_ini()
+  if (PLANE_ICAO == "A306") then
+    return XPLMFindCommand("A300/MCDU/altitude_hold_engage") ~= nil
+  else
+    return XPLMFindCommand("A300/MCUD/altitude_hold_engage") ~= nil
+  end
+end
 
 function ChampBravoCheck_A310_ini()
   if (XPLMFindDataRef("A300/elec/battery_on")                                 ~= nil and
@@ -291,13 +303,14 @@ function ChampBravoCheck_A310_ini()
       XPLMFindCommand("A300/MCDU/profile_mode")                               ~= nil and
       XPLMFindCommand("A300/MCDU/approach_mode")                              ~= nil and
       XPLMFindCommand("A300/MCDU/level_change")                               ~= nil and
-      XPLMFindCommand("A300/MCDU/altitude_hold_engage")                       ~= nil and
+      ChampBravoTypoMgr_A310_ini()                                                   and
       XPLMFindCommand("A300/MCDU/vvi_engage")                                 ~= nil and
       XPLMFindCommand("A300/MCDU/ap1_engage")                                 ~= nil and
       XPLMFindCommand("A300/MCDU/autothrottle_toggle")                        ~= nil and
 
       --Axis
       XPLMFindCommand("A300/MCDU/takeoff_goaround_trigger")                   ~= nil and
+      XPLMFindCommand("A300/MCDU/disconnect_at")                              ~= nil and
 
       --Switches
       XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E1")                  ~= nil and
