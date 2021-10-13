@@ -43,6 +43,7 @@ function ChampInit()
   --_joy_location6 vr/Oculus/oculus_Right/WMHD315R200HC9_Controller_Right/none
   --thus the left controller is as positon 5 (_joy_location5) and the right controller is at position 6 (_joy_location6)
   rift.map(6,7, true)
+  --reverbG2.map(3,4, false)
 
 
   for HID_device = 1,device_DB.size,1
@@ -345,6 +346,7 @@ function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
   if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
+    set_button_assignment(yoke.Red_Up,       "A300/MCDU/yoke_ap_disconnect_captain")
     ChampBravoMapping_A310_ini()
   elseif (PLANE_ICAO == "A319" or PLANE_ICAO == "A320" or PLANE_ICAO == "A330") then --Airbus Sidesticks
     set_axis_assignment(yoke.axis_roll,  "none", "normal")
@@ -363,19 +365,23 @@ function ChampAcSpecific()
     elseif (PLANE_ICAO == "A330") then
       --TBD
     end
-  elseif (PLANE_ICAO == "B738") then 
+  elseif (PLANE_ICAO == "B738") then
     set_button_assignment(yoke.Red_Up,  "laminar/B738/autopilot/capt_disco_press")
+    ChampBravoMapping_B738_zibo()
+  elseif (PLANE_ICAO == "B38M") then
+    --Ben hack for VAC, placeholder for future max which may not be zibo so keeping separate
+    set_button_assignment(yoke.Red_Up,        "laminar/B738/autopilot/capt_disco_press")
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     set_button_assignment(yoke.Red_Up,  "SSG/UFMC/AP_discon_Button")
     set_button_assignment(yoke.Sw_L_Dn, "SSG/UFMC/AP_ARM_AT_Switch")
     set_button_assignment(yoke.Red_Dn,  "SSG/UFMC/TOGA_Button")
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
+  elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
     --Flight Factor 767
     set_button_assignment(yoke.Red_Up,  "1-sim/comm/AP/ap_disc")
     ChampBravoMapping_B767_FF()
-  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
+  elseif string.find(PLANE_ICAO, "B77%w") then
     set_button_assignment(yoke.Red_Up,  "777/ap_disc")
     ChampBravoMapping_B777_FF()
   elseif (PLANE_ICAO == "B789") then
@@ -405,8 +411,9 @@ function ChampLedSpecificCheck()
   if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310")                             then ChampBravoLed_A310_ini()
   elseif (PLANE_ICAO == "A320")                                                 then ChampBravoLed_A320_FF()
   elseif (PLANE_ICAO == "B738")                                                 then ChampBravoLed_B738_zibo()
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763")                         then ChampBravoLed_B767_FF()
-  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then ChampBravoLed_B777_FF()
+  elseif (PLANE_ICAO == "B38M")                                                 then ChampBravoLed_B738_zibo()
+  elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then ChampBravoLed_B767_FF()
+  elseif string.find(PLANE_ICAO, "B77%w")                                       then ChampBravoLed_B777_FF()
   end
 end
 
@@ -438,6 +445,11 @@ function check_specific_datarefs()
         XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")  ~= nil
        ) then ac_ready = true
     end
+  elseif (PLANE_ICAO == "B38M") then 
+    if (ChampBravoCheck_B738_zibo()                                        and
+        XPLMFindCommand("laminar/B738/autopilot/capt_disco_press")  ~= nil
+       ) then ac_ready = true
+    end
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     if (XPLMFindCommand("SSG/UFMC/AP_discon_Button") ~= nil and
@@ -445,13 +457,13 @@ function check_specific_datarefs()
         XPLMFindCommand("SSG/UFMC/TOGA_Button")      ~= nil) then
       ac_ready = true
     end
-  elseif (PLANE_ICAO == "B762" or PLANE_ICAO == "B763") then
+  elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
     --Flight Factor 767
     if (ChampBravoCheck_B767_FF()                       and
         XPLMFindCommand("1-sim/comm/AP/ap_disc") ~= nil
        ) then ac_ready = true
     end
-  elseif (PLANE_ICAO == "B772" or PLANE_ICAO == "B77W" or PLANE_ICAO == "B77L") then
+  elseif string.find(PLANE_ICAO, "B77%w") then
     --Flight Factor 777
     if (ChampBravoCheck_B777_FF() and
         XPLMFindCommand("777/ap_disc") ~= nil
