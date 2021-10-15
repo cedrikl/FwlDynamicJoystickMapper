@@ -1,5 +1,21 @@
 --Flight Factor A320 Ultimate
 
+function ChampBravoEngine_A320_FF()
+  do_every_frame([[
+    if (button(]]..btq.axis3_rev_handle..[[)            and (get("model/controls/engine_reverse1") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_1")
+    elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("model/controls/engine_reverse1") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_1")
+    end
+
+    if (button(]]..btq.axis4_rev_handle..[[)            and (get("model/controls/engine_reverse2") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_2")
+    elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("model/controls/engine_reverse2") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+      command_once("sim/engines/thrust_reverse_toggle_2")
+    end
+  ]])
+end
+
 function ChampBravoMapping_A320_FF()
   function bravo_Ap_AltInc(numticks) bravo_command_multiple("a320/Panel/FCU_Altitude_switch+", numticks) end
   function bravo_Ap_AltDec(numticks) bravo_command_multiple("a320/Panel/FCU_Altitude_switch-", numticks) end
