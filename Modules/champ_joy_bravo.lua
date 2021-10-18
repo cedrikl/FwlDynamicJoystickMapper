@@ -9,7 +9,7 @@ function reverser_handler()
 
   if (PLANE_ICAO == "A320") then
     ChampBravoEngine_A320_FF()
-  elseif ((PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
+  elseif ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
     ChampBravoEngine_A321_toliss()
   elseif ((PLANE_ICAO == "B350") and (ChampEngineType == 9)) then
     ChampBravoEngine_B350_airfoillabs()

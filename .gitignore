@@ -1,6 +1,8 @@
-/Scripts/*
-!/Scripts/champ_joy*
+/Documentation/*
+/Internals/*
 /Modules/*
 !/Modules/champ_joy*
+/Scripts/*
+!/Scripts/champ_joy*
 /Scripts (disabled)/*
 ~/Scripts (disabled)/*JoyButtons.lua

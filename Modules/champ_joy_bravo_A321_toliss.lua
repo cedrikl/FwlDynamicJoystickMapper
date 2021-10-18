@@ -1,5 +1,3 @@
---Zibo 737-800
-
 function ChampBravoEngine_A321_toliss()
   do_every_frame([[
     if (button(]]..btq.axis3_rev_handle..[[)            and (get("AirbusFBW/throttle_input", 0) > -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
