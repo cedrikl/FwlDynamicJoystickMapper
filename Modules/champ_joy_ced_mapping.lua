@@ -135,7 +135,7 @@ function ChampComButtons()
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
   --set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
   --set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
-  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO)) then
+  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO)) then
     do_every_frame([[
       ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
       SwPos = button(]]..btq.sw1_up..[[)
@@ -192,23 +192,21 @@ function ChampAcSpecific()
   if ((PLANE_ICAO == "A306") or (PLANE_ICAO == "A310")) then
     set_button_assignment(scgl.A2,       "A300/MCDU/yoke_ap_disconnect_captain")
     ChampBravoMapping_A310_ini()
-  elseif (string.find(PLANE_ICAO, 'A31[8-9]') or string.find(PLANE_ICAO, 'A32%w') or string.find(PLANE_ICAO, 'A33%w')) then --Airbus Sidesticks
+  elseif (string.find(PLANE_ICAO, 'A3%w%w') or string.find(PLANE_ICAO, 'A2%wN')) then
+    --Airbus Sidesticks
     --set_axis_assignment(yoke.axis_roll,  "none", "normal")
     --set_axis_assignment(yoke.axis_pitch, "none", "normal")
     --set_axis_assignment(yoke.axis_2,     "none", "reverse")
     --set_axis_assignment(yoke.axis_3,     "none", "reverse")
     --set_axis_assignment(x55j.roll,  "roll", "normal")
     --set_axis_assignment(x55j.pitch, "pitch", "normal")
-    if (PLANE_ICAO == "A319") then
-      --Toliss A319
-      --set_button_assignment(x55j.V, "toliss_airbus/ap_disc_left_stick")
+    if ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
+      set_button_assignment(scgl.A2, "toliss_airbus/ap_disc_left_stick")
+      ChampBravoMapping_A321_toliss()
     elseif (PLANE_ICAO == "A320") then
       --Flight Factor A320 Ultimate
       set_button_assignment(scgl.A2, "a320/Panel/SidestickTakeoverL_button")
       ChampBravoMapping_A320_FF()
-    elseif ((PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
-      --set_button_assignment(scgl.A2, "a320/Panel/SidestickTakeoverL_button")
-      ChampBravoMapping_A321_toliss()
     elseif (PLANE_ICAO == "A330") then
       --TBD
     end
@@ -255,13 +253,13 @@ end
 -- The associated function is check_specific_datarefs()
 
 function ChampLedSpecificCheck()
-  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310")                             then ChampBravoLed_A310_ini()
-  elseif (PLANE_ICAO == "A320")                                                 then ChampBravoLed_A320_FF()
-  elseif (PLANE_ICAO == "A321")                                                 then ChampBravoLed_A321_toliss()
-  elseif (PLANE_ICAO == "B738")                                                 then ChampBravoLed_B738_zibo()
-  elseif (PLANE_ICAO == "B38M")                                                 then ChampBravoLed_B738_zibo()
-  elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then ChampBravoLed_B767_FF()
-  elseif string.find(PLANE_ICAO, "B77%w")                                       then ChampBravoLed_B777_FF()
+  if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310")                                   then ChampBravoLed_A310_ini()
+  elseif ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then ChampBravoLed_A321_toliss()
+  elseif (PLANE_ICAO == "A320")                                                       then ChampBravoLed_A320_FF()
+  elseif (PLANE_ICAO == "B738")                                                       then ChampBravoLed_B738_zibo()
+  elseif (PLANE_ICAO == "B38M")                                                       then ChampBravoLed_B738_zibo()
+  elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w"))       then ChampBravoLed_B767_FF()
+  elseif string.find(PLANE_ICAO, "B77%w")                                             then ChampBravoLed_B777_FF()
   end
 end
 
@@ -278,19 +276,14 @@ function check_specific_datarefs()
         XPLMFindCommand("A300/MCDU/yoke_ap_disconnect_captain") ~= nil
        ) then ac_ready = true
     end
-  elseif (PLANE_ICAO == "A319") then
-    --Toliss A319
-    if (XPLMFindCommand("toliss_airbus/ap_disc_left_stick") ~= nil) then
-      ac_ready = true
+  elseif ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
+    if (ChampBravoCheck_A321_toliss()                                    and
+        XPLMFindCommand("toliss_airbus/ap_disc_left_stick")   ~= nil
+       ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "A320") then
     if (ChampBravoCheck_A320_FF()                                        and
         XPLMFindCommand("a320/Panel/SidestickTakeoverL_button")   ~= nil
-       ) then ac_ready = true
-    end
-  elseif ((PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
-    if (ChampBravoCheck_A321_toliss()                                    and
-        true
        ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "B738") then 
