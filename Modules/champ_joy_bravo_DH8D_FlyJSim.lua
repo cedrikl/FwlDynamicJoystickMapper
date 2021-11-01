@@ -23,7 +23,7 @@ function ChampBravoMapping_DH8D_FlyJSim()
 
   set_axis_assignment(btq.axis2, "throttle 1", "reverse")
   set_axis_assignment(btq.axis3, "throttle 2", "reverse")
-  set_axis_assignment(btq.axis5, "prop", "normal")
+  set_axis_assignment(btq.axis4, "prop", "normal")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
