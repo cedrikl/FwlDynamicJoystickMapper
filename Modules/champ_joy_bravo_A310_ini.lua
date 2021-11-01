@@ -30,7 +30,7 @@ function ChampBravoMapping_A310_ini()
   end
   function apPanelCockpitAprLong(status)
     if (status == "begin") then command_begin("A300/MCDU/loc_toggle") elseif (status == "end") then command_end("A300/MCDU/loc_toggle") end
- end
+  end
 
   set_button_assignment(btq.ap_rev, "sim/none/none")
 
