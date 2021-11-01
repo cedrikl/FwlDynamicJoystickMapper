@@ -63,22 +63,7 @@ function reverser_handler()
         set_button_assignment(btq.axis1_rev_zone, "sim/engines/thrust_reverse_toggle_1")
         set_button_assignment(btq.axis2_rev_zone, "sim/engines/thrust_reverse_toggle_2")
       end
-    elseif ChampNbEngines == 2 then
-      -- Jets (--/--/ENG1/ENG2/--/--)
-      do_every_frame([[
-        if (button(]]..btq.axis3_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
-          set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, -1.0001)
-        elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
-          set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 0, 0)
-        end
-        
-        if (button(]]..btq.axis4_rev_handle..[[)            and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) >= -1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
-          set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, -1.0001)
-        elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1) < 0)   and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
-          set_array("sim/cockpit2/engine/actuators/throttle_beta_rev_ratio", 1, 0)
-        end
-      ]])
-    elseif ChampNbEngines >= 3 then
+    else
       -- Jets (--/ENG1/ENG2/ENG3/ENG4/--)
 
       --set_button_assignment(btq.axis2_rev_zone, "sim/engines/thrust_reverse_toggle_1")
@@ -126,9 +111,7 @@ function ChampBravoEngine()
   ChampEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
   logMsg(string.format("Champion Info: The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
 
-  if (PLANE_ICAO == "DH8D") then
-    --Mapping in specific module
-  elseif (((ChampEngineType <= 4) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
+  if (((ChampEngineType <= 4) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
     set_axis_assignment(btq.axis1, "throttle 1", "reverse")
     set_axis_assignment(btq.axis2, "throttle 2", "reverse")
 
@@ -139,19 +122,14 @@ function ChampBravoEngine()
     set_axis_assignment(btq.axis6, "mixture 2", "normal")
 
     set_button_assignment(btq.axis12_2nd_func, "sim/autopilot/take_off_go_around")
-  elseif (ChampNbEngines == 2) then
-    set_axis_assignment(btq.axis3, "throttle 1", "reverse")
-    set_axis_assignment(btq.axis4, "throttle 2", "reverse")
-
-    set_button_assignment(btq.axis3_2nd_func, "sim/autopilot/autothrottle_off")
-    set_button_assignment(btq.axis4_2nd_func, "sim/engines/TOGA_power")
-  elseif (ChampNbEngines >= 3) then
+  else
     set_axis_assignment(btq.axis2, "throttle 1", "reverse")
     set_axis_assignment(btq.axis3, "throttle 2", "reverse")
     set_axis_assignment(btq.axis4, "throttle 3", "reverse")
     set_axis_assignment(btq.axis5, "throttle 4", "reverse")
 
-    set_button_assignment(btq.axis12_2nd_func, "sim/engines/TOGA_power")
+    set_button_assignment(btq.axis12_2nd_func, "sim/autopilot/autothrottle_off")
+    set_button_assignment(btq.axis3_2nd_func, "sim/engines/TOGA_power")
   end
   reverser_handler()
 end

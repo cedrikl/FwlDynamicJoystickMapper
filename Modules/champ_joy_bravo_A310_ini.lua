@@ -64,8 +64,8 @@ function ChampBravoMapping_A310_ini()
 
   do_every_frame("apPanelDualHandler()")
 
-  set_button_assignment(btq.axis3_2nd_func, "A300/MCDU/disconnect_at")
-  set_button_assignment(btq.axis4_2nd_func, "A300/MCDU/takeoff_goaround_trigger")
+  set_button_assignment(btq.axis12_2nd_func, "A300/MCDU/disconnect_at")
+  set_button_assignment(btq.axis3_2nd_func, "A300/MCDU/takeoff_goaround_trigger")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")

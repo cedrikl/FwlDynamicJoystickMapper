@@ -1,14 +1,14 @@
 function ChampBravoEngine_A321_toliss()
   do_every_frame([[
-    if (button(]]..btq.axis3_rev_handle..[[)            and (get("AirbusFBW/throttle_input", 0) > -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+    if (button(]]..btq.axis2_rev_handle..[[)            and (get("AirbusFBW/throttle_input", 0) > -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_1")
-    elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("AirbusFBW/throttle_input", 0) <= -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+    elseif ((not(button(]]..btq.axis2_rev_handle..[[))) and (get("AirbusFBW/throttle_input", 0) <= -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_1")
     end
 
-    if (button(]]..btq.axis4_rev_handle..[[)            and (get("AirbusFBW/throttle_input", 1) > -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+    if (button(]]..btq.axis3_rev_handle..[[)            and (get("AirbusFBW/throttle_input", 1) > -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_2")
-    elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("AirbusFBW/throttle_input", 1) <= -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+    elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("AirbusFBW/throttle_input", 1) <= -0.1) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_2")
     end
   ]])
@@ -76,8 +76,8 @@ function ChampBravoMapping_A321_toliss()
 
   do_every_frame("apPanelDualHandler()")
 
+  set_button_assignment(btq.axis12_2nd_func, "sim/none/none")
   set_button_assignment(btq.axis3_2nd_func, "sim/none/none")
-  set_button_assignment(btq.axis4_2nd_func, "sim/none/none")
 
   set_button_assignment(btq.sw1_up, "sim/none/none")
   set_button_assignment(btq.sw1_dn, "sim/none/none")

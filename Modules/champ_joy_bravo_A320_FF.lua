@@ -2,15 +2,15 @@
 
 function ChampBravoEngine_A320_FF()
   do_every_frame([[
-    if (button(]]..btq.axis3_rev_handle..[[)            and (get("model/controls/engine_reverse1") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+    if (button(]]..btq.axis2_rev_handle..[[)            and (get("model/controls/engine_reverse1") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_1")
-    elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("model/controls/engine_reverse1") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
+    elseif ((not(button(]]..btq.axis2_rev_handle..[[))) and (get("model/controls/engine_reverse1") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 0) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_1")
     end
 
-    if (button(]]..btq.axis4_rev_handle..[[)            and (get("model/controls/engine_reverse2") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+    if (button(]]..btq.axis3_rev_handle..[[)            and (get("model/controls/engine_reverse2") <= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_2")
-    elseif ((not(button(]]..btq.axis4_rev_handle..[[))) and (get("model/controls/engine_reverse2") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
+    elseif ((not(button(]]..btq.axis3_rev_handle..[[))) and (get("model/controls/engine_reverse2") >= 0.5) and (get("sim/cockpit2/engine/actuators/throttle_ratio", 1) < 0.05)) then
       command_once("sim/engines/thrust_reverse_toggle_2")
     end
   ]])
@@ -89,8 +89,8 @@ function ChampBravoMapping_A320_FF()
 
   do_every_frame("apPanelDualHandler()")
 
-  set_button_assignment(btq.axis3_2nd_func, "a320/Pedestal/EngineDisconnect1_button")
-  set_button_assignment(btq.axis4_2nd_func, "sim/none/none")
+  set_button_assignment(btq.axis12_2nd_func, "a320/Pedestal/EngineDisconnect1_button")
+  set_button_assignment(btq.axis3_2nd_func, "sim/none/none")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
