@@ -1,4 +1,4 @@
---iniBuilds A300-600R & A310-300
+--iniBuilds A300-600R v2 & A310-300
 
 function ChampBravoMapping_A310_ini()
   function bravo_Ap_AltInc(numticks) bravo_command_multiple("A300/MCDU/altitude_up", numticks) end
@@ -39,11 +39,7 @@ function ChampBravoMapping_A310_ini()
     if (status == "begin") then command_begin("A300/MCDU/level_change") elseif (status == "end") then command_end("A300/MCDU/level_change") end
   end
   function apPanelCockpitAltLong(status)
-    if (PLANE_ICAO == "A306") then
-      if (status == "begin") then command_begin("A300/MCDU/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCDU/altitude_hold_engage") end
-    else
-      if (status == "begin") then command_begin("A300/MCUD/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCUD/altitude_hold_engage") end
-    end
+    if (status == "begin") then command_begin("A300/MCUD/altitude_hold_engage") elseif (status == "end") then command_end("A300/MCUD/altitude_hold_engage") end --typo MCUD instead of MCDU
   end
 
   set_button_assignment(btq.ap_vs, "A300/MCDU/vvi_engage")
@@ -271,14 +267,6 @@ function ChampBravoLed_A310_ini()
   end
 end
 
-function ChampBravoTypoMgr_A310_ini()
-  if (PLANE_ICAO == "A306") then
-    return XPLMFindCommand("A300/MCDU/altitude_hold_engage") ~= nil
-  else
-    return XPLMFindCommand("A300/MCUD/altitude_hold_engage") ~= nil
-  end
-end
-
 function ChampBravoCheck_A310_ini()
   if (XPLMFindDataRef("A300/elec/battery_on")                                 ~= nil and
       XPLMFindDataRef("A300/elec/dc_norm_bus_off")                            ~= nil and
@@ -303,7 +291,7 @@ function ChampBravoCheck_A310_ini()
       XPLMFindCommand("A300/MCDU/profile_mode")                               ~= nil and
       XPLMFindCommand("A300/MCDU/approach_mode")                              ~= nil and
       XPLMFindCommand("A300/MCDU/level_change")                               ~= nil and
-      ChampBravoTypoMgr_A310_ini()                                                   and
+      XPLMFindCommand("A300/MCUD/altitude_hold_engage")                       ~= nil and  --typo MCUD instead of MCDU
       XPLMFindCommand("A300/MCDU/vvi_engage")                                 ~= nil and
       XPLMFindCommand("A300/MCDU/ap1_engage")                                 ~= nil and
       XPLMFindCommand("A300/MCDU/autothrottle_toggle")                        ~= nil and
