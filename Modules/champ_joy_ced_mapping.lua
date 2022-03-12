@@ -26,6 +26,12 @@ require("champ_joy_bravo_TBM9_hotstart")
 
 ac_ready = false
 
+function championTurnOnVr()
+  if (0 == get("sim/graphics/VR/enabled")) then
+    command_once("sim/VR/toggle_vr")
+  end
+end
+
 function ChampInit()
   clear_all_axis_assignments()
   clear_all_button_assignments()
@@ -48,7 +54,7 @@ function ChampInit()
   --_joy_location6 vr/Oculus/oculus_Right/WMHD315R200HC9_Controller_Right/none
   --thus the left controller is as positon 5 (_joy_location5) and the right controller is at position 6 (_joy_location6)
   --rift.map(6,7, true)
-  reverbG2.map(3,4, false)
+  reverbG2.map(4,3, false)
 
 
   for HID_device = 1,device_DB.size,1
@@ -78,6 +84,8 @@ function ChampInit()
       btq.ap_panel_main()
     end
   end
+
+  create_command("champion/VR/vrOn", "Button enter VR (ON only)", "championTurnOnVr()", "", "")
 end
 
 -------------------------
@@ -127,8 +135,15 @@ function ChampComButtons()
   set_button_assignment(scgl.A3_Right,      "sim/flight_controls/rudder_trim_right")
   set_button_assignment(scgl.B1,            "sim/view/default_view")
   set_button_assignment(scgl.D1,            "sim/view/circle")
-  set_button_assignment(scgl.C1_Right,      "sim/VR/toggle_vr")
+  set_button_assignment(scgl.C1_Up,         "sim/general/up_slow")
+  set_button_assignment(scgl.C1_Right,      "champion/VR/vrOn")
+  set_button_assignment(scgl.C1_Down,       "sim/general/down_slow")
   set_button_assignment(scgl.C1_Left,       "sim/VR/general/reset_view")
+  set_button_assignment(scgl.A4_Up,         "sim/general/forward_slow")
+  set_button_assignment(scgl.A4_Right,      "sim/general/right_slow")
+  set_button_assignment(scgl.A4_Down,       "sim/general/backward_slow")
+  set_button_assignment(scgl.A4_Left,       "sim/general/left_slow")
+
 
   set_button_assignment(btq.flaps_up,       "sim/flight_controls/flaps_up")
   set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
@@ -136,7 +151,7 @@ function ChampComButtons()
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
   --set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
   --set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
-  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO)) then
+  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO) and ("TBM9" ~= PLANE_ICAO)) then
     do_every_frame([[
       ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
       SwPos = button(]]..btq.sw1_up..[[)
