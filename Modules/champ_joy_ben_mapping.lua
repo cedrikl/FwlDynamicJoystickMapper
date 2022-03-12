@@ -213,14 +213,12 @@ function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
   if ((PLANE_ICAO == "A306") or (PLANE_ICAO == "A310")) then
-    set_button_assignment(yoke.Red_Up,       "A300/MCDU/yoke_ap_disconnect_captain")
+    set_button_assignment(afy.L_WhiteBtn,       "A300/MCDU/yoke_ap_disconnect_captain")
     ChampBravoMapping_A310_ini()
   elseif (string.find(PLANE_ICAO, 'A3%w%w') or string.find(PLANE_ICAO, 'A2%wN')) then
     --Airbus Sidesticks
-    set_axis_assignment(yoke.axis_roll,  "none", "normal")
-    set_axis_assignment(yoke.axis_pitch, "none", "normal")
-    set_axis_assignment(yoke.axis_2,     "none", "reverse")
-    set_axis_assignment(yoke.axis_3,     "none", "reverse")
+    set_axis_assignment(afy.axis_roll,  "none", "normal")
+    set_axis_assignment(afy.axis_pitch, "none", "normal")
     set_axis_assignment(x55j.roll,  "roll", "normal")
     set_axis_assignment(x55j.pitch, "pitch", "normal")
     if ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
@@ -234,17 +232,17 @@ function ChampAcSpecific()
       --TBD
     end
   elseif (PLANE_ICAO == "B738") then
-    set_button_assignment(yoke.Red_Up, "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(afy.L_WhiteBtn, "laminar/B738/autopilot/capt_disco_press")
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B38M") then
     --Ben hack for VAC, placeholder for future max which may not be zibo so keeping separate
-    set_button_assignment(yoke.Red_Up, "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(afy.L_WhiteBtn, "laminar/B738/autopilot/capt_disco_press")
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
-    set_button_assignment(yoke.Red_Up,  "SSG/UFMC/AP_discon_Button")
-    set_button_assignment(yoke.Sw_L_Dn, "SSG/UFMC/AP_ARM_AT_Switch")
-    set_button_assignment(yoke.Red_Dn,  "SSG/UFMC/TOGA_Button")
+    set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
+    --set_button_assignment(yoke.Sw_L_Dn, "SSG/UFMC/AP_ARM_AT_Switch")
+    --set_button_assignment(yoke.Red_Dn,  "SSG/UFMC/TOGA_Button")
   elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
     --Flight Factor 767
     set_button_assignment(yoke.Red_Up,  "1-sim/comm/AP/ap_disc")
@@ -255,15 +253,13 @@ function ChampAcSpecific()
   elseif (PLANE_ICAO == "B789") then
     --TBD
   elseif (PLANE_ICAO == "DH8D") then
-    set_button_assignment(yoke.Red_Up, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
+    set_button_assignment(afy.L_WhiteBtn, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
     --set_button_assignment(scgl.Trig_Aft, "FJS/Q4XP/Autopilot/TCS_Engage")
     ChampBravoMapping_DH8D_FlyJSim()
   elseif (PLANE_ICAO == "UH1") then
     --Nimbus UH1?
-    set_axis_assignment(yoke.axis_roll,  "none",  "normal")
-    set_axis_assignment(yoke.axis_pitch, "none",  "normal")
-    set_axis_assignment(yoke.axis_2,     "none",  "reverse")
-    set_axis_assignment(yoke.axis_3,     "none",  "reverse")
+    set_axis_assignment(afy.axis_roll,  "none",  "normal")
+    set_axis_assignment(afy.axis_pitch, "none",  "normal")
 
     set_axis_assignment(x55j.roll,       "roll",  "normal")
     set_axis_assignment(x55j.pitch,      "pitch", "normal")
