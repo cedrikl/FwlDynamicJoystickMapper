@@ -33,6 +33,15 @@ joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
 joy_known.db[joy_known.size + 1]["vid"] = 0x294b
+joy_known.db[joy_known.size + 1]["pid"] = 0x1900
+joy_known.db[joy_known.size + 1]["name"] = "Honeycomb Aeronautical Alpha Flight Yoke"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_alpha"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x294b
 joy_known.db[joy_known.size + 1]["pid"] = 0x1901
 joy_known.db[joy_known.size + 1]["name"] = "Honeycomb Aeronautical Bravo Throttle Quadrant"
 joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_bravo"

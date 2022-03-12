@@ -10,6 +10,7 @@ x55j      = require("champ_joy_x55j")
 TPR       = require("champ_joy_tpr")
 scgl      = require("champ_joy_scg_l")
 stq       = require("champ_joy_saitek_tq")
+afy       = require("champ_joy_alpha")
 btq       = require("champ_joy_bravo")
 btq_led   = require("champ_joy_bravo_leds")
 
@@ -77,6 +78,10 @@ function ChampInit()
 
     if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_ChPedals" == device_DB.db[HID_device]["modu"])) then
       pedals.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
+    end
+
+    if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_alpha" == device_DB.db[HID_device]["modu"])) then
+      afy.map(device_DB.db[HID_device]["xpos"], device_DB.db[HID_device]["hidp"])
     end
 
     if (nil ~= (device_DB.db[HID_device]["xpos"]) and ("champ_joy_bravo" == device_DB.db[HID_device]["modu"])) then
