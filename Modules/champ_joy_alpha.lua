@@ -65,3 +65,5 @@ function alpha.map(joy_num, joy_hid_pointer)
   alpha.L_Hat_Left    = start_button + 41
   alpha.L_Hat_UpLeft  = start_button + 42
 end
+
+return alpha
