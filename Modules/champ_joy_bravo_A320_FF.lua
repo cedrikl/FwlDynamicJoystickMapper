@@ -94,7 +94,7 @@ function ChampBravoMapping_A320_FF()
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("model/controls/heat_engine1")
       AcPos2 = get("model/controls/heat_engine2")
       JoyPos = button(]]..btq.sw2_up..[[)
@@ -113,7 +113,7 @@ function ChampBravoMapping_A320_FF()
     ]])
   set_button_assignment(btq.sw3_up, "sim/none/none")
   set_button_assignment(btq.sw3_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("model/controls/heat_wing")
       JoyPos = button(]]..btq.sw3_up..[[)
   
@@ -126,7 +126,7 @@ function ChampBravoMapping_A320_FF()
     ]])
   set_button_assignment(btq.sw5_up, "sim/none/none")
   set_button_assignment(btq.sw5_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("model/controls/light_strobe")
       JoyPos = button(]]..btq.sw5_up..[[)
   
@@ -142,7 +142,7 @@ function ChampBravoMapping_A320_FF()
   set_button_assignment(btq.sw7_up,    "sim/none/none")
   set_button_assignment(btq.sw7_dn,    "sim/none/none")
   --model/controls/light_strobe
-  do_every_frame([[
+  do_often([[
     L_Pos = get("model/controls/light_land1")
     LinGate = (L_Pos == 0.0) or (L_Pos == 0.5) or (L_Pos == 1.0)
     C_Pos = get("model/controls/light_nose")

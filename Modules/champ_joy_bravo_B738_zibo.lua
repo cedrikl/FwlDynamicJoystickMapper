@@ -58,7 +58,7 @@ function ChampBravoMapping_B738_zibo()
 
   set_button_assignment(btq.sw1_up, "sim/none/none")
   set_button_assignment(btq.sw1_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
       ChockStatus = get("laminar/B738/fms/chock_status")
       SwPos = button(]]..btq.sw1_up..[[)
@@ -72,7 +72,7 @@ function ChampBravoMapping_B738_zibo()
     ]])
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("laminar/B738/antiice_sw", 0)
       AcPos2 = get("laminar/B738/antiice_sw", 1)
       JoyPos = button(]]..btq.sw2_up..[[)
@@ -92,7 +92,7 @@ function ChampBravoMapping_B738_zibo()
     ]])
   set_button_assignment(btq.sw3_up, "sim/none/none")
   set_button_assignment(btq.sw3_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("laminar/B738/antiice_sw", 2)
       JoyPos = button(]]..btq.sw3_up..[[)
 
@@ -105,7 +105,7 @@ function ChampBravoMapping_B738_zibo()
     ]])
   set_button_assignment(btq.sw5_up, "sim/none/none")
   set_button_assignment(btq.sw5_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("laminar/B738/lights_sw", 0)
       JoyPos = button(]]..btq.sw5_up..[[)
 

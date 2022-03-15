@@ -77,7 +77,7 @@ function ChampBravoMapping_B777_FF()
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     L_Pos = get("anim/15/switch")
     R_Pos = get("anim/16/switch")
     SwPos2 = button(]]..btq.sw2_up..[[)
@@ -96,7 +96,7 @@ function ChampBravoMapping_B777_FF()
   ]])
   set_button_assignment(btq.sw3_up, "sim/none/none")
   set_button_assignment(btq.sw3_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     T_Pos = get("anim/14/switch")
     SwPos3 = button(]]..btq.sw3_up..[[)
 
@@ -108,7 +108,7 @@ function ChampBravoMapping_B777_FF()
   ]])
   set_button_assignment(btq.sw5_up, "sim/none/none")
   set_button_assignment(btq.sw5_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     T_Pos = get("anim/45/switch")
     SwPos5 = button(]]..btq.sw5_up..[[)
 
@@ -120,7 +120,7 @@ function ChampBravoMapping_B777_FF()
   ]])
   set_button_assignment(btq.sw6_up, "sim/none/none")
   set_button_assignment(btq.sw6_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     T_Pos = get("anim/44/switch")
     SwPos6 = button(]]..btq.sw6_up..[[)
 
@@ -132,7 +132,7 @@ function ChampBravoMapping_B777_FF()
   ]])
   set_button_assignment(btq.sw7_up, "sim/none/none")
   set_button_assignment(btq.sw7_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     L_Pos = get("anim/40/switch")
     C_Pos = get("anim/88/switch")
     R_Pos = get("anim/89/switch")

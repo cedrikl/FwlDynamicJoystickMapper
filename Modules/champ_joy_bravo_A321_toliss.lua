@@ -81,7 +81,7 @@ function ChampBravoMapping_A321_toliss()
 
   set_button_assignment(btq.sw1_up, "sim/none/none")
   set_button_assignment(btq.sw1_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     ParkPos = get("AirbusFBW/ParkBrakeAnim")
     SwPos = button(]]..btq.sw1_up..[[)
 
@@ -93,7 +93,7 @@ function ChampBravoMapping_A321_toliss()
   ]])
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     AcPos1 = get("ckpt/lamp/119")
     AcPos2 = get("ckpt/lamp/121")
     JoyPos = button(]]..btq.sw2_up..[[)
@@ -113,7 +113,7 @@ function ChampBravoMapping_A321_toliss()
   ]])
   set_button_assignment(btq.sw3_up, "sim/none/none")
   set_button_assignment(btq.sw3_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
     AcPos1 = get("ckpt/lamp/117")
     JoyPos = button(]]..btq.sw3_up..[[)
   
@@ -128,7 +128,7 @@ function ChampBravoMapping_A321_toliss()
 
   set_button_assignment(btq.sw5_up, "sim/none/none")
   set_button_assignment(btq.sw5_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("ckpt/oh/strobeLight/anim")
       JoyPos = button(]]..btq.sw5_up..[[)
   
@@ -143,7 +143,7 @@ function ChampBravoMapping_A321_toliss()
   set_button_assignment(btq.sw6_dn,    "sim/none/none")
   set_button_assignment(btq.sw7_up,    "sim/none/none")
   set_button_assignment(btq.sw7_dn,    "sim/none/none")
-  do_every_frame([[
+  do_often([[
     L_Pos = get("ckpt/oh/ladningLightLeft/anim")
     C_Pos = get("ckpt/oh/taxiLight/anim")
     R_Pos = get("ckpt/oh/ladningLightRight/anim")

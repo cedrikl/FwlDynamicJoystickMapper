@@ -65,7 +65,7 @@ function ChampBravoMapping_A310_ini()
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("A300/animations/buttons/ANTI_ICE_E1")
       AcPos2 = get("A300/animations/buttons/ANTI_ICE_E2")
       JoyPos = button(]]..btq.sw2_up..[[)
@@ -84,7 +84,7 @@ function ChampBravoMapping_A310_ini()
     ]])
   set_button_assignment(btq.sw3_up, "sim/none/none")
   set_button_assignment(btq.sw3_dn, "sim/none/none")
-  do_every_frame([[
+  do_often([[
       AcPos1 = get("A300/animations/buttons/WING_SUPPLY")
       JoyPos = button(]]..btq.sw3_up..[[)
   
