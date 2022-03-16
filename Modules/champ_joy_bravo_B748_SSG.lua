@@ -67,104 +67,97 @@ function ChampBravoMapping_B748_SSG()
     if (status == "begin") then command_begin("SSG/UFMC/AP_N1_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_N1_Button") end
   end
 
-  --set_button_assignment(btq.ap_master, "sim/none/none")
-  --function apPanelCockpitMasterShort(status)
-  --  if (status == "begin") then command_begin("AP1") elseif (status == "end") then command_end("a320/Panel/FCU_AutoPilot1_button") end
-  --end
-  --function apPanelCockpitMasterLong(status)
-  --  if (status == "begin") then command_begin("AT ARM") elseif (status == "end") then command_end("a320/Panel/FCU_AutoThrust_button") end
-  --end
+  set_button_assignment(btq.ap_master, "sim/none/none")
+  function apPanelCockpitMasterShort(status)
+    if (status == "begin") then command_begin("SSG/UFMC/AP_CMDA_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_CMDA_Button") end
+  end
+  function apPanelCockpitMasterLong(status)
+    if (status == "begin") then command_begin("SSG/UFMC/AP_ARM_AT_Switch") elseif (status == "end") then command_end("SSG/UFMC/AP_ARM_AT_Switch") end
+  end
 
   do_every_frame("apPanelDualHandler()")
 
 
-  set_button_assignment(btq.axis12_2nd_func, "SSG/UFMC/AP_ARM_AT_Switch")
+  set_button_assignment(btq.axis12_2nd_func, "SSG/UFMC/AT_Discon")
   set_button_assignment(btq.axis3_2nd_func,  "SSG/UFMC/TOGA_Button")
 
-  --set_button_assignment(btq.sw2_up, "sim/none/none")
-  --set_button_assignment(btq.sw2_dn, "sim/none/none")
-  --do_often([[
-  --    AcPos1 = get("model/controls/heat_engine1")
-  --    AcPos2 = get("model/controls/heat_engine2")
-  --    JoyPos = button(]]..btq.sw2_up..[[)
-  --
-  --    if (JoyPos and (AcPos1 < 0.0001)) then
-  --      command_once("a320/Overhead/HeatEngine1_button")
-  --    elseif (not(JoyPos) and (AcPos1 > 0.4999)) then
-  --      command_once("a320/Overhead/HeatEngine1_button")
-  --    end
-  --
-  --    if (JoyPos and (AcPos2 < 0.0001)) then
-  --      command_once("a320/Overhead/HeatEngine2_button")
-  --    elseif (not(JoyPos) and (AcPos2 > 0.4999)) then
-  --      command_once("a320/Overhead/HeatEngine2_button")
-  --    end
-  --  ]])
-  --set_button_assignment(btq.sw3_up, "sim/none/none")
-  --set_button_assignment(btq.sw3_dn, "sim/none/none")
-  --do_often([[
-  --    AcPos1 = get("model/controls/heat_wing")
-  --    JoyPos = button(]]..btq.sw3_up..[[)
-  --
-  --
-  --    if (JoyPos and (AcPos1 < 0.0001)) then
-  --      command_once("a320/Overhead/HeatWing_button")
-  --    elseif (not(JoyPos) and (AcPos1 > 0.4999)) then
-  --      command_once("a320/Overhead/HeatWing_button")
-  --    end
-  --  ]])
-  --set_button_assignment(btq.sw5_up, "sim/none/none")
-  --set_button_assignment(btq.sw5_dn, "sim/none/none")
-  --do_often([[
-  --    AcPos1 = get("model/controls/light_strobe")
-  --    JoyPos = button(]]..btq.sw5_up..[[)
-  --
-  --
-  --    if (JoyPos and (AcPos1 < 0.5001)) then
-  --      command_once("a320/Overhead/LightStrobe_switch+")
-  --    elseif (not(JoyPos) and (AcPos1 > 0.9999)) then
-  --      command_once("a320/Overhead/LightStrobe_switch+")
-  --    end
-  --  ]])
-  --set_button_assignment(btq.sw6_up,    "sim/none/none")
-  --set_button_assignment(btq.sw6_dn,    "sim/none/none")
-  --do_often([[
-  --  L_Pos = get("model/controls/light_land1")
-  --  LinGate = (L_Pos == 0.0) or (L_Pos == 0.5) or (L_Pos == 1.0)
-  --  C_Pos = get("model/controls/light_nose")
-  --  CinGate = (C_Pos == 0.0) or (C_Pos == 0.5) or (C_Pos == 1.0)
-  --  R_Pos = get("model/controls/light_land2")
-  --  RinGate = (R_Pos == 0.0) or (R_Pos == 0.5) or (R_Pos == 1.0)
-  --  SwPos6 = button(]]..btq.sw6_up..[[)
-  --  SwPos7 = button(]]..btq.sw7_up..[[)
-  --  
-  --  if (SwPos7 and (L_Pos ~= 1) and LinGate) then
-  --    command_once("a320/Overhead/LightLandL_switch+")
-  --  elseif (not(SwPos7) and (L_Pos ~= 0) and LinGate) then
-  --    command_once("a320/Overhead/LightLandL_switch+")
-  --  end
-  --
-  --  if (SwPos7 and (R_Pos ~= 1) and RinGate) then
-  --    command_once("a320/Overhead/LightLandR_switch+")
-  --  elseif (not(SwPos7) and (R_Pos ~= 0) and RinGate) then
-  --    command_once("a320/Overhead/LightLandR_switch+")
-  --  end
-  --
-  --  if (SwPos7 and (C_Pos ~= 1) and CinGate) then
-  --    command_once("a320/Overhead/LightNose_switch+")
-  --  elseif (SwPos6 and not(SwPos7) and (C_Pos ~= 0.5) and CinGate) then
-  --    command_once("a320/Overhead/LightNose_switch+")
-  --  elseif (not(SwPos6) and not(SwPos7) and (C_Pos ~= 0) and CinGate) then
-  --    command_once("a320/Overhead/LightNose_switch+")
-  --  end
-  --]])
+  set_button_assignment(btq.sw2_up, "sim/none/none")
+  set_button_assignment(btq.sw2_dn, "sim/none/none")
+  do_often([[
+    Eng1Pos = get("ssg/ICE/ice_eng1_sw")
+    Eng2Pos = get("ssg/ICE/ice_eng2_sw")
+    Eng3Pos = get("ssg/ICE/ice_eng3_sw")
+    Eng4Pos = get("ssg/ICE/ice_eng4_sw")
+    SwPos2 = button(]]..btq.sw2_up..[[)
+    
+    if (SwPos2 and (Eng1Pos ~= 2)) then
+      set("ssg/ICE/ice_eng1_sw", 2)
+    elseif (not(SwPos2) and (Eng1Pos >= 2)) then
+      set("ssg/ICE/ice_eng1_sw", 1)
+    end
+    
+    if (SwPos2 and (Eng2Pos ~= 2)) then
+      set("ssg/ICE/ice_eng2_sw", 2)
+    elseif (not(SwPos2) and (Eng2Pos >= 2)) then
+      set("ssg/ICE/ice_eng2_sw", 1)
+    end
+
+    if (SwPos2 and (Eng3Pos ~= 2)) then
+      set("ssg/ICE/ice_eng3_sw", 2)
+    elseif (not(SwPos2) and (Eng3Pos >= 2)) then
+      set("ssg/ICE/ice_eng3_sw", 1)
+    end
+
+    if (SwPos2 and (Eng4Pos ~= 2)) then
+      set("ssg/ICE/ice_eng4_sw", 2)
+    elseif (not(SwPos2) and (Eng4Pos >= 2)) then
+      set("ssg/ICE/ice_eng4_sw", 1)
+    end
+  ]])
+  
+  set_button_assignment(btq.sw3_up, "sim/none/none")
+  set_button_assignment(btq.sw3_dn, "sim/none/none")
+    do_often([[
+    Eng1Pos = get("ssg/ICE/ice_wing_sw")
+    SwPos3 = button(]]..btq.sw3_up..[[)
+    
+    if (SwPos3 and (Eng1Pos ~= 2)) then
+      set("ssg/ICE/ice_wing_sw", 2)
+    elseif (not(SwPos3) and (Eng1Pos >= 2)) then
+      set("ssg/ICE/ice_wing_sw", 1)
+    end
+  ]])
+
+  set_button_assignment(btq.sw5_up, "sim/none/none")
+  set_button_assignment(btq.sw5_dn, "sim/none/none")
+  do_often([[
+       SwPos5 = button(]]..btq.sw5_up..[[)
+ 
+      if (SwPos5) then
+        set("ssg/LGT/lgt_stb_sw", 1)
+      elseif (not(SwPos5)) then
+        set("ssg/LGT/lgt_stb_sw", 0)
+      end
+    ]])
+  set_button_assignment(btq.sw6_up,    "sim/none/none")
+  set_button_assignment(btq.sw6_dn,    "sim/none/none")
+  do_often([[
+    SwPos6 = button(]]..btq.sw6_up..[[)
+    
+    if (SwPos6) then
+      set("ssg/LGT/lgt_taxi_sw", 1)
+    elseif (not(SwPos6)) then
+      set("ssg/LGT/lgt_taxi_sw", 0)
+    end
+  ]]) 
+  
   set_button_assignment(btq.sw7_up,    "sim/none/none")
   set_button_assignment(btq.sw7_dn,    "sim/none/none")
   do_often([[
-    INL_Pos =  get("SSG/LGT/lgt_inL_sw")
-    INR_Pos =  get("SSG/LGT/lgt_inL_sw")
-    OUTL_Pos = get("SSG/LGT/lgt_outL_sw")
-    OUTR_Pos = get("SSG/LGT/lgt_outR_sw")
+    INL_Pos =  get("ssg/LGT/lgt_inL_sw")
+    INR_Pos =  get("ssg/LGT/lgt_inR_sw")
+    OUTL_Pos = get("ssg/LGT/lgt_outL_sw")
+    OUTR_Pos = get("ssg/LGT/lgt_outR_sw")
     SwPos7 = button(]]..btq.sw7_up..[[)
     
     if (SwPos7 and (INL_Pos ~= 1)) then
@@ -190,45 +183,16 @@ function ChampBravoMapping_B748_SSG()
     elseif (not(SwPos7) and (OUTR_Pos ~= 0)) then
       command_once("SSG/Lights/Land_OUTR")
     end
-  ]])
+  ]])  
 end
 
 
 function ChampBravoLed_B748_SSG()
-  btq_led.led_check(
-    (
-      (get("a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity") > 0.1) or
-      (get("a320/Aircraft/PowerPlant/APU/APU_Rate") > 0.01)
-    ), btq_led, 'C', btq_led.block_C_LED.APU)
-  btq_led.led_check(
-    (
-      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLF") ~= 1.0) or
-      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRF") ~= 1.0) or
-      (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedF") ~= 1.0) or
-      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedLB") ~= 1.0) or
-      (get("a320/Aircraft/Pneumatic/Cabin/DoorClosedRB") ~= 1.0) or
-      (get("a320/Aircraft/Pneumatic/Cabin/CargoClosedB") ~= 1.0)
-    ), btq_led, 'D', btq_led.block_D_LED.DOOR)
-  if (
-      get("a320/Aircraft/Electric/BCL1/Powered") == 0 and
-      get("a320/Aircraft/Electric/BCL2/Powered") == 0 and
-      get("a320/Aircraft/Electric/GCU1/Powered") == 0 and
-      get("a320/Aircraft/Electric/GCU2/Powered") == 0 and
-      get("a320/Aircraft/Electric/GCU3/Powered") == 0 and
-      get("a320/Aircraft/Electric/MGCU/Powered") == 0
-     ) then setAllToOff()
-  end
 end
 
 
 function ChampBravoCheck_B748_SSG()
-  if (--XPLMFindDataRef("a320/Aircraft/Electric/BCL1/Powered")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Electric/BCL2/Powered")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Electric/GCU1/Powered")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Electric/GCU2/Powered")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Electric/GCU3/Powered")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Electric/MGCU/Powered")     ~= nil and
-      --AP Panel
+  if (--AP Panel rotary
       XPLMFindCommand("SSG/UFMC/Alt_UP")                         ~= nil and
       XPLMFindCommand("SSG/UFMC/Alt_Down")                       ~= nil and
       XPLMFindCommand("SSG/UFMC/VS_UP")                          ~= nil and
@@ -237,7 +201,7 @@ function ChampBravoCheck_B748_SSG()
       XPLMFindCommand("SSG/UFMC/HDG_Down")                       ~= nil and
       XPLMFindCommand("SSG/UFMC/Speed_UP")                       ~= nil and
       XPLMFindCommand("SSG/UFMC/Speed_Down")                     ~= nil and
-
+      --AP Panel Buttons
       XPLMFindCommand("SSG/UFMC/AP_HDG_Button")                  ~= nil and
       XPLMFindCommand("SSG/UFMC/AP_HDGHOLD_Button")              ~= nil and
       XPLMFindCommand("SSG/UFMC/AP_LNAV_Button")                 ~= nil and
@@ -249,66 +213,27 @@ function ChampBravoCheck_B748_SSG()
       XPLMFindCommand("SSG/UFMC/AP_LVLCHG_Button")               ~= nil and
       XPLMFindCommand("SSG/UFMC/AP_SPD_Button")                  ~= nil and
       XPLMFindCommand("SSG/UFMC/AP_N1_Button")                   ~= nil and
-      ----Axis
+      XPLMFindCommand("SSG/UFMC/AP_CMDA_Button")                 ~= nil and
       XPLMFindCommand("SSG/UFMC/AP_ARM_AT_Switch")               ~= nil and
+      --Axis
+      XPLMFindCommand("SSG/UFMC/AT_Discon")                      ~= nil and
       XPLMFindCommand("SSG/UFMC/TOGA_Button")                    ~= nil and
-      ----Switches
-      --XPLMFindDataRef("model/controls/heat_engine1")             ~= nil and
-      --XPLMFindDataRef("model/controls/heat_engine1")             ~= nil and
-      --XPLMFindCommand("a320/Overhead/HeatEngine1_button")        ~= nil and
-      --XPLMFindCommand("a320/Overhead/HeatEngine2_button")        ~= nil and
-      --XPLMFindDataRef("model/controls/heat_wing")                ~= nil and
-      --XPLMFindCommand("a320/Overhead/HeatWing_button")           ~= nil and
-      --XPLMFindDataRef("model/controls/light_strobe")             ~= nil and
-      --XPLMFindCommand("a320/Overhead/LightStrobe_switch+")       ~= nil and
-
-      --XPLMFindDataRef("model/controls/light_nose")               ~= nil and
-      --XPLMFindCommand("SSG/Lights/beacon")                       ~= nil and
-      --XPLMFindCommand("SSG/Lights/Nav")                          ~= nil and
-      --XPLMFindCommand("a320/Overhead/LightNose_switch+")                             ~= nil and
-
-      XPLMFindDataRef("SSG/LGT/lgt_inL_sw")                      ~= nil and
-      XPLMFindDataRef("SSG/LGT/lgt_inL_sw")                      ~= nil and
-      XPLMFindDataRef("SSG/LGT/lgt_outL_sw")                     ~= nil and
-      XPLMFindDataRef("SSG/LGT/lgt_outR_sw")                     ~= nil and
+      --Switches
+      XPLMFindDataRef("ssg/ICE/ice_eng1_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/ICE/ice_eng2_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/ICE/ice_eng3_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/ICE/ice_eng4_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/ICE/ice_wing_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/LGT/lgt_stb_sw")                      ~= nil and
+      XPLMFindDataRef("ssg/LGT/lgt_taxi_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/LGT/lgt_inL_sw")                      ~= nil and
+      XPLMFindDataRef("ssg/LGT/lgt_inL_sw")                      ~= nil and
+      XPLMFindDataRef("ssg/LGT/lgt_outL_sw")                     ~= nil and
+      XPLMFindDataRef("ssg/LGT/lgt_outR_sw")                     ~= nil and
       XPLMFindCommand("SSG/Lights/Land_INL")                     ~= nil and
       XPLMFindCommand("SSG/Lights/Land_INR")                     ~= nil and
       XPLMFindCommand("SSG/Lights/Land_OUTL")                    ~= nil and
-      XPLMFindCommand("SSG/Lights/Land_OUTR")                    ~= nil and
-      ----LEDs
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_LateralDigit4/State")         ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_LocalizerLight/State")        ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_ApproachLight/State")         ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AltitudeDigit6/State")        ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_VerticalDigit6/State")        ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_SpeedDigit5/State")           ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight1/State")       ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/FCU_AutoPilotLight2/State")       ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLA/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightLB/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRA/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastCautLightRB/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLA/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightLB/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRA/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Panel/ShieldMastWarnLightRB/Intensity") ~= nil and 
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine1_LightA/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine1_LightB/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireAPU_LightA/Intensity")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireAPU_LightB/Intensity")     ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightA/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/FireEngine2_LightB/Intensity") ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/PowerPlant/EngineL/StarterValve/Position")      ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/PowerPlant/EngineR/StarterValve/Position")      ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Cockpit/Overhead/APU_MasterOn/Intensity")       ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/PowerPlant/APU/APU_Rate")                       ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedLF")                  ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedRF")                  ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/CargoClosedF")                  ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedLB")                  ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/DoorClosedRB")                  ~= nil and
-      --XPLMFindDataRef("a320/Aircraft/Pneumatic/Cabin/CargoClosedB")                  ~= nil
-      true
+      XPLMFindCommand("SSG/Lights/Land_OUTR")                    ~= nil
      ) then return true
   else
     return false

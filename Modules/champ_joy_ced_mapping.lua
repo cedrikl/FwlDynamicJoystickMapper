@@ -18,7 +18,9 @@ require("champ_joy_bravo_A310_ini")
 require("champ_joy_bravo_A320_FF")
 require("champ_joy_bravo_A321_toliss")
 require("champ_joy_bravo_B350_airfoillabs")
+require("champ_joy_alpha_B738_zibo")
 require("champ_joy_bravo_B738_zibo")
+require("champ_joy_alpha_B748_SSG")
 require("champ_joy_bravo_B748_SSG")
 require("champ_joy_bravo_B767_FF")
 require("champ_joy_bravo_B777_FF")
@@ -232,22 +234,19 @@ function ChampAcSpecific()
     end
   elseif (PLANE_ICAO == "B738") then
     set_button_assignment(scgl.A2, "laminar/B738/autopilot/capt_disco_press")
+    --ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B38M") then
     --Ben hack for VAC, placeholder for future max which may not be zibo so keeping separate
     set_button_assignment(scgl.A2, "laminar/B738/autopilot/capt_disco_press")
+    --ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
-    --set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
-    --set_button_assignment(afy.L_Trim1Up,     "sim/flight_controls/pitch_trim_down")
-    --set_button_assignment(afy.L_Trim1Dn,     "sim/flight_controls/pitch_trim_up")
-
-    --set_button_assignment(afy.B_BcnOn,       "SSG/Lights/beacon")
-    --set_button_assignment(afy.B_BcnOff,      "SSG/Lights/beacon")
-    --set_button_assignment(afy.B_NavOn,       "SSG/Lights/Nav")
-    --set_button_assignment(afy.B_NavOff,      "SSG/Lights/Nav")
-
+    set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
+    set_button_assignment(afy.L_Trim1Up,   "sim/flight_controls/pitch_trim_down")
+    set_button_assignment(afy.L_Trim1Dn,   "sim/flight_controls/pitch_trim_up")
+    --ChampAlphaMapping_B748_SSG()
     ChampBravoMapping_B748_SSG()
   elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
     --Flight Factor 767
@@ -326,7 +325,8 @@ function check_specific_datarefs()
        ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "B748") then
-    if (ChampBravoCheck_B748_SSG()                          and
+    if (--ChampAlphaCheck_B748_SSG()                          and
+        ChampBravoCheck_B748_SSG()                          and
         XPLMFindCommand("SSG/UFMC/AP_discon_Button") ~= nil
        ) then ac_ready = true
     end
