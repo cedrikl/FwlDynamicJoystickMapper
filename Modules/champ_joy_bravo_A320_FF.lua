@@ -1,4 +1,4 @@
---Flight Factor A320 Ultimate
+--Flight Factor A320 Ultimate Bravo Mappings
 
 function ChampBravoEngine_A320_FF()
   do_every_frame([[

@@ -1,4 +1,4 @@
---Flight Factor B767 Pro Extended
+--Flight Factor B767 Pro Extended Bravo Mappings
 
 function ChampBravoMapping_B767_FF()
   function bravo_Ap_AltInc(numticks) bravo_command_multiple("1-sim/comm/AP/altUP", numticks) end

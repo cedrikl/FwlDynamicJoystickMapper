@@ -25,7 +25,7 @@ function ChampAlphaMapping_B738_zibo()
   do_often([[
     Bcn_Pos =  get("sim/cockpit/electrical/beacon_lights_on")
     SwSBcnPos = button(]]..afy.B_BcnOn..[[)
-    
+
     if (SwSBcnPos and (Bcn_Pos < 1)) then
       command_once("sim/lights/beacon_lights_toggle")
     elseif (not(SwSBcnPos) and (Bcn_Pos > 0)) then
@@ -38,7 +38,7 @@ function ChampAlphaMapping_B738_zibo()
   do_often([[
     Land_Pos =   get("laminar/B738/toggle_switch/rwy_light_left")
     SwSLandPos  = button(]]..afy.B_LandOn..[[)
-    
+
     if (SwSLandPos and (Land_Pos < 1)) then
       command_once("laminar/B738/switch/rwy_light_left_on")
     elseif (not(SwSLandPos) and (Land_Pos > 0)) then
@@ -57,7 +57,7 @@ function ChampAlphaMapping_B738_zibo()
   ]])
   --Wing Lights
   set_button_assignment(afy.B_TaxiOn,         "laminar/B738/switch/wing_light_on")
-  set_button_assignment(afy.B_TaxiOff,        "laminar/B738/switch/wing_light_off")  
+  set_button_assignment(afy.B_TaxiOff,        "laminar/B738/switch/wing_light_off")
   --Wheel Lights
   set_button_assignment(afy.B_NavOff,          "laminar/B738/switch/wheel_light_on")
   set_button_assignment(afy.B_NavOn,         "laminar/B738/switch/wheel_light_off")
@@ -78,19 +78,18 @@ function ChampAlphaCheck_B738_zibo()
       
       XPLMFindCommand("laminar/B738/switch/battery_up")                         ~= nil and
       XPLMFindCommand("laminar/B738/switch/battery_dn")                         ~= nil and
-      XPLMFindCommand("laminar/B738/button_switch_cover02")                     ~= nil and      
+      XPLMFindCommand("laminar/B738/button_switch_cover02")                     ~= nil and
       XPLMFindCommand("sim/lights/beacon_lights_toggle")                        ~= nil and
       XPLMFindCommand("laminar/B738/switch/rwy_light_left_on")                  ~= nil and
       XPLMFindCommand("laminar/B738/switch/rwy_light_left_off")                 ~= nil and
       XPLMFindCommand("laminar/B738/switch/rwy_light_right_on")                 ~= nil and
       XPLMFindCommand("laminar/B738/switch/rwy_light_right_off")                ~= nil and
       XPLMFindCommand("laminar/B738/switch/wing_light_on")                      ~= nil and
-      XPLMFindCommand("laminar/B738/switch/wing_light_off")                     ~= nil and   
+      XPLMFindCommand("laminar/B738/switch/wing_light_off")                     ~= nil and
       XPLMFindCommand("laminar/B738/switch/wheel_light_on")                     ~= nil and
       XPLMFindCommand("laminar/B738/switch/wheel_light_off")                    ~= nil and
       XPLMFindCommand("laminar/B738/switch/logo_light_on")                      ~= nil and
-      XPLMFindCommand("laminar/B738/switch/logo_light_off")                     ~= nil and
-      true
+      XPLMFindCommand("laminar/B738/switch/logo_light_off")                     ~= nil
      ) then return true
   else
     return false

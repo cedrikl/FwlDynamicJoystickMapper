@@ -87,8 +87,7 @@ function ChampAlphaCheck_B748_SSG()
       XPLMFindDataRef("ssg/LGT/lgt_wing_sw")        ~= nil and
       XPLMFindCommand("SSG/Lights/Wing")            ~= nil and
       XPLMFindDataRef("ssg/LGT/lgt_logo_sw")        ~= nil and
-      XPLMFindCommand("SSG/Lights/Logo")            ~= nil and
-      true
+      XPLMFindCommand("SSG/Lights/Logo")            ~= nil
      ) then return true
   else
     return false
