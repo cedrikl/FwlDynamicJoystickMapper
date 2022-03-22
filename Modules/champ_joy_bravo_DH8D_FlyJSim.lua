@@ -1,21 +1,56 @@
---FlyJSim Q4XP (DH8D)
+--FlyJSim Q4XP (DH8D) Bravo Mappings
 
 function ChampBravoMapping_DH8D_FlyJSim()
   function bravo_Ap_VsInc(numticks)  bravo_command_multiple("FJS/Q4XP/Autopilot/WheelUP", numticks) end
   function bravo_Ap_VsDec(numticks)  bravo_command_multiple("FJS/Q4XP/Autopilot/WheelDN", numticks) end
-  --function bravo_Ap_CrsInc(numticks) bravo_command_multiple("TBD", numticks) end
-  --function bravo_Ap_CrsDec(numticks) bravo_command_multiple("TBD", numticks) end
-  function bravo_Ap_IasInc(numticks) bravo_command_multiple("FJS/Q4XP/Autopilot/WheelUP", numticks) end
-  function bravo_Ap_IasDec(numticks) bravo_command_multiple("FJS/Q4XP/Autopilot/WheelDN", numticks) end
+  function bravo_Ap_CrsInc(numticks) bravo_command_multiple("sim/radios/obs_HSI_up", numticks) end
+  function bravo_Ap_CrsDec(numticks) bravo_command_multiple("sim/radios/obs_HSI_down", numticks) end
 
-  set_button_assignment(btq.ap_alt, "sim/none/none")
-  function apPanelCockpitAltShort(status)
-    if (status == "begin") then command_begin("sim/autopilot/altitude_arm") elseif (status == "end") then command_end("sim/autopilot/altitude_arm") end
-  end
-  function apPanelCockpitAltLong(status)
-    if (status == "begin") then command_begin("sim/autopilot/altitude_hold") elseif (status == "end") then command_end("sim/autopilot/altitude_hold") end
-  end
+  set_button_assignment(btq.ap_hdg,    "sim/none/none")
+    function apPanelCockpitHdgShort(status) 
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_hdg") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_hdg") end
+    end
 
+ set_button_assignment(btq.ap_nav,    "sim/none/none")
+   function apPanelCockpitNavShort(status) 
+     if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_nav") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_nav") end
+   end
+   function apPanelCockpitNavLong(status) 
+     if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_vnav") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_vnav") end
+   end
+  
+  set_button_assignment(btq.ap_apr,    "sim/none/none")
+    function apPanelCockpitAprShort(status) 
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_appr") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_appr") end
+    end
+
+  set_button_assignment(btq.ap_rev,    "sim/none/none")
+    function apPanelCockpitRevShort(status)
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_bc") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_bc") end
+    end
+
+  set_button_assignment(btq.ap_alt,    "sim/none/none")
+    function apPanelCockpitAltShort(status)
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_altsel") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_altsel") end
+    end
+    function apPanelCockpitAltLong(status)
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_alt") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_alt") end
+    end
+  
+  set_button_assignment(btq.ap_vs,     "sim/none/none")
+    function apPanelCockpitVsShort(status)
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_vs") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_vs") end
+    end
+
+  set_button_assignment(btq.ap_ias,    "sim/none/none")
+    function apPanelCockpitIasShort(status)
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_ias") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_ias") end
+    end
+  set_button_assignment(btq.ap_master, "sim/none/none")
+    function apPanelCockpitMasterShort(status)
+      if (status == "begin") then command_begin("FJS/Q4XP/SoftKey/ap_ap") elseif (status == "end") then command_end("FJS/Q4XP/SoftKey/ap_ap") end
+    end
+    
   do_every_frame("apPanelDualHandler()")
 
   set_button_assignment(btq.axis12_2nd_func, "FJS/Q4XP/ENGINES/PowerGatePassALL")
@@ -27,177 +62,95 @@ function ChampBravoMapping_DH8D_FlyJSim()
   set_button_assignment(btq.sw2_dn, "sim/none/none")
   set_button_assignment(btq.sw3_up, "sim/none/none")
   set_button_assignment(btq.sw3_dn, "sim/none/none")
+  set_button_assignment(btq.sw4_up, "sim/none/none")
+  set_button_assignment(btq.sw4_dn, "sim/none/none")
+  set_button_assignment(btq.sw5_up, "sim/none/none")
+  set_button_assignment(btq.sw5_dn, "sim/none/none")
+  set_button_assignment(btq.sw6_up, "sim/none/none")
+  set_button_assignment(btq.sw6_dn, "sim/none/none")
+  set_button_assignment(btq.sw7_up, "sim/none/none")
+  set_button_assignment(btq.sw7_dn, "sim/none/none")
+-----------------
+--PANEL BUTTONS--
+-----------------
+--Strobe light
+  set_button_assignment(btq.sw5_up, "sim/none/none")
+  set_button_assignment(btq.sw5_dn, "sim/none/none")
+  do_often([[
+    Str_Pos = get("FJS/Q4XP/Manips/TwoSwitch_Anim", 23)
+    SwStr = button(]]..btq.sw5_up..[[)
+ 
+    if (SwStr and (Str_Pos ~= 1)) then
+      command_once("FJS/Q4XP/Switches/ACOL_dn")
+    elseif (not(SwStr) and (Str_Pos >= 0)) then
+      command_once("FJS/Q4XP/Switches/ACOL_up")
+    end
+  ]])
+--Taxi light
+  set_button_assignment(btq.sw6_up,    "sim/none/none")
+  set_button_assignment(btq.sw6_dn,    "sim/none/none")
+  do_often([[
+    TaxiPos = get("FJS/Q4XP/Manips/TwoSwitch_Anim", 18)
+    SwPos6 = button(]]..btq.sw6_up..[[)
+
+    if (SwPos6 and (TaxiPos ~= 1)) then
+      command_once("FJS/Q4XP/Switches/TAXI_LIGHTS")
+    elseif (not(SwPos6) and (TaxiPos == 1)) then
+      command_once("FJS/Q4XP/Switches/TAXI_LIGHTS")
+    end
+  ]])
+--Landing light
+  set_button_assignment(btq.sw7_up,    "sim/none/none")
+  set_button_assignment(btq.sw7_dn,    "sim/none/none")
+  do_often([[
+    AppPos = get("FJS/Q4XP/Manips/TwoSwitch_Anim", 16)
+    FlrPos = get("FJS/Q4XP/Manips/TwoSwitch_Anim", 17)
+    SwPos7 = button(]]..btq.sw7_up..[[)
+    
+    if (SwPos7 and (AppPos ~= 1)) then
+      command_once("FJS/Q4XP/Switches/APPR_LIGHTS")
+    elseif (not(SwPos7) and (AppPos == 1)) then
+      command_once("FJS/Q4XP/Switches/APPR_LIGHTS")
+    end
+
+    if (SwPos7 and (FlrPos ~= 1)) then
+      command_once("FJS/Q4XP/Switches/FLARE_LIGHTS")
+    elseif (not(SwPos7) and (FlrPos == 1)) then
+      command_once("FJS/Q4XP/Switches/FLARE_LIGHTS")
+    end
+  ]])
 end
 
-
 function ChampBravoLed_DH8D_FlyJSim()
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/MCDU/animations/lights/heading_sel") == 1)
-  --  ), btq_led, 'A', btq_led.block_A_LED.HEADING)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/MCDU/animations/lights/nav") == 1) or
-  --    (get("A300/MCDU/animations/lights/profile_mode") == 1)
-  --  ), btq_led, 'A', btq_led.block_A_LED.NAV)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/MCDU/animations/lights/approach") == 1)
-  --  ), btq_led, 'A', btq_led.block_A_LED.APR)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/MCDU/animations/lights/level_change") == 1) or
-  --    (get("A300/MCDU/animations/lights/altitude_hold") == 1)
-  --  ), btq_led, 'A', btq_led.block_A_LED.ALT)
-  --btq_led.led_check(
-  --  (
-  --    (false)
-  --  ), btq_led, 'A', btq_led.block_A_LED.VS)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/MCDU/animations/lights/autothrottle") == 1)
-  --  ), btq_led, 'A', btq_led.block_A_LED.IAS)
-  --
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/master_warning") == 1)
-  --  ), btq_led, 'B', btq_led.block_B_LED.MASTER_WARNING)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/master_caution_light") == 1)
-  --  ), btq_led, 'C', btq_led.block_C_LED.MASTER_CAUTION)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/FIRE/fire_handle_engine1_light") == 1) or
-  --    (get("A300/FIRE/fire_handle_apu_light")     == 1) or
-  --    (get("A300/FIRE/fire_handle_engine2_light") == 1)
-  --  ), btq_led, 'B', btq_led.block_B_LED.ENGINE_FIRE)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/engine/engine1_oil_low_press_light") == 1) or
-  --    (get("A300/engine/engine2_oil_low_press_light") == 1)
-  --  ), btq_led, 'C', btq_led.block_C_LED.LOW_OIL_PRESS)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/HYD/hydraulic_blue_light")   == 1) or
-  --    (get("A300/HYD/hydraulic_green1_light") == 1) or
-  --    (get("A300/HYD/hydraulic_green2_light") == 1) or
-  --    (get("A300/HYD/hydraulic_green3_light") == 1) or
-  --    (get("A300/HYD/hydraulic_yellow_light") == 1)
-  --  ), btq_led, 'C', btq_led.block_C_LED.LOW_HYD_PRESS)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/FUEL/outer_tank_pump1_left_low_pressure")  == 1 ) or
-  --    (get("A300/FUEL/outer_tank_pump2_left_low_pressure")  == 1 ) or
-  --    (get("A300/FUEL/outer_tank_pump1_right_low_pressure") == 1 ) or
-  --    (get("A300/FUEL/outer_tank_pump2_right_low_pressure") == 1 ) or
-  --    (get("A300/FUEL/center_tank_pump1_low_pressure")      == 1 ) or
-  --    (get("A300/FUEL/center_tank_pump2_low_pressure")      == 1 ) or
-  --    (get("A300/FUEL/inner_tank_pump1_right_low_pressure") == 1 ) or
-  --    (get("A300/FUEL/inner_tank_pump2_right_low_pressure") == 1 ) or
-  --    (get("A300/FUEL/inner_tank_pump2_left_low_pressure")  == 1 ) or
-  --    (get("A300/FUEL/inner_tank_pump1_left_low_pressure")  == 1 ) or
-  --    (get("A300/FUEL/trim_tank_pump2_low_pressure")        == 1 ) or
-  --    (get("A300/FUEL/trim_tank_pump1_low_pressure")        == 1 )
-  --  ), btq_led, 'C', btq_led.block_C_LED.LOW_FUEL_PRESS)
-  --btq_led.led_check(
-  --  (
-  --    (get("sim/cockpit2/ice/cowling_thermal_anti_ice_per_engine", 0) == 1) or
-  --    (get("sim/cockpit2/ice/cowling_thermal_anti_ice_per_engine", 1) == 1) or
-  --    (get("A300/ICE/wing_supply") == 1)
-  --  ), btq_led, 'C', btq_led.block_C_LED.ANTI_ICE)
-  --
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/APU/master_switch_button") == 1) or
-  --    (get("A300/APU/n1") > 5.0)
-  --  ), btq_led, 'C', btq_led.block_C_LED.APU)
-  --btq_led.led_check(
-  --  (
-  --    (get("A300/GND/doors_ratio", 0) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 1) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 2) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 3) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 4) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 5) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 6) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 7) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 8) > 0.1 ) or
-  --    (get("A300/GND/doors_ratio", 9) > 0.1 ) 
-  --  ), btq_led, 'D', btq_led.block_D_LED.DOOR)
-  --
-  --
-  --if (
-  --    (get("A300/elec/battery_on")      == 0) and
-  --    (get("A300/elec/dc_norm_bus_off") == 1) and
-  --    (get("A300/elec/ac_bus1_off")     == 1) and
-  --    (get("A300/elec/ac_bus2_off")     == 1)
-  --   ) then setAllToOff()
-  --end
 end
 
 function ChampBravoCheck_DH8D_FlyJSim()
-  if (--XPLMFindDataRef("A300/elec/battery_on")                                 ~= nil and
-  --    XPLMFindDataRef("A300/elec/dc_norm_bus_off")                            ~= nil and
-  --    XPLMFindDataRef("A300/elec/ac_bus1_off")                                ~= nil and
-  --    XPLMFindDataRef("A300/elec/ac_bus2_off")                                ~= nil and
-
+  if (
       --AP Panel
-      XPLMFindCommand("FJS/Q4XP/Autopilot/WheelUP")                            ~= nil and
-      XPLMFindCommand("FJS/Q4XP/Autopilot/WheelDN")                            ~= nil and
-  --    XPLMFindCommand("A300/radios/ILS/course/dial_up")                       ~= nil and
-  --    XPLMFindCommand("A300/radios/ILS/course/dial_down")                     ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Autopilot/WheelUP")           ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Autopilot/WheelDN")           ~= nil and
 
       --Axis
-      XPLMFindCommand("FJS/Q4XP/ENGINES/PowerGatePassALL")                    ~= nil and
-  --    XPLMFindCommand("A300/MCDU/disconnect_at")                              ~= nil and
+      XPLMFindCommand("FJS/Q4XP/ENGINES/PowerGatePassALL")    ~= nil and
 
       --Switches
-  --    XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E1")                  ~= nil and
-  --    XPLMFindDataRef("A300/animations/buttons/ANTI_ICE_E2")                  ~= nil and
-  --    XPLMFindCommand("A300/ICE/eng1_toggle")                                 ~= nil and
-  --    XPLMFindCommand("A300/ICE/eng2_toggle")                                 ~= nil and
-  --    XPLMFindDataRef("A300/animations/buttons/WING_SUPPLY")                  ~= nil and
-  --    XPLMFindCommand("A300/ICE/wing_supply_toggle")                          ~= nil and
-
-      --LEDs
-  --    XPLMFindDataRef("A300/MCDU/animations/lights/heading_sel")              ~= nil and
-  --    XPLMFindDataRef("A300/MCDU/animations/lights/nav")                      ~= nil and
-  --    XPLMFindDataRef("A300/MCDU/animations/lights/profile_mode")             ~= nil and
-  --    XPLMFindDataRef("A300/MCDU/animations/lights/approach")                 ~= nil and
-  --    XPLMFindDataRef("A300/MCDU/animations/lights/level_change")             ~= nil and
-  --    XPLMFindDataRef("A300/MCDU/animations/lights/altitude_hold")            ~= nil and
-  --
-  --    XPLMFindDataRef("A300/master_warning")                                  ~= nil and
-  --    XPLMFindDataRef("A300/master_caution_light")                            ~= nil and
-  --    XPLMFindDataRef("A300/FIRE/fire_handle_engine1_light")                  ~= nil and
-  --    XPLMFindDataRef("A300/FIRE/fire_handle_apu_light")                      ~= nil and
-  --    XPLMFindDataRef("A300/FIRE/fire_handle_engine2_light")                  ~= nil and
-  --    XPLMFindDataRef("A300/engine/engine1_oil_low_press_light")              ~= nil and
-  --    XPLMFindDataRef("A300/engine/engine2_oil_low_press_light")              ~= nil and
-  --    XPLMFindDataRef("A300/HYD/hydraulic_blue_light")                        ~= nil and
-  --    XPLMFindDataRef("A300/HYD/hydraulic_green1_light")                      ~= nil and
-  --    XPLMFindDataRef("A300/HYD/hydraulic_green2_light")                      ~= nil and
-  --    XPLMFindDataRef("A300/HYD/hydraulic_green3_light")                      ~= nil and
-  --    XPLMFindDataRef("A300/HYD/hydraulic_yellow_light")                      ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/outer_tank_pump1_left_low_pressure")         ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/outer_tank_pump2_left_low_pressure")         ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/outer_tank_pump1_right_low_pressure")        ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/outer_tank_pump2_right_low_pressure")        ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/center_tank_pump1_low_pressure")             ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/center_tank_pump2_low_pressure")             ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/inner_tank_pump1_right_low_pressure")        ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/inner_tank_pump2_right_low_pressure")        ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/inner_tank_pump2_left_low_pressure")         ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/inner_tank_pump1_left_low_pressure")         ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/trim_tank_pump2_low_pressure")               ~= nil and
-  --    XPLMFindDataRef("A300/FUEL/trim_tank_pump1_low_pressure")               ~= nil and
-  --    XPLMFindDataRef("sim/cockpit2/ice/cowling_thermal_anti_ice_per_engine") ~= nil and
-  --    XPLMFindDataRef("A300/ICE/wing_supply")                                 ~= nil and
-  --    XPLMFindDataRef("A300/APU/master_switch_button")                        ~= nil and
-  --    XPLMFindDataRef("A300/APU/n1")                                          ~= nil and
-  --    XPLMFindDataRef("A300/GND/doors_ratio")                                 ~= nil
-      true
+      XPLMFindDataRef("FJS/Q4XP/Manips/TwoSwitch_Anim")       ~= nil and
+                                                          
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_hdg")              ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_nav")              ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_vnav")             ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_appr")             ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_bc")               ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_altsel")           ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_alt")              ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_vs")               ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_ias")              ~= nil and
+      XPLMFindCommand("FJS/Q4XP/SoftKey/ap_ap")               ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Switches/ACOL_up")            ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Switches/ACOL_dn")            ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Switches/TAXI_LIGHTS")        ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Switches/APPR_LIGHTS")        ~= nil and
+      XPLMFindCommand("FJS/Q4XP/Switches/FLARE_LIGHTS")       ~= nil
     ) then return true
   else
     return false
