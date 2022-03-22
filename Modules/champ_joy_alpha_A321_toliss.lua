@@ -84,8 +84,7 @@ function ChampAlphaMapping_A321_toliss()
 end
 
 function ChampAlphaCheck_A321_toliss()
-  if (
-      XPLMFindDataRef("ckpt/oh/beaconLight/anim")                         ~= nil and
+  if (XPLMFindDataRef("ckpt/oh/beaconLight/anim")                         ~= nil and
       XPLMFindCommand("toliss_airbus/lightcommands/BeaconOn")             ~= nil and
       XPLMFindCommand("toliss_airbus/lightcommands/BeaconOff")            ~= nil and
       XPLMFindCommand("toliss_airbus/eleccommands/Bat1On")                ~= nil and
@@ -99,8 +98,8 @@ function ChampAlphaCheck_A321_toliss()
       XPLMFindCommand("toliss_airbus/lightcommands/WingLightOn")          ~= nil and
       XPLMFindCommand("toliss_airbus/lightcommands/WingLightOff")         ~= nil and
       XPLMFindDataRef("ckpt/oh/navLight/anim")                            ~= nil and
-      XPLMFindCommand"toliss_airbus/lightcommands/NavLightUp")            ~= nil and
-      XPLMFindCommand"toliss_airbus/lightcommands/NavLightDown")          ~= nil
+      XPLMFindCommand("toliss_airbus/lightcommands/NavLightUp")           ~= nil and
+      XPLMFindCommand("toliss_airbus/lightcommands/NavLightDown")         ~= nil
      ) then return true
   else
     return false

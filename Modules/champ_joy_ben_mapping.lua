@@ -19,6 +19,8 @@ require("champ_joy_alpha_A320_FF")
 require("champ_joy_bravo_A320_FF")
 require("champ_joy_alpha_A321_toliss")
 require("champ_joy_bravo_A321_toliss")
+require("champ_joy_alpha_A330_JD")
+require("champ_joy_bravo_A330_JD")
 require("champ_joy_bravo_B350_airfoillabs")
 require("champ_joy_alpha_B738_zibo")
 require("champ_joy_bravo_B738_zibo")
@@ -29,10 +31,12 @@ require("champ_joy_bravo_B767_FF")
 require("champ_joy_alpha_B777_FF")
 require("champ_joy_bravo_B777_FF")
 require("champ_joy_alpha_C172_Carenado")
+require("champ_joy_alpha_DH8D_FlyJSim")
 require("champ_joy_bravo_DH8D_FlyJSim")
 require("champ_joy_alpha_E195_SSG")
 require("champ_joy_bravo_E195_SSG")
 require("champ_joy_bravo_SF34_les")
+require("champ_joy_alpha_TBM9_hotstart")
 require("champ_joy_bravo_TBM9_hotstart")
 
 ac_ready = false
@@ -139,8 +143,8 @@ function ChampComButtons()
   set_button_assignment(afy.L_Trim1Dn,     "sim/flight_controls/pitch_trim_up")
   set_button_assignment(afy.L_Trim2Up,     "sim/flight_controls/pitch_trimB_up")
   set_button_assignment(afy.L_Trim2Dn,     "sim/flight_controls/pitch_trimB_down")
-  set_button_assignment(afy.L_WhiteBtn,    "sim/autopilot/servos_off_any")
-  set_button_assignment(afy.R_RedBtn,      "sim/view/default_view")
+  set_button_assignment(afy.L_WhiteBtn,    "sim/view/default_view")
+  set_button_assignment(afy.R_RedBtn,      "sim/autopilot/servos_off_any")
   set_button_assignment(afy.R_WhiteBtn,    "sim/view/circle")
   set_button_assignment(afy.R_Trim1Left,   "sim/flight_controls/aileron_trim_left")
   set_button_assignment(afy.R_Trim1Right,  "sim/flight_controls/aileron_trim_right")
@@ -223,7 +227,7 @@ function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
 
   if ((PLANE_ICAO == "A306") or (PLANE_ICAO == "A310")) then
-    set_button_assignment(afy.L_WhiteBtn,       "A300/MCDU/yoke_ap_disconnect_captain")
+    set_button_assignment(afy.R_RedBtn,       "A300/MCDU/yoke_ap_disconnect_captain")
     ChampBravoMapping_A310_ini()
   elseif (string.find(PLANE_ICAO, 'A3%w%w') or string.find(PLANE_ICAO, 'A2%wN')) then
     --Airbus Sidesticks
@@ -241,55 +245,58 @@ function ChampAcSpecific()
       ChampAlphaMapping_A320_FF()
       ChampBravoMapping_A320_FF()
     elseif (PLANE_ICAO == "A330") then
-      --TBD
+      --JarDesign A330
+      set_button_assignment(x55j.V, "jd/ap/takeover")
+      ChampAlphaMapping_A330_JD()
+      ChampBravoMapping_A330_JD()
     end
   elseif (PLANE_ICAO == "B738") then
-    set_button_assignment(afy.L_WhiteBtn, "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(afy.R_RedBtn, "laminar/B738/autopilot/capt_disco_press")
     ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B38M") then
     --Ben hack for VAC, placeholder for future max which may not be zibo so keeping separate
-    set_button_assignment(afy.L_WhiteBtn, "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(afy.R_RedBtn, "laminar/B738/autopilot/capt_disco_press")
     ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
-    set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
-    set_button_assignment(afy.L_Trim1Up,   "sim/flight_controls/pitch_trim_down")
-    set_button_assignment(afy.L_Trim1Dn,   "sim/flight_controls/pitch_trim_up")
+    set_button_assignment(afy.R_RedBtn,  "SSG/UFMC/AP_discon_Button")
     ChampAlphaMapping_B748_SSG()
     ChampBravoMapping_B748_SSG()
   elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
-    --Flight Factor 767
-    set_button_assignment(afy.L_WhiteBtn, "1-sim/comm/AP/ap_disc")
+    --Flight Factor 757 & 767
+    set_button_assignment(afy.R_RedBtn, "1-sim/comm/AP/ap_disc")
     ChampAlphaMapping_B767_FF()
     ChampBravoMapping_B767_FF()
   elseif string.find(PLANE_ICAO, "B77%w") then
-    set_button_assignment(afy.L_WhiteBtn, "777/ap_disc")
+    set_button_assignment(afy.R_RedBtn, "777/ap_disc")
     ChampAlphaMapping_B777_FF()
     ChampBravoMapping_B777_FF()
   elseif (PLANE_ICAO == "B789") then
     --TBD
---  elseif (PLANE_ICAO == "C172") then
---    --SET ASSIGNMENT AP DISCONNECT
---    ChampAlphaMapping_C172_Carenado()
+  elseif (PLANE_ICAO == "C172") then
+    --SET ASSIGNMENT AP DISCONNECT
+    ChampAlphaMapping_C172_Carenado()
   elseif (PLANE_ICAO == "DH8D") then
-    set_button_assignment(afy.L_WhiteBtn, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
+    set_button_assignment(afy.R_RedBtn, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
     --set_button_assignment(scgl.Trig_Aft, "FJS/Q4XP/Autopilot/TCS_Engage")
+    ChampAlphaMapping_DH8D_FlyJSim()
     ChampBravoMapping_DH8D_FlyJSim()
   elseif (PLANE_ICAO == "E195") then
     --SSG 195
-  --  set_button_assignment(afy.L_Trim1Up,   "sim/flight_controls/pitch_trim_down")
-  --  set_button_assignment(afy.L_Trim1Dn,   "sim/flight_controls/pitch_trim_up")
     ChampAlphaMapping_E195_SSG()
     ChampBravoMapping_E195_SSG()
+  elseif (PLANE_ICAO == "TBM9") then
+    --HotStart TBM9
+    ChampAlphaMapping_TBM9_hotstart()
+    ChampBravoMapping_TBM9_hotstart()
   elseif (PLANE_ICAO == "UH1") then
     --Nimbus UH1?
     set_axis_assignment(afy.axis_roll,  "none",  "normal")
     set_axis_assignment(afy.axis_pitch, "none",  "normal")
     set_axis_assignment(x55j.roll,       "roll",  "normal")
     set_axis_assignment(x55j.pitch,      "pitch", "normal")
-
   end
 end
 
@@ -338,6 +345,12 @@ function check_specific_datarefs()
         XPLMFindCommand("a320/Panel/SidestickTakeoverL_button") ~= nil
        ) then ac_ready = true
     end
+  elseif (PLANE_ICAO == "A330") then
+    if (ChampAlphaCheck_A330_JD()                                      and
+        ChampBravoCheck_A330_JD()                                      and
+        XPLMFindCommand("jd/ap/takeover") ~= nil
+       ) then ac_ready = true
+    end
   elseif (PLANE_ICAO == "B738") then 
     if (ChampBravoCheck_B738_zibo()                                       and
         XPLMFindCommand("laminar/B738/autopilot/capt_disco_press") ~= nil
@@ -366,14 +379,14 @@ function check_specific_datarefs()
         XPLMFindCommand("777/ap_disc") ~= nil
        ) then ac_ready = true
     end
-    elseif (PLANE_ICAO == "C172") then
-    if (ChampAlphaCheck_C172_Carenado()                     and
-        true
+  elseif (PLANE_ICAO == "C172") then
+    if (ChampAlphaCheck_C172_Carenado()                     ~= nil
        ) then ac_ready = true
     end
     
   elseif string.find(PLANE_ICAO, "DH8D") then
-    if (ChampBravoCheck_DH8D_FlyJSim() and
+    if (ChampAlphaCheck_DH8D_FlyJSim() and
+        ChampBravoCheck_DH8D_FlyJSim() and
         XPLMFindCommand("FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT") ~= nil and
         XPLMFindCommand("FJS/Q4XP/Autopilot/TCS_Engage")           ~= nil
        ) then ac_ready = true
@@ -383,7 +396,11 @@ function check_specific_datarefs()
         ChampBravoCheck_E195_SSG()
        ) then ac_ready = true
     end
-    
+  elseif (PLANE_ICAO == "TBM9") then
+    if (ChampAlphaCheck_TBM9_hotstart()                          and
+        ChampBravoCheck_TBM9_hotstart()
+       ) then ac_ready = true
+    end    
   elseif (PLANE_ICAO == "SF34") then
     if (ChampBravoCheck_SF34_les()
        ) then ac_ready = true

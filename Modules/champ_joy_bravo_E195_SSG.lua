@@ -5,35 +5,37 @@ function ChampBravoEngine_E195_SSG()
 end
 
 function ChampBravoMapping_E195_SSG()
-  --function bravo_Ap_AltInc(numticks) bravo_command_multiple("SSG/UFMC/Alt_UP", numticks) end
-  --function bravo_Ap_AltDec(numticks) bravo_command_multiple("SSG/UFMC/Alt_Down", numticks) end
-  --function bravo_Ap_VsInc(numticks)  bravo_command_multiple("SSG/UFMC/VS_UP", numticks) end
-  --function bravo_Ap_VsDec(numticks)  bravo_command_multiple("SSG/UFMC/VS_Down", numticks) end
-  --function bravo_Ap_HdgInc(numticks) bravo_command_multiple("SSG/UFMC/HDG_UP", numticks) end
-  --function bravo_Ap_HdgDec(numticks) bravo_command_multiple("SSG/UFMC/HDG_Down", numticks) end
-  --function bravo_Ap_IasInc(numticks) bravo_command_multiple("SSG/UFMC/Speed_UP", numticks) end
-  --function bravo_Ap_IasDec(numticks) bravo_command_multiple("SSG/UFMC/Speed_Down", numticks) end
-  --
-  --set_button_assignment(btq.ap_hdg,    "sim/none/none")
-  --function apPanelCockpitHdgShort(status) 
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_HDG_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_HDG_Button") end
-  --end
+  function bravo_Ap_AltInc(numticks) bravo_command_multiple("SSG/EJET/MCP/Alt_UP", numticks) end
+  function bravo_Ap_AltDec(numticks) bravo_command_multiple("SSG/EJET/MCP/Alt_Down", numticks) end
+  function bravo_Ap_VsInc(numticks)  bravo_command_multiple("SSG/EJET/MCP/VS_UP", numticks) end
+  function bravo_Ap_VsDec(numticks)  bravo_command_multiple("SSG/EJET/MCP/VS_Down", numticks) end
+  function bravo_Ap_HdgInc(numticks) bravo_command_multiple("SSG/EJET/MCP/HDG_UP", numticks) end
+  function bravo_Ap_HdgDec(numticks) bravo_command_multiple("SSG/EJET/MCP/HDG_Down", numticks) end
+  function bravo_Ap_IasInc(numticks) bravo_command_multiple("SSG/EJET/MCP/Speed_UP", numticks) end
+  function bravo_Ap_IasDec(numticks) bravo_command_multiple("SSG/EJET/MCP/Speed_Down", numticks) end
+  function bravo_Ap_IasDec(numticks) bravo_command_multiple("SSG/EJET/MCP/CRS_P_UP", numticks) end
+  function bravo_Ap_IasDec(numticks) bravo_command_multiple("SSG/EJET/MCP/CRS_P_Down", numticks) end
+  
+  set_button_assignment(btq.ap_hdg,    "sim/none/none")
+  function apPanelCockpitHdgShort(status) 
+    if (status == "begin") then command_begin("SSG/EJET/MCP/HDG_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/HDG_COMM") end
+  end
   --function apPanelCockpitHdgLong(status) 
   --  if (status == "begin") then command_begin("SSG/UFMC/AP_HDGHOLD_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_HDGHOLD_Button") end
   --end
-  --
-  --set_button_assignment(btq.ap_nav,    "sim/none/none")
-  --function apPanelCockpitNavShort(status) 
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_LNAV_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_LNAV_Button") end
-  --end
-  --function apPanelCockpitNavLong(status) 
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_VNAV_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_VNAV_Button") end
-  --end
-  --
-  --set_button_assignment(btq.ap_apr,    "sim/none/none")
-  --function apPanelCockpitAprShort(status) 
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_APP_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_APP_Button") end
-  --end
+
+ set_button_assignment(btq.ap_nav,    "sim/none/none")
+ function apPanelCockpitNavShort(status) 
+   if (status == "begin") then command_begin("SSG/EJET/MCP/LNAV_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/LNAV_COMM") end
+ end
+ function apPanelCockpitNavLong(status) 
+   if (status == "begin") then command_begin("SSG/EJET/MCP/VNAV_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/VNAV_COMM") end
+ end
+  
+  set_button_assignment(btq.ap_apr,    "sim/none/none")
+  function apPanelCockpitAprShort(status) 
+    if (status == "begin") then command_begin("SSG/EJET/MCP/APP_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/APP_COMM") end
+  end
   --function apPanelCockpitAprLong(status) 
   --  if (status == "begin") then command_begin("SSG/UFMC/AP_VORLOC_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_VORLOC_Button") end
   --end
@@ -42,46 +44,46 @@ function ChampBravoMapping_E195_SSG()
   ----function apPanelCockpitRevShort(status)    end
   ----function apPanelCockpitRevLong(status)     end
   --
-  --set_button_assignment(btq.ap_alt,    "sim/none/none")
-  --function apPanelCockpitAltShort(status)
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_LVLCHG_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_LVLCHG_Button") end
-  --end
-  --function apPanelCockpitAltLong(status)
-  --  if (status == "begin") then command_begin("sim/autopilot/altitude_hold") elseif (status == "end") then command_end("sim/autopilot/altitude_hold") end
-  --end
-  --
-  --set_button_assignment(btq.ap_vs,     "SSG/UFMC/AP_VS_Button")
-  ----function apPanelCockpitVsShort(status)
-  ----  if (status == "begin") then command_begin(") elseif (status == "end") then command_end("") end
-  ----end
-  ----function apPanelCockpitVsLong(status)
-  ----  if (status == "begin") then command_begin("") elseif (status == "end") then command_end("") end
-  ----end
-  --
-  --set_button_assignment(btq.ap_ias,    "sim/none/none")
-  --function apPanelCockpitIasShort(status)
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_SPD_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_SPD_Button") end
-  --end
+  set_button_assignment(btq.ap_alt,    "sim/none/none")
+  function apPanelCockpitAltShort(status)
+    if (status == "begin") then command_begin("SSG/EJET/MCP/FLCH_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/FLCH_COMM") end
+  end
+  function apPanelCockpitAltLong(status)
+    if (status == "begin") then command_begin("SSG/EJET/MCP/ALT_COMM") elseif (status == "end") then command_end("sim/autopilot/altitude_hold") end
+  end
+  
+  set_button_assignment(btq.ap_vs,     "sim/none/none")
+    function apPanelCockpitVsShort(status)
+      if (status == "begin") then command_begin("SSG/EJET/MCP/VS_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/VS_COMM") end
+    end
+    --function apPanelCockpitVsLong(status)
+    --  if (status == "begin") then command_begin("") elseif (status == "end") then command_end("") end
+    --end
+
+  set_button_assignment(btq.ap_ias,    "sim/none/none")
+  function apPanelCockpitIasShort(status)
+    if (status == "begin") then command_begin("SSG/EJET/MCP/Speed_A_M") elseif (status == "end") then command_end("SSG/EJET/MCP/Speed_A_M") end
+  end
   --function apPanelCockpitIasLong(status)
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_N1_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_N1_Button") end
+  --  if (status == "begin") then command_begin("SSG/EJET/MCP/AT_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/AT_COMM") end
   --end
-  --
-  --set_button_assignment(btq.ap_master, "sim/none/none")
-  --function apPanelCockpitMasterShort(status)
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_CMDA_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_CMDA_Button") end
-  --end
-  --function apPanelCockpitMasterLong(status)
-  --  if (status == "begin") then command_begin("SSG/UFMC/AP_ARM_AT_Switch") elseif (status == "end") then command_end("SSG/UFMC/AP_ARM_AT_Switch") end
-  --end
-  --
-  --do_every_frame("apPanelDualHandler()")
+  
+  set_button_assignment(btq.ap_master, "sim/none/none")
+  function apPanelCockpitMasterShort(status)
+    if (status == "begin") then command_begin("SSG/EJET/MCP/AP_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/AP_COMM") end
+  end
+  function apPanelCockpitMasterLong(status)
+    if (status == "begin") then command_begin("SSG/EJET/MCP/AT_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/AT_COMM") end
+  end
+  
+  do_every_frame("apPanelDualHandler()")
 
   -------------------------
   -- Axis --
   -------------------------
 
-  --set_button_assignment(btq.axis12_2nd_func, "SSG/UFMC/AT_Discon")
-  --set_button_assignment(btq.axis3_2nd_func,  "SSG/UFMC/TOGA_Button")
+  --set_button_assignment(btq.axis12_2nd_func, "SSG/EJET/MCP/AT_COMM")
+  set_button_assignment(btq.axis3_2nd_func,  "SSG/EJET/MCP/Toga")
 
   set_axis_assignment(btq.axis1,  "none",  "normal")
   do_every_frame([[
@@ -179,33 +181,40 @@ function ChampBravoMapping_E195_SSG()
 end
 
 function ChampBravoCheck_E195_SSG()
-  if (--AP Panel rotary
-      XPLMFindCommand("SSG/UFMC/Alt_UP")                         ~= nil and
-      XPLMFindCommand("SSG/UFMC/Alt_Down")                       ~= nil and
-      XPLMFindCommand("SSG/UFMC/VS_UP")                          ~= nil and
-      XPLMFindCommand("SSG/UFMC/VS_Down")                        ~= nil and
-      XPLMFindCommand("SSG/UFMC/HDG_UP")                         ~= nil and
-      XPLMFindCommand("SSG/UFMC/HDG_Down")                       ~= nil and
-      XPLMFindCommand("SSG/UFMC/Speed_UP")                       ~= nil and
-      XPLMFindCommand("SSG/UFMC/Speed_Down")                     ~= nil and
-      --AP Panel Buttons
-      XPLMFindCommand("SSG/UFMC/AP_HDG_Button")                  ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_HDGHOLD_Button")              ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_LNAV_Button")                 ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_VNAV_Button")                 ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_APP_Button")                  ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_VORLOC_Button")               ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_discon_Button")               ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_VS_Button")                   ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_LVLCHG_Button")               ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_SPD_Button")                  ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_N1_Button")                   ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_CMDA_Button")                 ~= nil and
-      XPLMFindCommand("SSG/UFMC/AP_ARM_AT_Switch")               ~= nil and
-      ----Axis
-      XPLMFindCommand("SSG/UFMC/AT_Discon")                      ~= nil and
-      XPLMFindCommand("SSG/UFMC/TOGA_Button")                    ~= nil and
-      XPLMFindDataref("SSG/B748/speed_brk_hand")                 ~= nil and
+  if (--MCP Rotary & Buttons
+      XPLMFindCommand("SSG/EJET/MCP/ALT_COMM")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/Alt_Down")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/Alt_UP")                     ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/AP_COMM")                    ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/APP_COMM")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/AT_COMM")                    ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/BANK_COMM")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/CRS_CP_Down")                ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/CRS_CP_UP")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/CRS_P_Down")                 ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/CRS_P_UP")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/FD_CP_COMM")                 ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/FD_P_COMM")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/FLCH_COMM")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/FPA_COMM")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/FPA_Down")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/FPA_UP")                     ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/HDG_COMM")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/HDG_Down")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/HDG_UP")                     ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/LNAV_COMM")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/Speed_A_M")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/Speed_Down")                 ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/Speed_UP")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/SRC_COMM")                   ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/Toga")                       ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/VNAV_COMM")                  ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/VS_COMM")                    ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/VS_Down")                    ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/VS_UP")                      ~= nil and
+      XPLMFindCommand("SSG/EJET/MCP/YD_COMM")                    ~= nil and
+      --AXIS
+      XPLMFindDataRef("SSG/B748/speed_brk_hand")                 ~= nil and
       ----Switches
       XPLMFindDataRef("SSG/EJET/ANTICE/ice_eng1_fail")           ~= nil and
       XPLMFindDataRef("SSG/EJET/ANTICE/ice_eng2_fail")           ~= nil and

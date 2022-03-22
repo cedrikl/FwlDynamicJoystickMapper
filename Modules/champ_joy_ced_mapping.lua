@@ -19,6 +19,8 @@ require("champ_joy_alpha_A320_FF")
 require("champ_joy_bravo_A320_FF")
 require("champ_joy_alpha_A321_toliss")
 require("champ_joy_bravo_A321_toliss")
+require("champ_joy_alpha_A330_JD")
+require("champ_joy_bravo_A330_JD")
 require("champ_joy_bravo_B350_airfoillabs")
 require("champ_joy_alpha_B738_zibo")
 require("champ_joy_bravo_B738_zibo")
@@ -33,6 +35,7 @@ require("champ_joy_bravo_DH8D_FlyJSim")
 require("champ_joy_alpha_E195_SSG")
 require("champ_joy_bravo_E195_SSG")
 require("champ_joy_bravo_SF34_les")
+require("champ_joy_alpha_TBM9_hotstart")
 require("champ_joy_bravo_TBM9_hotstart")
 
 ac_ready = false
@@ -239,7 +242,10 @@ function ChampAcSpecific()
       ChampAlphaMapping_A320_FF()
       ChampBravoMapping_A320_FF()
     elseif (PLANE_ICAO == "A330") then
-      --TBD
+      --JarDesign A330
+      set_button_assignment(scgl.A2, "jd/ap/takeover")
+      --ChampAlphaMapping_A330_JD()
+      ChampBravoMapping_A330_JD()
     end
   elseif (PLANE_ICAO == "B738") then
     set_button_assignment(scgl.A2, "laminar/B738/autopilot/capt_disco_press")
@@ -253,12 +259,10 @@ function ChampAcSpecific()
   elseif (PLANE_ICAO == "B748") then
     --SSG 747
     set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
-    set_button_assignment(afy.L_Trim1Up,   "sim/flight_controls/pitch_trim_down")
-    set_button_assignment(afy.L_Trim1Dn,   "sim/flight_controls/pitch_trim_up")
     --ChampAlphaMapping_B748_SSG()
     ChampBravoMapping_B748_SSG()
   elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
-    --Flight Factor 767
+    --Flight Factor 757 & 767
     set_button_assignment(scgl.A2, "1-sim/comm/AP/ap_disc")
     --ChampAlphaMapping_B767_FF()
     ChampBravoMapping_B767_FF()
@@ -274,14 +278,16 @@ function ChampAcSpecific()
   elseif (PLANE_ICAO == "DH8D") then
     set_button_assignment(scgl.A2, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
     set_button_assignment(scgl.Trig_Aft, "FJS/Q4XP/Autopilot/TCS_Engage")
+    --ChampAlphaMapping_DH8D_FlyJSim()
     ChampBravoMapping_DH8D_FlyJSim()
   elseif (PLANE_ICAO == "E195") then
     --SSG 195
-    set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_Discon")
-  --  set_button_assignment(afy.L_Trim1Up,   "sim/flight_controls/pitch_trim_down")
-  --  set_button_assignment(afy.L_Trim1Dn,   "sim/flight_controls/pitch_trim_up")
     --ChampAlphaMapping_E195_SSG()
     ChampBravoMapping_E195_SSG()
+  elseif (PLANE_ICAO == "TBM9") then
+    --HotStart TBM9
+    --ChampAlphaMapping_TBM9_hotstart()
+    ChampBravoMapping_TBM9_hotstart()
   elseif (PLANE_ICAO == "UH1") then
     --Nimbus UH1?
     --set_axis_assignment(afy.axis_roll,  "none",  "normal")
@@ -337,6 +343,12 @@ function check_specific_datarefs()
         XPLMFindCommand("a320/Panel/SidestickTakeoverL_button") ~= nil
        ) then ac_ready = true
     end
+  elseif (PLANE_ICAO == "A330") then
+    if (ChampAlphaCheck_A330_JD()                                      and
+        ChampBravoCheck_A330_JD()                                      and
+        XPLMFindCommand("jd/ap/takeover") ~= nil
+       ) then ac_ready = true
+    end
   elseif (PLANE_ICAO == "B738") then 
     if (ChampBravoCheck_B738_zibo()                                       and
         XPLMFindCommand("laminar/B738/autopilot/capt_disco_press") ~= nil
@@ -372,7 +384,8 @@ function check_specific_datarefs()
     end
     
   elseif string.find(PLANE_ICAO, "DH8D") then
-    if (ChampBravoCheck_DH8D_FlyJSim() and
+    if (ChampAlphaCheck_DH8D_FlyJSim() and
+        ChampBravoCheck_DH8D_FlyJSim() and
         XPLMFindCommand("FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT") ~= nil and
         XPLMFindCommand("FJS/Q4XP/Autopilot/TCS_Engage")           ~= nil
        ) then ac_ready = true
@@ -382,7 +395,11 @@ function check_specific_datarefs()
         ChampBravoCheck_E195_SSG()
        ) then ac_ready = true
     end
-    
+  elseif (PLANE_ICAO == "TBM9") then
+    if (ChampAlphaCheck_TBM9_hotstart()                          and
+        ChampBravoCheck_TBM9_hotstart()
+       ) then ac_ready = true
+    end    
   elseif (PLANE_ICAO == "SF34") then
     if (ChampBravoCheck_SF34_les()
        ) then ac_ready = true
