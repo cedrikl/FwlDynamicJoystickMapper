@@ -2,6 +2,7 @@
 /Internals/*
 /Modules/*
 !/Modules/champ_joy*
+!/Modules/button_accel.lua
 /Scripts/*
 !/Scripts/champ_joy*
 /Scripts (disabled)/*

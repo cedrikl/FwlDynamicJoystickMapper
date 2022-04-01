@@ -1,3 +1,4 @@
+require("button_accel")
 ------------------------------------
 -- Common reverse helper function --
 ------------------------------------
@@ -17,6 +18,8 @@ function reverser_handler()
     ChampBravoEngine_SF34_les()
   elseif (PLANE_ICAO == "TBM9") then
     ChampBravoEngine_TBM9_hotstart()
+  elseif (PLANE_ICAO == "MD11") then
+    ChampBravoEngine_MD11_Rotate()
   else
     if (((ChampEngineType <= 4) and (ChampNbEngines <= 2))) then
       -- (Turbo)Props (ENG1/ENG2/PROP1/PROP2/MIX1/MIX2)
@@ -138,8 +141,8 @@ end
 local bravo = {}
 
 local lastTickTimestamp = 0
-local upticksRepetition = 0
-local downticksRepetition = 0
+local previousValue = 0
+local prev_direction = 0
 
 apButtonStartOfPush = 0.0
 apButtonStartOfRelease = 0.0
@@ -224,8 +227,12 @@ function bravo.map(joy_num, joy_hid_pointer)
   bravo.sw6_dn           = start_button + 44
   bravo.sw7_up           = start_button + 45
   bravo.sw7_dn           = start_button + 46
-  
+
   bravo.axis4_2nd_func   = start_button + 47
+
+  define_shared_DataRef("champion/bravo/encoder", "Int")
+  rotary_bug = AccelButton(bravo.ap_incr, bravo.ap_decr, "champion/bravo/encoder", 3, 5, 3, 1, 0, 0.5)
+  do_every_frame("rotary_bug.operate()")
 end
 
 
@@ -294,51 +301,30 @@ function apPanelHandleDownticks(numticks)
 end
 
 
-function apPanelWheelCheck()
-  timeSinceLastTick = get("sim/time/total_running_time_sec") - lastTickTimestamp
-
-  if (timeSinceLastTick > 0.100) then --min 70 msec between ticks, otherwise these multiple inputs sent
-    uptick = button(bravo.ap_incr)
-    downtick = button(bravo.ap_decr)
-    count = 0
-
-    if (uptick or downtick) then --the incr/decr knob was turned (and debounce exceeded)
-      lastTickTimestamp = get("sim/time/total_running_time_sec")
-      if (uptick) then
-        downticksRepetition = 0
-        upticksRepetition = upticksRepetition + 1
-
-        if (upticksRepetition < 4) then
-          apPanelHandleUpticks(1)
-        elseif (upticksRepetition < 8) then
-          apPanelHandleUpticks(2)
-        elseif (upticksRepetition < 12) then
-          apPanelHandleUpticks(5)
-        else
-          apPanelHandleUpticks(10)
-        end
-      else
-        upticksRepetition = 0
-        downticksRepetition = downticksRepetition + 1
-
-        if (downticksRepetition < 4) then
-          apPanelHandleDownticks(1)
-        elseif (downticksRepetition < 8) then
-          apPanelHandleDownticks(2)
-        elseif (downticksRepetition < 12) then
-          apPanelHandleDownticks(5)
-        else
-          apPanelHandleDownticks(10)
-        end
-      end
-    end
-
-    if (timeSinceLastTick > 0.4) then
-      upticksRepetition = 0
-      downticksRepetition = 0
-    end
+function apPanelHandleTicks(direction, numticks)
+  if     (direction == 1) then
+    apPanelHandleUpticks(numticks)
+  elseif (direction == -1) then
+    apPanelHandleDownticks(numticks)
   end
 end
+
+
+function apPanelWheelCheck()
+  direction = 0
+  value = get("champion/bravo/encoder")
+  delta = value - previousValue
+  previousValue = value
+
+  if (delta >= 0) then
+    direction = 1
+  else
+    direction = -1
+  end
+  delta = math.min(math.abs(delta), 10)
+  apPanelHandleTicks(direction, delta)
+end
+
 
 -----------------------------------------
 

@@ -31,9 +31,11 @@ require("champ_joy_bravo_B767_FF")
 require("champ_joy_alpha_B777_FF")
 require("champ_joy_bravo_B777_FF")
 require("champ_joy_alpha_C172_Carenado")
+require("champ_joy_alpha_DH8D_FlyJSim")
 require("champ_joy_bravo_DH8D_FlyJSim")
 require("champ_joy_alpha_E195_SSG")
 require("champ_joy_bravo_E195_SSG")
+require("champ_joy_bravo_MD11_Rotate")
 require("champ_joy_bravo_SF34_les")
 require("champ_joy_alpha_TBM9_hotstart")
 require("champ_joy_bravo_TBM9_hotstart")
@@ -169,7 +171,7 @@ function ChampComButtons()
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
   --set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
   --set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
-  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO) and ("TBM9" ~= PLANE_ICAO)) then
+  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO) and ("TBM9" ~= PLANE_ICAO) and ("MD11" ~= PLANE_ICAO)) then
     do_often([[
       ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
       SwPos = button(]]..btq.sw1_up..[[)
@@ -237,12 +239,10 @@ function ChampAcSpecific()
       --ChampAlphaMapping_A321_toliss()
       ChampBravoMapping_A321_toliss()
     elseif (PLANE_ICAO == "A320") then
-      --Flight Factor A320 Ultimate
       set_button_assignment(scgl.A2, "a320/Panel/SidestickTakeoverL_button")
       ChampAlphaMapping_A320_FF()
       ChampBravoMapping_A320_FF()
     elseif (PLANE_ICAO == "A330") then
-      --JarDesign A330
       set_button_assignment(scgl.A2, "jd/ap/takeover")
       --ChampAlphaMapping_A330_JD()
       ChampBravoMapping_A330_JD()
@@ -257,12 +257,10 @@ function ChampAcSpecific()
     --ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
-    --SSG 747
     set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
     --ChampAlphaMapping_B748_SSG()
     ChampBravoMapping_B748_SSG()
   elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
-    --Flight Factor 757 & 767
     set_button_assignment(scgl.A2, "1-sim/comm/AP/ap_disc")
     --ChampAlphaMapping_B767_FF()
     ChampBravoMapping_B767_FF()
@@ -272,20 +270,22 @@ function ChampAcSpecific()
     ChampBravoMapping_B777_FF()
   elseif (PLANE_ICAO == "B789") then
     --TBD
---  elseif (PLANE_ICAO == "C172") then
---    --SET ASSIGNMENT AP DISCONNECT
---    ChampAlphaMapping_C172_Carenado()
+  elseif (PLANE_ICAO == "C172") then
+    --SET ASSIGNMENT AP DISCONNECT
+    --ChampAlphaMapping_C172_Carenado()
   elseif (PLANE_ICAO == "DH8D") then
     set_button_assignment(scgl.A2, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
     set_button_assignment(scgl.Trig_Aft, "FJS/Q4XP/Autopilot/TCS_Engage")
     --ChampAlphaMapping_DH8D_FlyJSim()
     ChampBravoMapping_DH8D_FlyJSim()
-  elseif (PLANE_ICAO == "E195") then
-    --SSG 195
+  elseif ((PLANE_ICAO == "E170") or (PLANE_ICAO == "E195")) then
     --ChampAlphaMapping_E195_SSG()
     ChampBravoMapping_E195_SSG()
+  elseif (PLANE_ICAO == "MD11") then
+    set_button_assignment(scgl.A2, "Rotate/aircraft/controls_c/ap_disc_l")
+    --ChampAlphaMapping_TBM9_hotstart()
+    ChampBravoMapping_MD11_Rotate()
   elseif (PLANE_ICAO == "TBM9") then
-    --HotStart TBM9
     --ChampAlphaMapping_TBM9_hotstart()
     ChampBravoMapping_TBM9_hotstart()
   elseif (PLANE_ICAO == "UH1") then
@@ -378,7 +378,7 @@ function check_specific_datarefs()
        ) then ac_ready = true
     end
     elseif (PLANE_ICAO == "C172") then
-    if (ChampAlphaCheck_C172_Carenado()                     and
+    if (--ChampAlphaCheck_C172_Carenado()                     and
         true
        ) then ac_ready = true
     end
@@ -393,6 +393,11 @@ function check_specific_datarefs()
   elseif (PLANE_ICAO == "E195") then
     if (ChampAlphaCheck_E195_SSG()                          and
         ChampBravoCheck_E195_SSG()
+       ) then ac_ready = true
+    end
+  elseif (PLANE_ICAO == "MD11") then
+    if (ChampBravoCheck_MD11_Rotate()                                  and
+        XPLMFindCommand("Rotate/aircraft/controls_c/ap_disc_l") ~= nil
        ) then ac_ready = true
     end
   elseif (PLANE_ICAO == "TBM9") then
