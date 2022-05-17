@@ -24,13 +24,13 @@ function ChampBravoMapping_E195_SSG()
   --  if (status == "begin") then command_begin("SSG/UFMC/AP_HDGHOLD_Button") elseif (status == "end") then command_end("SSG/UFMC/AP_HDGHOLD_Button") end
   --end
 
- set_button_assignment(btq.ap_nav,    "sim/none/none")
- function apPanelCockpitNavShort(status) 
-   if (status == "begin") then command_begin("SSG/EJET/MCP/LNAV_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/LNAV_COMM") end
- end
- function apPanelCockpitNavLong(status) 
-   if (status == "begin") then command_begin("SSG/EJET/MCP/VNAV_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/VNAV_COMM") end
- end
+  set_button_assignment(btq.ap_nav,    "sim/none/none")
+  function apPanelCockpitNavShort(status) 
+    if (status == "begin") then command_begin("SSG/EJET/MCP/LNAV_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/LNAV_COMM") end
+  end
+  function apPanelCockpitNavLong(status) 
+    if (status == "begin") then command_begin("SSG/EJET/MCP/VNAV_COMM") elseif (status == "end") then command_end("SSG/EJET/MCP/VNAV_COMM") end
+  end
   
   set_button_assignment(btq.ap_apr,    "sim/none/none")
   function apPanelCockpitAprShort(status) 

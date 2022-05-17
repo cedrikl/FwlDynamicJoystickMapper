@@ -107,7 +107,10 @@ function ChampBravoMapping_MD11_Rotate()
   function apPanelCockpitMasterLong(status) end
 
   do_every_frame("apPanelDualHandler()")
-  
+
+  set_button_assignment(btq.gear_dn, "Rotate/aircraft/controls_c/gear_handle_up")
+  set_button_assignment(btq.gear_up, "Rotate/aircraft/controls_c/gear_handle_dn")
+
   set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
   set_button_assignment(btq.axis12_2nd_func, "Rotate/aircraft/controls_c/ats_disc_l")
   set_button_assignment(btq.axis3_2nd_func, "Rotate/aircraft/controls_c/to_ga")
@@ -258,6 +261,8 @@ function ChampBravoCheck_MD11_Rotate()
       XPLMFindCommand("Rotate/aircraft/controls_c/eng_3_reverser_toggle")     ~= nil and
 
       --Switches
+      XPLMFindCommand("Rotate/aircraft/controls_c/gear_handle_up")            ~= nil and
+      XPLMFindCommand("Rotate/aircraft/controls_c/gear_handle_dn")            ~= nil and
       XPLMFindCommand("Rotate/aircraft/controls_c/park_brake_up")             ~= nil and
       XPLMFindCommand("Rotate/aircraft/controls_c/park_brake_dn")             ~= nil and
       XPLMFindDataRef("Rotate/aircraft/controls/anti_ice_eng_1")              ~= nil and

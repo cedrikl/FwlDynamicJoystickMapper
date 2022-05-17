@@ -31,6 +31,9 @@ require("champ_joy_bravo_B767_FF")
 require("champ_joy_alpha_B777_FF")
 require("champ_joy_bravo_B777_FF")
 require("champ_joy_alpha_C172_Carenado")
+require("champ_joy_bravo_CL60_hotstart")
+require("champ_joy_alpha_CRJ_AD")
+require("champ_joy_bravo_CRJ_AD")
 require("champ_joy_alpha_DH8D_FlyJSim")
 require("champ_joy_bravo_DH8D_FlyJSim")
 require("champ_joy_alpha_E195_SSG")
@@ -41,12 +44,6 @@ require("champ_joy_alpha_TBM9_hotstart")
 require("champ_joy_bravo_TBM9_hotstart")
 
 ac_ready = false
-
-function championTurnOnVr()
-  if (0 == get("sim/graphics/VR/enabled")) then
-    command_once("sim/VR/toggle_vr")
-  end
-end
 
 function ChampInit()
   clear_all_axis_assignments()
@@ -104,8 +101,6 @@ function ChampInit()
       btq.ap_panel_main()
     end
   end
-
-  create_command("champion/VR/vrOn", "Button enter VR (ON only)", "championTurnOnVr()", "", "")
 end
 
 -------------------------
@@ -153,7 +148,7 @@ function ChampComButtons()
   set_button_assignment(scgl.A3_Down,       "sim/flight_controls/pitch_trim_up")
   set_button_assignment(scgl.A3_Left,       "sim/flight_controls/rudder_trim_left")
   set_button_assignment(scgl.A3_Right,      "sim/flight_controls/rudder_trim_right")
-  set_button_assignment(scgl.B1,            "sim/view/default_view")
+  set_button_assignment(scgl.B1,            "sim/view/quick_look_0")
   set_button_assignment(scgl.D1,            "sim/view/circle")
   set_button_assignment(scgl.C1_Up,         "sim/general/up_slow")
   set_button_assignment(scgl.C1_Right,      "champion/VR/vrOn")
@@ -164,14 +159,13 @@ function ChampComButtons()
   set_button_assignment(scgl.A4_Down,       "sim/general/backward_slow")
   set_button_assignment(scgl.A4_Left,       "sim/general/left_slow")
 
-
   set_button_assignment(btq.flaps_up,       "sim/flight_controls/flaps_up")
   set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
   set_button_assignment(btq.gear_up,        "sim/flight_controls/landing_gear_up")
   set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
   --set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
   --set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
-  if (("B738" ~= PLANE_ICAO) and ("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO) and ("TBM9" ~= PLANE_ICAO) and ("MD11" ~= PLANE_ICAO)) then
+  if (("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO) and ("B738" ~= PLANE_ICAO) and ("CL60" ~= PLANE_ICAO) and ("MD11" ~= PLANE_ICAO) and ("TBM9" ~= PLANE_ICAO)) then
     do_often([[
       ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
       SwPos = button(]]..btq.sw1_up..[[)
@@ -273,6 +267,16 @@ function ChampAcSpecific()
   elseif (PLANE_ICAO == "C172") then
     --SET ASSIGNMENT AP DISCONNECT
     --ChampAlphaMapping_C172_Carenado()
+  elseif (PLANE_ICAO == "CL60") then
+    ChampBravoMapping_CL60_hotstart()
+    set_button_assignment(scgl.Trig_Fwd, "CL650/checklist/check_item")
+    set_button_assignment(scgl.Trig_Aft, "CL650/checklist/skip_item")
+    set_button_assignment(scgl.C1_Right, "CL650/checklist/next_checklist")
+    set_button_assignment(scgl.C1_Left,  "CL650/checklist/prev_checklist")
+  elseif (PLANE_ICAO == "CRJ9") then
+    set_button_assignment(afy.R_RedBtn, "crj900/command/autopilot/ap_disc")
+    --ChampAlphaMapping_CRJ_AD()
+    ChampBravoMapping_CRJ_AD()
   elseif (PLANE_ICAO == "DH8D") then
     set_button_assignment(scgl.A2, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
     set_button_assignment(scgl.Trig_Aft, "FJS/Q4XP/Autopilot/TCS_Engage")
@@ -294,7 +298,6 @@ function ChampAcSpecific()
     --set_axis_assignment(afy.axis_pitch, "none",  "normal")
     --set_axis_assignment(x55j.roll,       "roll",  "normal")
     --set_axis_assignment(x55j.pitch,      "pitch", "normal")
-
   end
 end
 
@@ -377,12 +380,26 @@ function check_specific_datarefs()
         XPLMFindCommand("777/ap_disc") ~= nil
        ) then ac_ready = true
     end
-    elseif (PLANE_ICAO == "C172") then
-    if (--ChampAlphaCheck_C172_Carenado()                     and
+  elseif (PLANE_ICAO == "C172") then
+    if (--ChampAlphaCheck_C172_Carenado()                     ~= nil
         true
        ) then ac_ready = true
     end
-    
+  elseif (PLANE_ICAO == "CL60") then
+    if (ChampBravoCheck_CL60_hotstart()                   and
+        XPLMFindCommand("CL650/checklist/check_item")     and
+        XPLMFindCommand("CL650/checklist/skip_item")      and
+        XPLMFindCommand("CL650/checklist/next_checklist") and
+        XPLMFindCommand("CL650/checklist/prev_checklist") and
+        true
+       ) then ac_ready = true
+    end
+  elseif (PLANE_ICAO == "CRJ9") then
+    if (ChampAlphaCheck_CRJ_AD()             and
+        ChampBravoCheck_CRJ_AD()             and
+        XPLMFindCommand("crj900/command/autopilot/ap_disc") ~= nil
+       ) then ac_ready = true
+    end   
   elseif string.find(PLANE_ICAO, "DH8D") then
     if (ChampAlphaCheck_DH8D_FlyJSim() and
         ChampBravoCheck_DH8D_FlyJSim() and
