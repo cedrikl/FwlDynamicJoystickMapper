@@ -23,6 +23,15 @@ joy_known.db[joy_known.size + 1]["hidp"] = nil
 joy_known.size = joy_known.size + 1
 
 joy_known.db[joy_known.size + 1] = {}
+joy_known.db[joy_known.size + 1]["vid"] = 0x3344
+joy_known.db[joy_known.size + 1]["pid"] = 0x838f
+joy_known.db[joy_known.size + 1]["name"] = "Virpil MT-50 CM3 Alpha Prime L"
+joy_known.db[joy_known.size + 1]["modu"] = "champ_joy_cm3_aprime_l"
+joy_known.db[joy_known.size + 1]["xpos"] = nil
+joy_known.db[joy_known.size + 1]["hidp"] = nil
+joy_known.size = joy_known.size + 1
+
+joy_known.db[joy_known.size + 1] = {}
 joy_known.db[joy_known.size + 1]["vid"] = 0x231d
 joy_known.db[joy_known.size + 1]["pid"] = 0x0127
 joy_known.db[joy_known.size + 1]["name"] = "VKBsim Space Gunfighter L"
