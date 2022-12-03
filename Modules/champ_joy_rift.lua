@@ -44,13 +44,13 @@ function rift.map(joy_l_num, joy_r_num, joy_hid_pointer)
 end
 
 function rift.mapDefault()
-  set_axis_assignment(rift.L_Joy_X,      "VR Touchpad X", "normal")
-  set_axis_assignment(rift.L_Joy_Y,      "VR Touchpad Y", "normal")
-  set_axis_assignment(rift.L_Joy_Index , "VR Trigger",    "normal")
+  champ_set_axis_assignment(rift.L_Joy_X,      "VR Touchpad X", "normal")
+  champ_set_axis_assignment(rift.L_Joy_Y,      "VR Touchpad Y", "normal")
+  champ_set_axis_assignment(rift.L_Joy_Index , "VR Trigger",    "normal")
 
-  --set_axis_assignment(rift.R_Joy_X,      "VR Touchpad X"  , "normal")
-  --set_axis_assignment(rift.R_Joy_Y,      "VR Touchpad Y"  , "normal")
-  set_axis_assignment(rift.R_Joy_Index,  "VR Trigger"     , "normal")
+  --champ_set_axis_assignment(rift.R_Joy_X,      "VR Touchpad X"  , "normal")
+  --champ_set_axis_assignment(rift.R_Joy_Y,      "VR Touchpad Y"  , "normal")
+  champ_set_axis_assignment(rift.R_Joy_Index,  "VR Trigger"     , "normal")
 
   set_button_assignment(rift.L_Y,        "sim/VR/reserved/menu")
   set_button_assignment(rift.L_X,        "sim/VR/general/reset_view")

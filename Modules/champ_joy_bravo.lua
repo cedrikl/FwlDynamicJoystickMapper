@@ -24,8 +24,8 @@ function reverser_handler()
     if (((ChampEngineType <= 4) and (ChampNbEngines <= 2))) then
       -- (Turbo)Props (ENG1/ENG2/PROP1/PROP2/MIX1/MIX2)
       if (ChampEngineBeta) then
-        set_axis_assignment(btq.axis1, "none", "normal")
-        set_axis_assignment(btq.axis2, "none", "normal")
+        champ_set_axis_assignment(btq.axis1, "none", "normal")
+        champ_set_axis_assignment(btq.axis2, "none", "normal")
         set_button_assignment(btq.axis1_rev_zone, "sim/engines/beta_toggle_1")
         set_button_assignment(btq.axis2_rev_zone, "sim/engines/beta_toggle_2")
 
@@ -115,21 +115,21 @@ function ChampBravoEngine()
   logMsg(string.format("Champion Info: The number of engines is %i (Type: %i)", ChampNbEngines, ChampEngineType))
 
   if (((ChampEngineType <= 4) and (ChampNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
-    set_axis_assignment(btq.axis1, "throttle 1", "reverse")
-    set_axis_assignment(btq.axis2, "throttle 2", "reverse")
+    champ_set_axis_assignment(btq.axis1, "throttle 1", "reverse")
+    champ_set_axis_assignment(btq.axis2, "throttle 2", "reverse")
 
-    set_axis_assignment(btq.axis3, "prop 1", "normal")
-    set_axis_assignment(btq.axis4, "prop 2", "normal")
+    champ_set_axis_assignment(btq.axis3, "prop 1", "normal")
+    champ_set_axis_assignment(btq.axis4, "prop 2", "normal")
 
-    set_axis_assignment(btq.axis5, "mixture 1", "normal")
-    set_axis_assignment(btq.axis6, "mixture 2", "normal")
+    champ_set_axis_assignment(btq.axis5, "mixture 1", "normal")
+    champ_set_axis_assignment(btq.axis6, "mixture 2", "normal")
 
     set_button_assignment(btq.axis12_2nd_func, "sim/autopilot/take_off_go_around")
   else
-    set_axis_assignment(btq.axis2, "throttle 1", "reverse")
-    set_axis_assignment(btq.axis3, "throttle 2", "reverse")
-    set_axis_assignment(btq.axis4, "throttle 3", "reverse")
-    set_axis_assignment(btq.axis5, "throttle 4", "reverse")
+    champ_set_axis_assignment(btq.axis2, "throttle 1", "reverse")
+    champ_set_axis_assignment(btq.axis3, "throttle 2", "reverse")
+    champ_set_axis_assignment(btq.axis4, "throttle 3", "reverse")
+    champ_set_axis_assignment(btq.axis5, "throttle 4", "reverse")
 
     set_button_assignment(btq.axis12_2nd_func, "sim/autopilot/autothrottle_off")
     set_button_assignment(btq.axis3_2nd_func, "sim/engines/TOGA_power")

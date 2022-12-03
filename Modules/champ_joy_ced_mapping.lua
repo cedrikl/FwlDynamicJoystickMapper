@@ -46,6 +46,88 @@ require("champ_joy_bravo_TBM9_hotstart")
 
 ac_ready = false
 
+function champ_set_axis_assignment(index, CommandRequested, ReverseOrNot)
+
+  universalCommand = string.lower(CommandRequested)
+
+      if (universalCommand == "none")                    then CommandWanted = "none"
+  elseif (universalCommand == "pitch")                   then CommandWanted = "Pitch"
+  elseif (universalCommand == "roll")                    then CommandWanted = "Roll"
+  elseif (universalCommand == "yaw")                     then CommandWanted = "Yaw"
+  elseif (universalCommand == "throttle")                then CommandWanted = "Throttle"
+  elseif (universalCommand == "collective")              then CommandWanted = "Collective"
+  elseif (universalCommand == "left toe brake")          then CommandWanted = "Left toe brake"
+  elseif (universalCommand == "right toe brake")         then CommandWanted = "Right toe brake"
+  elseif (universalCommand == "prop")                    then CommandWanted = "Prop"
+  elseif (universalCommand == "mixture")                 then CommandWanted = "Mixture"
+  elseif (universalCommand == "carb heat")               then CommandWanted = "Carb heat"
+  elseif (universalCommand == "flaps")                   then CommandWanted = "Flaps"
+  elseif (universalCommand == "thrust vector")           then CommandWanted = "Thrust vector"
+  elseif (universalCommand == "wing sweep")              then CommandWanted = "Wing sweep"
+  elseif (universalCommand == "speedbrakes")             then CommandWanted = "Speedbrakes"
+  elseif (universalCommand == "displacement")            then CommandWanted = "Displacement"
+  elseif (universalCommand == "reverse")                 then CommandWanted = "Reverse"
+  elseif (universalCommand == "elevator trim")           then CommandWanted = "Elevator trim"
+  elseif (universalCommand == "aileron trim")            then CommandWanted = "Aileron trim"
+  elseif (universalCommand == "rudder trim")             then CommandWanted = "Rudder trim"
+  elseif (universalCommand == "throttle 1")              then CommandWanted = "Throttle 1"
+  elseif (universalCommand == "throttle 2")              then CommandWanted = "Throttle 2"
+  elseif (universalCommand == "throttle 3")              then CommandWanted = "Throttle 3"
+  elseif (universalCommand == "throttle 4")              then CommandWanted = "Throttle 4"
+  elseif (universalCommand == "prop 1")                  then CommandWanted = "Prop 1"
+  elseif (universalCommand == "prop 2")                  then CommandWanted = "Prop 2"
+  elseif (universalCommand == "prop 3")                  then CommandWanted = "Prop 3"
+  elseif (universalCommand == "prop 4")                  then CommandWanted = "Prop 4"
+  elseif (universalCommand == "mixture 1")               then CommandWanted = "Mixture 1"
+  elseif (universalCommand == "mixture 2")               then CommandWanted = "Mixture 2"
+  elseif (universalCommand == "mixture 3")               then CommandWanted = "Mixture 3"
+  elseif (universalCommand == "mixture 4")               then CommandWanted = "Mixture 4"
+  elseif (universalCommand == "reverse 1")               then CommandWanted = "Reverse 1"
+  elseif (universalCommand == "reverse 2")               then CommandWanted = "Reverse 2"
+  elseif (universalCommand == "reverse 3")               then CommandWanted = "Reverse 3"
+  elseif (universalCommand == "reverse 4")               then CommandWanted = "Reverse 4"
+  elseif (universalCommand == "landing gear")            then CommandWanted = "Landing gear"
+  elseif (universalCommand == "nosewheel tiller")        then CommandWanted = "Nosewheel tiller"
+  elseif (universalCommand == "backup throttle")         then CommandWanted = "Backup throttle"
+  elseif (universalCommand == "auto roll")               then CommandWanted = "Auto roll"
+  elseif (universalCommand == "auto pitch")              then CommandWanted = "Auto pitch"
+  elseif (universalCommand == "cowl flaps")              then CommandWanted = "Cowl flaps"
+  elseif (universalCommand == "view left/right")         then CommandWanted = "View left/right"
+  elseif (universalCommand == "view up/down")            then CommandWanted = "View up/down"
+  elseif (universalCommand == "view zoom")               then CommandWanted = "View zoom"
+  elseif (universalCommand == "camera left/right")       then CommandWanted = "Camera left/right"
+  elseif (universalCommand == "camera up/down")          then CommandWanted = "Camera up/down"
+  elseif (universalCommand == "camera zoom")             then CommandWanted = "Camera zoom"
+  elseif (universalCommand == "gun/bomb left/right")     then CommandWanted = "Gun/bomb left/right"
+  elseif (universalCommand == "gun/bomb up/down")        then CommandWanted = "Gun/bomb up/down"
+  elseif (universalCommand == "vr touchpad x")           then CommandWanted = "VR Touchpad X"
+  elseif (universalCommand == "vr touchpad y")           then CommandWanted = "VR Touchpad Y"
+  elseif (universalCommand == "vr trigger")              then CommandWanted = "VR Trigger"
+  elseif (universalCommand == "custom command(s)")       then CommandWanted = "Custom command(s)"
+  elseif (universalCommand == "throttle 5")              then CommandWanted = "Throttle 5"
+  elseif (universalCommand == "throttle 6")              then CommandWanted = "Throttle 6"
+  elseif (universalCommand == "throttle 7")              then CommandWanted = "Throttle 7"
+  elseif (universalCommand == "throttle 8")              then CommandWanted = "Throttle 8"
+  elseif (universalCommand == "cowl flaps 1")            then CommandWanted = "Cowl flaps 1"
+  elseif (universalCommand == "cowl flaps 2")            then CommandWanted = "Cowl flaps 2"
+  elseif (universalCommand == "cowl flaps 3")            then CommandWanted = "Cowl flaps 3"
+  elseif (universalCommand == "cowl flaps 4")            then CommandWanted = "Cowl flaps 4"
+  elseif (universalCommand == "cowl flaps 5")            then CommandWanted = "Cowl flaps 5"
+  elseif (universalCommand == "cowl flaps 6")            then CommandWanted = "Cowl flaps 6"
+  elseif (universalCommand == "cowl flaps 7")            then CommandWanted = "Cowl flaps 7"
+  elseif (universalCommand == "cowl flaps 8")            then CommandWanted = "Cowl flaps 8"
+  elseif (universalCommand == "throttle vertical")       then CommandWanted = "Throttle Vertical"
+  elseif (universalCommand == "throttle horizontal")     then CommandWanted = "Throttle Horizontal"
+  elseif (universalCommand == "copilot pitch")           then CommandWanted = "Copilot Pitch"
+  elseif (universalCommand == "copilot roll")            then CommandWanted = "Copilot Roll"
+  elseif (universalCommand == "copilot yaw")             then CommandWanted = "Copilot Yaw"
+  elseif (universalCommand == "copilot left toe brake")  then CommandWanted = "Copilot Left toe brake"
+  elseif (universalCommand == "copilot right toe brake") then CommandWanted = "Copilot Right toe brake"
+  end
+
+  set_axis_assignment(index, CommandWanted, ReverseOrNot)
+end
+
 function ChampInit()
   clear_all_axis_assignments()
   clear_all_button_assignments()
@@ -68,7 +150,7 @@ function ChampInit()
   --_joy_location6 vr/Oculus/oculus_Right/WMHD315R200HC9_Controller_Right/none
   --thus the left controller is as positon 5 (_joy_location5) and the right controller is at position 6 (_joy_location6)
   --rift.map(6,7, true)
-  reverbG2.map(4,3, false)
+  --reverbG2.map(4,3, false)
 
 
   for HID_device = 1,device_DB.size,1
@@ -113,15 +195,17 @@ end
 -------------------------
 
 function ChampComAxis()
-  set_axis_assignment(scgl.axis_roll , "roll" , "normal")
-  set_axis_assignment(scgl.axis_pitch, "pitch", "normal")
+  champ_set_axis_assignment(vpcl.axis_roll,   "Roll" ,           "normal")
+  champ_set_axis_assignment(vpcl.axis_pitch,  "Pitch",           "normal")
+  champ_set_axis_assignment(vpcl.axis_view_y, "View up/down",    "normal")
+  champ_set_axis_assignment(vpcl.axis_view_x, "View left/right", "normal")
 
-  set_axis_assignment(TPR.yaw    , "yaw"            , "normal")
-  set_axis_assignment(TPR.brake_l, "left toe brake" , "reverse")
-  set_axis_assignment(TPR.brake_r, "right toe brake", "reverse")
+  champ_set_axis_assignment(TPR.yaw    , "Yaw"            , "normal")
+  champ_set_axis_assignment(TPR.brake_l, "Left toe brake" , "reverse")
+  champ_set_axis_assignment(TPR.brake_r, "Right toe brake", "reverse")
 
-  set_axis_assignment(btq.axis1,      "speedbrakes", "normal")
-  --set_axis_assignment(btq.axis6,      "flaps", "reverse")
+  champ_set_axis_assignment(btq.axis1,      "Speedbrakes", "normal")
+  --champ_set_axis_assignment(btq.axis6,      "Flaps", "reverse")
 end
 
 ---------------------------
@@ -138,38 +222,33 @@ end
 
 function ChampComButtons()
   --rift.mapDefault()
-  reverbG2.mapDefault()
+  --reverbG2.mapDefault()
 
-  set_button_assignment(scgl.A2,            "sim/autopilot/servos_off_any")
-  set_button_assignment(scgl.A1_Up,         "sim/general/hat_switch_up")
-  set_button_assignment(scgl.A1_Up_Right,   "sim/general/hat_switch_up_right")
-  set_button_assignment(scgl.A1_Right,      "sim/general/hat_switch_right")
-  set_button_assignment(scgl.A1_Down_Right, "sim/general/hat_switch_down_right")
-  set_button_assignment(scgl.A1_Down,       "sim/general/hat_switch_down")
-  set_button_assignment(scgl.A1_Down_Left,  "sim/general/hat_switch_down_left")
-  set_button_assignment(scgl.A1_Left,       "sim/general/hat_switch_left")
-  set_button_assignment(scgl.A1_Up_Left,    "sim/general/hat_switch_up_left")
-  set_button_assignment(scgl.A3_Up,         "sim/flight_controls/pitch_trim_down")
-  set_button_assignment(scgl.A3_Down,       "sim/flight_controls/pitch_trim_up")
-  set_button_assignment(scgl.A3_Left,       "sim/flight_controls/rudder_trim_left")
-  set_button_assignment(scgl.A3_Right,      "sim/flight_controls/rudder_trim_right")
-  set_button_assignment(scgl.B1,            "sim/view/quick_look_0")
-  set_button_assignment(scgl.D1,            "sim/view/circle")
-  set_button_assignment(scgl.C1_Up,         "sim/general/up_slow")
-  set_button_assignment(scgl.C1_Right,      "champion/VR/vrOn")
-  set_button_assignment(scgl.C1_Down,       "sim/general/down_slow")
-  set_button_assignment(scgl.C1_Left,       "sim/VR/general/reset_view")
-  set_button_assignment(scgl.A4_Up,         "sim/general/forward_slow")
-  set_button_assignment(scgl.A4_Right,      "sim/general/right_slow")
-  set_button_assignment(scgl.A4_Down,       "sim/general/backward_slow")
-  set_button_assignment(scgl.A4_Left,       "sim/general/left_slow")
+  set_button_assignment(vpcl.tr_button,      "sim/autopilot/servos_off_any")
+  set_button_assignment(vpcl.br_hat_up,      "sim/flight_controls/pitch_trim_down")
+  set_button_assignment(vpcl.br_hat_down,    "sim/flight_controls/pitch_trim_up")
+  --set_button_assignment(vpcl.br_hat_left,    "sim/flight_controls/rudder_trim_left")
+  --set_button_assignment(vpcl.br_hat_right,   "sim/flight_controls/rudder_trim_right")
+  set_button_assignment(vpcl.side_hat_press, "SRS/X-Camera/Select_View_ID_1")
+  set_button_assignment(vpcl.pinkie,         "SRS/X-Camera/Select_View_ID_6")
+  set_button_assignment(vpcl.side_hat_up,    "sim/general/up_slow")
+  set_button_assignment(vpcl.side_hat_down,  "sim/general/down_slow")
+  set_button_assignment(vpcl.thb_hat_up,     "sim/general/forward_slow")
+  set_button_assignment(vpcl.thb_hat_right,  "sim/general/right_slow")
+  set_button_assignment(vpcl.thb_hat_down,   "sim/general/backward_slow")
+  set_button_assignment(vpcl.thb_hat_left,   "sim/general/left_slow")
+  set_button_assignment(vpcl.tl_hat_press,   "bgood/xchecklist/reload_checklist")
+  set_button_assignment(vpcl.tl_hat_down,    "bgood/xchecklist/check_item")
+  set_button_assignment(vpcl.tl_hat_up,      "bgood/xchecklist/toggle_checklist")
+  set_button_assignment(vpcl.tl_hat_right,   "bgood/xchecklist/next_checklist")
+  set_button_assignment(vpcl.tl_hat_left,    "bgood/xchecklist/prev_checklist")
 
-  set_button_assignment(btq.flaps_up,       "sim/flight_controls/flaps_up")
-  set_button_assignment(btq.flaps_dn,       "sim/flight_controls/flaps_down")
-  set_button_assignment(btq.gear_up,        "sim/flight_controls/landing_gear_up")
-  set_button_assignment(btq.gear_dn,        "sim/flight_controls/landing_gear_down")
-  --set_button_assignment(btq.trim_dn,        "sim/flight_controls/pitch_trim_down")
-  --set_button_assignment(btq.trim_up,        "sim/flight_controls/pitch_trim_up")
+  set_button_assignment(btq.flaps_up,        "sim/flight_controls/flaps_up")
+  set_button_assignment(btq.flaps_dn,        "sim/flight_controls/flaps_down")
+  set_button_assignment(btq.gear_up,         "sim/flight_controls/landing_gear_up")
+  set_button_assignment(btq.gear_dn,         "sim/flight_controls/landing_gear_down")
+  set_button_assignment(btq.trim_dn,         "sim/flight_controls/pitch_trim_down")
+  set_button_assignment(btq.trim_up,         "sim/flight_controls/pitch_trim_up")
   if (("A321" ~= PLANE_ICAO) and ("A21N" ~= PLANE_ICAO) and ("B738" ~= PLANE_ICAO) and ("CL60" ~= PLANE_ICAO) and ("MD11" ~= PLANE_ICAO) and ("TBM9" ~= PLANE_ICAO)) then
     do_often([[
       ParkPos = get("sim/cockpit2/controls/parking_brake_ratio")
@@ -223,48 +302,49 @@ end
 
 function ChampAcSpecific()
   logMsg(string.format("Champion Info: Currently Detected A/C Type is %s", PLANE_ICAO))
+  ap_disc_button = vpcl.tr_button
 
   if ((PLANE_ICAO == "A306") or (PLANE_ICAO == "A310")) then
-    set_button_assignment(scgl.A2,       "A300/MCDU/yoke_ap_disconnect_captain")
+    set_button_assignment(ap_disc_button, "A300/MCDU/yoke_ap_disconnect_captain")
     ChampBravoMapping_A310_ini()
   elseif (string.find(PLANE_ICAO, 'A3%w%w') or string.find(PLANE_ICAO, 'A2%wN')) then
     --Airbus Sidesticks
-    --set_axis_assignment(afy.axis_roll,  "none", "normal")
-    --set_axis_assignment(afy.axis_pitch, "none", "normal")
-    --set_axis_assignment(x55j.roll,  "roll", "normal")
-    --set_axis_assignment(x55j.pitch, "pitch", "normal")
+    --champ_set_axis_assignment(afy.axis_roll,  "none", "normal")
+    --champ_set_axis_assignment(afy.axis_pitch, "none", "normal")
+    --champ_set_axis_assignment(x55j.roll,  "roll", "normal")
+    --champ_set_axis_assignment(x55j.pitch, "pitch", "normal")
     if ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
-      set_button_assignment(scgl.A2, "toliss_airbus/ap_disc_left_stick")
+      set_button_assignment(ap_disc_button, "toliss_airbus/ap_disc_left_stick")
       --ChampAlphaMapping_A321_toliss()
       ChampBravoMapping_A321_toliss()
     elseif (PLANE_ICAO == "A320") then
-      set_button_assignment(scgl.A2, "a320/Panel/SidestickTakeoverL_button")
-      ChampAlphaMapping_A320_FF()
+      set_button_assignment(ap_disc_button, "a320/Panel/SidestickTakeoverL_button")
+      --ChampAlphaMapping_A320_FF()
       ChampBravoMapping_A320_FF()
     elseif (PLANE_ICAO == "A330") then
-      set_button_assignment(scgl.A2, "jd/ap/takeover")
+      set_button_assignment(ap_disc_button, "jd/ap/takeover")
       --ChampAlphaMapping_A330_JD()
       ChampBravoMapping_A330_JD()
     end
   elseif (PLANE_ICAO == "B738") then
-    set_button_assignment(scgl.A2, "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(ap_disc_button, "laminar/B738/autopilot/capt_disco_press")
     --ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B38M") then
     --Ben hack for VAC, placeholder for future max which may not be zibo so keeping separate
-    set_button_assignment(scgl.A2, "laminar/B738/autopilot/capt_disco_press")
+    set_button_assignment(ap_disc_button, "laminar/B738/autopilot/capt_disco_press")
     --ChampAlphaMapping_B738_zibo()
     ChampBravoMapping_B738_zibo()
   elseif (PLANE_ICAO == "B748") then
-    set_button_assignment(afy.L_WhiteBtn,  "SSG/UFMC/AP_discon_Button")
+    set_button_assignment(ap_disc_button,  "SSG/UFMC/AP_discon_Button")
     --ChampAlphaMapping_B748_SSG()
     ChampBravoMapping_B748_SSG()
   elseif (string.find(PLANE_ICAO, "B75%w") or string.find(PLANE_ICAO, "B76%w")) then
-    set_button_assignment(scgl.A2, "1-sim/comm/AP/ap_disc")
+    set_button_assignment(ap_disc_button, "1-sim/comm/AP/ap_disc")
     --ChampAlphaMapping_B767_FF()
     ChampBravoMapping_B767_FF()
   elseif string.find(PLANE_ICAO, "B77%w") then
-    set_button_assignment(scgl.A2, "777/ap_disc")
+    set_button_assignment(ap_disc_button, "777/ap_disc")
     --ChampAlphaMapping_B777_FF()
     ChampBravoMapping_B777_FF()
   elseif (PLANE_ICAO == "B789") then
@@ -274,24 +354,24 @@ function ChampAcSpecific()
     --ChampAlphaMapping_C172_Carenado()
   elseif (PLANE_ICAO == "CL60") then
     ChampBravoMapping_CL60_hotstart()
-    set_button_assignment(scgl.Trig_Fwd, "CL650/checklist/check_item")
-    set_button_assignment(scgl.Trig_Aft, "CL650/checklist/skip_item")
-    set_button_assignment(scgl.C1_Right, "CL650/checklist/next_checklist")
-    set_button_assignment(scgl.C1_Left,  "CL650/checklist/prev_checklist")
+    set_button_assignment(vpcl.tl_hat_down,  "CL650/checklist/check_item")
+    set_button_assignment(vpcl.tl_hat_up,    "CL650/checklist/skip_item")
+    set_button_assignment(vpcl.tl_hat_right, "CL650/checklist/next_checklist")
+    set_button_assignment(vpcl.tl_hat_left,  "CL650/checklist/prev_checklist")
   elseif (PLANE_ICAO == "CRJ9") then
-    set_button_assignment(afy.R_RedBtn, "crj900/command/autopilot/ap_disc")
+    set_button_assignment(ap_disc_button, "crj900/command/autopilot/ap_disc")
     --ChampAlphaMapping_CRJ_AD()
     ChampBravoMapping_CRJ_AD()
-  elseif (PLANE_ICAO == "DH8D") then
-    set_button_assignment(scgl.A2, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
-    set_button_assignment(scgl.Trig_Aft, "FJS/Q4XP/Autopilot/TCS_Engage")
+  elseif string.find(PLANE_ICAO, "DH8D") then
+    set_button_assignment(ap_disc_button, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
+    set_button_assignment(vpcl.fliptrig_ctr,  "FJS/Q4XP/Autopilot/TCS_Engage")
     --ChampAlphaMapping_DH8D_FlyJSim()
     ChampBravoMapping_DH8D_FlyJSim()
   elseif ((PLANE_ICAO == "E170") or (PLANE_ICAO == "E195")) then
     --ChampAlphaMapping_E195_SSG()
     ChampBravoMapping_E195_SSG()
   elseif (PLANE_ICAO == "MD11") then
-    set_button_assignment(scgl.A2, "Rotate/aircraft/controls_c/ap_disc_l")
+    set_button_assignment(ap_disc_button, "Rotate/aircraft/controls_c/ap_disc_l")
     --ChampAlphaMapping_TBM9_hotstart()
     ChampBravoMapping_MD11_Rotate()
   elseif (PLANE_ICAO == "TBM9") then
@@ -299,10 +379,10 @@ function ChampAcSpecific()
     ChampBravoMapping_TBM9_hotstart()
   elseif (PLANE_ICAO == "UH1") then
     --Nimbus UH1?
-    --set_axis_assignment(afy.axis_roll,  "none",  "normal")
-    --set_axis_assignment(afy.axis_pitch, "none",  "normal")
-    --set_axis_assignment(x55j.roll,       "roll",  "normal")
-    --set_axis_assignment(x55j.pitch,      "pitch", "normal")
+    --champ_set_axis_assignment(afy.axis_roll,  "none",  "normal")
+    --champ_set_axis_assignment(afy.axis_pitch, "none",  "normal")
+    --champ_set_axis_assignment(x55j.roll,       "roll",  "normal")
+    --champ_set_axis_assignment(x55j.pitch,      "pitch", "normal")
   end
 end
 
@@ -333,7 +413,6 @@ end
 -- We should always ensure the required datarefs exist before attempting to map them in ChampAcSpecific() and ChampLedSpecificCheck()
 
 function check_specific_datarefs()
-
   if (PLANE_ICAO == "A306" or PLANE_ICAO == "A310") then
     if (ChampBravoCheck_A310_ini() and
         XPLMFindCommand("A300/MCDU/yoke_ap_disconnect_captain") ~= nil
@@ -357,12 +436,12 @@ function check_specific_datarefs()
         XPLMFindCommand("jd/ap/takeover") ~= nil
        ) then ac_ready = true
     end
-  elseif (PLANE_ICAO == "B738") then 
+  elseif (PLANE_ICAO == "B738") then
     if (ChampBravoCheck_B738_zibo()                                       and
         XPLMFindCommand("laminar/B738/autopilot/capt_disco_press") ~= nil
        ) then ac_ready = true
     end
-  elseif (PLANE_ICAO == "B38M") then 
+  elseif (PLANE_ICAO == "B38M") then
     if (ChampBravoCheck_B738_zibo()                                       and
         XPLMFindCommand("laminar/B738/autopilot/capt_disco_press") ~= nil
        ) then ac_ready = true
@@ -404,7 +483,7 @@ function check_specific_datarefs()
         ChampBravoCheck_CRJ_AD()             and
         XPLMFindCommand("crj900/command/autopilot/ap_disc") ~= nil
        ) then ac_ready = true
-    end   
+    end
   elseif string.find(PLANE_ICAO, "DH8D") then
     if (ChampAlphaCheck_DH8D_FlyJSim() and
         ChampBravoCheck_DH8D_FlyJSim() and
@@ -426,7 +505,7 @@ function check_specific_datarefs()
     if (ChampAlphaCheck_TBM9_hotstart()                          and
         ChampBravoCheck_TBM9_hotstart()
        ) then ac_ready = true
-    end    
+    end
   elseif (PLANE_ICAO == "SF34") then
     if (ChampBravoCheck_SF34_les()
        ) then ac_ready = true

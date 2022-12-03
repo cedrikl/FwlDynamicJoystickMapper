@@ -1,6 +1,6 @@
 function ChampBravoEngine_B350_airfoillabs()
-  set_axis_assignment(btq.axis1, "none", "normal")
-  set_axis_assignment(btq.axis2, "none", "normal")
+  champ_set_axis_assignment(btq.axis1, "none", "normal")
+  champ_set_axis_assignment(btq.axis2, "none", "normal")
   set_button_assignment(btq.axis1_rev_zone, "sim/engines/beta_toggle_1")
   set_button_assignment(btq.axis2_rev_zone, "sim/engines/beta_toggle_2")
 

@@ -85,7 +85,7 @@ function ChampBravoMapping_E195_SSG()
   --set_button_assignment(btq.axis12_2nd_func, "SSG/EJET/MCP/AT_COMM")
   set_button_assignment(btq.axis3_2nd_func,  "SSG/EJET/MCP/Toga")
 
-  set_axis_assignment(btq.axis1,  "none",  "normal")
+  champ_set_axis_assignment(btq.axis1,  "none",  "normal")
   do_every_frame([[
     joy_pos = get("sim/joystick/joystick_axis_values", ]]..btq.axis1..[[)
     set("SSG/B748/speed_brk_hand", 1-joy_pos)
