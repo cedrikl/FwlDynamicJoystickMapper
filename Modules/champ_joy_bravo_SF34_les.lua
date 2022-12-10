@@ -1,10 +1,10 @@
 function ChampBravoEngine_SF34_les()
-  champ_set_axis_assignment(btq.axis1, "none", "normal")
-  champ_set_axis_assignment(btq.axis2, "none", "normal")
-  champ_set_axis_assignment(btq.axis3, "none", "normal")
-  champ_set_axis_assignment(btq.axis4, "none", "normal")
-  champ_set_axis_assignment(btq.axis5, "none", "normal")
-  champ_set_axis_assignment(btq.axis6, "none", "normal")
+  set_axis_assignment(btq.axis1, "none", "normal")
+  set_axis_assignment(btq.axis2, "none", "normal")
+  set_axis_assignment(btq.axis3, "none", "normal")
+  set_axis_assignment(btq.axis4, "none", "normal")
+  set_axis_assignment(btq.axis5, "none", "normal")
+  set_axis_assignment(btq.axis6, "none", "normal")
 
 
   previous_axis1_rev_handle = 0

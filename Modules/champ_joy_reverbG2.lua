@@ -42,13 +42,13 @@ function reverbG2.map(joy_l_num, joy_r_num, joy_hid_pointer)
 end
 
 function reverbG2.mapDefault()
-  champ_set_axis_assignment(reverbG2.L_Joy_X,      "VR Touchpad X", "normal")
-  champ_set_axis_assignment(reverbG2.L_Joy_Y,      "VR Touchpad Y", "normal")
-  champ_set_axis_assignment(reverbG2.L_Joy_Index , "VR Trigger",    "normal")
+  set_axis_assignment(reverbG2.L_Joy_X,      "VR Touchpad X", "normal")
+  set_axis_assignment(reverbG2.L_Joy_Y,      "VR Touchpad Y", "normal")
+  set_axis_assignment(reverbG2.L_Joy_Index , "VR Trigger",    "normal")
 
-  champ_set_axis_assignment(reverbG2.R_Joy_X,      "VR Touchpad X"  , "normal")
-  champ_set_axis_assignment(reverbG2.R_Joy_Y,      "VR Touchpad Y"  , "normal")
-  champ_set_axis_assignment(reverbG2.R_Joy_Index,  "VR Trigger"     , "normal")
+  set_axis_assignment(reverbG2.R_Joy_X,      "VR Touchpad X"  , "normal")
+  set_axis_assignment(reverbG2.R_Joy_Y,      "VR Touchpad Y"  , "normal")
+  set_axis_assignment(reverbG2.R_Joy_Index,  "VR Trigger"     , "normal")
 
   set_button_assignment(reverbG2.L_Menu,     "sim/VR/reserved/menu")
   --set_button_assignment(reverbG2.L_X,        "sim/VR/general/reset_view")

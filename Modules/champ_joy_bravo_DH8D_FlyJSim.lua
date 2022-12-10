@@ -54,9 +54,9 @@ function ChampBravoMapping_DH8D_FlyJSim()
   do_every_frame("apPanelDualHandler()")
 
   set_button_assignment(btq.axis12_2nd_func, "FJS/Q4XP/ENGINES/PowerGatePassALL")
-  champ_set_axis_assignment(btq.axis1, "prop", "normal")
-  champ_set_axis_assignment(btq.axis4, "none", "normal")
-  champ_set_axis_assignment(btq.axis5, "none", "normal")
+  set_axis_assignment(btq.axis1, "prop", "normal")
+  set_axis_assignment(btq.axis4, "none", "normal")
+  set_axis_assignment(btq.axis5, "none", "normal")
 
   set_button_assignment(btq.sw2_up, "sim/none/none")
   set_button_assignment(btq.sw2_dn, "sim/none/none")

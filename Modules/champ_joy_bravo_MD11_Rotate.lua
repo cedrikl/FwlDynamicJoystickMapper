@@ -111,7 +111,7 @@ function ChampBravoMapping_MD11_Rotate()
   set_button_assignment(btq.gear_dn, "Rotate/aircraft/controls_c/gear_handle_up")
   set_button_assignment(btq.gear_up, "Rotate/aircraft/controls_c/gear_handle_dn")
 
-  champ_set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
+  set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
   set_button_assignment(btq.axis12_2nd_func, "Rotate/aircraft/controls_c/ats_disc_l")
   set_button_assignment(btq.axis3_2nd_func, "Rotate/aircraft/controls_c/to_ga")
 

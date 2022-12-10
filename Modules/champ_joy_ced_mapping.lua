@@ -46,88 +46,6 @@ require("champ_joy_bravo_TBM9_hotstart")
 
 ac_ready = false
 
-function champ_set_axis_assignment(index, CommandRequested, ReverseOrNot)
-
-  universalCommand = string.lower(CommandRequested)
-
-      if (universalCommand == "none")                    then CommandWanted = "none"
-  elseif (universalCommand == "pitch")                   then CommandWanted = "Pitch"
-  elseif (universalCommand == "roll")                    then CommandWanted = "Roll"
-  elseif (universalCommand == "yaw")                     then CommandWanted = "Yaw"
-  elseif (universalCommand == "throttle")                then CommandWanted = "Throttle"
-  elseif (universalCommand == "collective")              then CommandWanted = "Collective"
-  elseif (universalCommand == "left toe brake")          then CommandWanted = "Left toe brake"
-  elseif (universalCommand == "right toe brake")         then CommandWanted = "Right toe brake"
-  elseif (universalCommand == "prop")                    then CommandWanted = "Prop"
-  elseif (universalCommand == "mixture")                 then CommandWanted = "Mixture"
-  elseif (universalCommand == "carb heat")               then CommandWanted = "Carb heat"
-  elseif (universalCommand == "flaps")                   then CommandWanted = "Flaps"
-  elseif (universalCommand == "thrust vector")           then CommandWanted = "Thrust vector"
-  elseif (universalCommand == "wing sweep")              then CommandWanted = "Wing sweep"
-  elseif (universalCommand == "speedbrakes")             then CommandWanted = "Speedbrakes"
-  elseif (universalCommand == "displacement")            then CommandWanted = "Displacement"
-  elseif (universalCommand == "reverse")                 then CommandWanted = "Reverse"
-  elseif (universalCommand == "elevator trim")           then CommandWanted = "Elevator trim"
-  elseif (universalCommand == "aileron trim")            then CommandWanted = "Aileron trim"
-  elseif (universalCommand == "rudder trim")             then CommandWanted = "Rudder trim"
-  elseif (universalCommand == "throttle 1")              then CommandWanted = "Throttle 1"
-  elseif (universalCommand == "throttle 2")              then CommandWanted = "Throttle 2"
-  elseif (universalCommand == "throttle 3")              then CommandWanted = "Throttle 3"
-  elseif (universalCommand == "throttle 4")              then CommandWanted = "Throttle 4"
-  elseif (universalCommand == "prop 1")                  then CommandWanted = "Prop 1"
-  elseif (universalCommand == "prop 2")                  then CommandWanted = "Prop 2"
-  elseif (universalCommand == "prop 3")                  then CommandWanted = "Prop 3"
-  elseif (universalCommand == "prop 4")                  then CommandWanted = "Prop 4"
-  elseif (universalCommand == "mixture 1")               then CommandWanted = "Mixture 1"
-  elseif (universalCommand == "mixture 2")               then CommandWanted = "Mixture 2"
-  elseif (universalCommand == "mixture 3")               then CommandWanted = "Mixture 3"
-  elseif (universalCommand == "mixture 4")               then CommandWanted = "Mixture 4"
-  elseif (universalCommand == "reverse 1")               then CommandWanted = "Reverse 1"
-  elseif (universalCommand == "reverse 2")               then CommandWanted = "Reverse 2"
-  elseif (universalCommand == "reverse 3")               then CommandWanted = "Reverse 3"
-  elseif (universalCommand == "reverse 4")               then CommandWanted = "Reverse 4"
-  elseif (universalCommand == "landing gear")            then CommandWanted = "Landing gear"
-  elseif (universalCommand == "nosewheel tiller")        then CommandWanted = "Nosewheel tiller"
-  elseif (universalCommand == "backup throttle")         then CommandWanted = "Backup throttle"
-  elseif (universalCommand == "auto roll")               then CommandWanted = "Auto roll"
-  elseif (universalCommand == "auto pitch")              then CommandWanted = "Auto pitch"
-  elseif (universalCommand == "cowl flaps")              then CommandWanted = "Cowl flaps"
-  elseif (universalCommand == "view left/right")         then CommandWanted = "View left/right"
-  elseif (universalCommand == "view up/down")            then CommandWanted = "View up/down"
-  elseif (universalCommand == "view zoom")               then CommandWanted = "View zoom"
-  elseif (universalCommand == "camera left/right")       then CommandWanted = "Camera left/right"
-  elseif (universalCommand == "camera up/down")          then CommandWanted = "Camera up/down"
-  elseif (universalCommand == "camera zoom")             then CommandWanted = "Camera zoom"
-  elseif (universalCommand == "gun/bomb left/right")     then CommandWanted = "Gun/bomb left/right"
-  elseif (universalCommand == "gun/bomb up/down")        then CommandWanted = "Gun/bomb up/down"
-  elseif (universalCommand == "vr touchpad x")           then CommandWanted = "VR Touchpad X"
-  elseif (universalCommand == "vr touchpad y")           then CommandWanted = "VR Touchpad Y"
-  elseif (universalCommand == "vr trigger")              then CommandWanted = "VR Trigger"
-  elseif (universalCommand == "custom command(s)")       then CommandWanted = "Custom command(s)"
-  elseif (universalCommand == "throttle 5")              then CommandWanted = "Throttle 5"
-  elseif (universalCommand == "throttle 6")              then CommandWanted = "Throttle 6"
-  elseif (universalCommand == "throttle 7")              then CommandWanted = "Throttle 7"
-  elseif (universalCommand == "throttle 8")              then CommandWanted = "Throttle 8"
-  elseif (universalCommand == "cowl flaps 1")            then CommandWanted = "Cowl flaps 1"
-  elseif (universalCommand == "cowl flaps 2")            then CommandWanted = "Cowl flaps 2"
-  elseif (universalCommand == "cowl flaps 3")            then CommandWanted = "Cowl flaps 3"
-  elseif (universalCommand == "cowl flaps 4")            then CommandWanted = "Cowl flaps 4"
-  elseif (universalCommand == "cowl flaps 5")            then CommandWanted = "Cowl flaps 5"
-  elseif (universalCommand == "cowl flaps 6")            then CommandWanted = "Cowl flaps 6"
-  elseif (universalCommand == "cowl flaps 7")            then CommandWanted = "Cowl flaps 7"
-  elseif (universalCommand == "cowl flaps 8")            then CommandWanted = "Cowl flaps 8"
-  elseif (universalCommand == "throttle vertical")       then CommandWanted = "Throttle Vertical"
-  elseif (universalCommand == "throttle horizontal")     then CommandWanted = "Throttle Horizontal"
-  elseif (universalCommand == "copilot pitch")           then CommandWanted = "Copilot Pitch"
-  elseif (universalCommand == "copilot roll")            then CommandWanted = "Copilot Roll"
-  elseif (universalCommand == "copilot yaw")             then CommandWanted = "Copilot Yaw"
-  elseif (universalCommand == "copilot left toe brake")  then CommandWanted = "Copilot Left toe brake"
-  elseif (universalCommand == "copilot right toe brake") then CommandWanted = "Copilot Right toe brake"
-  end
-
-  set_axis_assignment(index, CommandWanted, ReverseOrNot)
-end
-
 function ChampInit()
   clear_all_axis_assignments()
   clear_all_button_assignments()
@@ -195,17 +113,17 @@ end
 -------------------------
 
 function ChampComAxis()
-  champ_set_axis_assignment(vpcl.axis_roll,   "Roll" ,           "normal")
-  champ_set_axis_assignment(vpcl.axis_pitch,  "Pitch",           "normal")
-  champ_set_axis_assignment(vpcl.axis_view_y, "View up/down",    "normal")
-  champ_set_axis_assignment(vpcl.axis_view_x, "View left/right", "normal")
+  set_axis_assignment(vpcl.axis_roll,   "rOlL" ,           "normal")
+  set_axis_assignment(vpcl.axis_pitch,  "Pitch",           "normal")
+  set_axis_assignment(vpcl.axis_view_y, "View up/down",    "normal")
+  set_axis_assignment(vpcl.axis_view_x, "View left/right", "normal")
 
-  champ_set_axis_assignment(TPR.yaw    , "Yaw"            , "normal")
-  champ_set_axis_assignment(TPR.brake_l, "Left toe brake" , "reverse")
-  champ_set_axis_assignment(TPR.brake_r, "Right toe brake", "reverse")
+  set_axis_assignment(TPR.yaw    , "Yaw"            , "normal")
+  set_axis_assignment(TPR.brake_l, "Left toe brake" , "reverse")
+  set_axis_assignment(TPR.brake_r, "Right toe brake", "reverse")
 
-  champ_set_axis_assignment(btq.axis1,      "Speedbrakes", "normal")
-  --champ_set_axis_assignment(btq.axis6,      "Flaps", "reverse")
+  set_axis_assignment(btq.axis1,      "Speedbrakes", "normal")
+  --set_axis_assignment(btq.axis6,      "Flaps", "reverse")
 end
 
 ---------------------------
@@ -309,10 +227,10 @@ function ChampAcSpecific()
     ChampBravoMapping_A310_ini()
   elseif (string.find(PLANE_ICAO, 'A3%w%w') or string.find(PLANE_ICAO, 'A2%wN')) then
     --Airbus Sidesticks
-    --champ_set_axis_assignment(afy.axis_roll,  "none", "normal")
-    --champ_set_axis_assignment(afy.axis_pitch, "none", "normal")
-    --champ_set_axis_assignment(x55j.roll,  "roll", "normal")
-    --champ_set_axis_assignment(x55j.pitch, "pitch", "normal")
+    --set_axis_assignment(afy.axis_roll,  "none", "normal")
+    --set_axis_assignment(afy.axis_pitch, "none", "normal")
+    --set_axis_assignment(x55j.roll,  "roll", "normal")
+    --set_axis_assignment(x55j.pitch, "pitch", "normal")
     if ((PLANE_ICAO == "A319") or (PLANE_ICAO == "A321") or (PLANE_ICAO == "A21N")) then
       set_button_assignment(ap_disc_button, "toliss_airbus/ap_disc_left_stick")
       --ChampAlphaMapping_A321_toliss()
@@ -379,10 +297,10 @@ function ChampAcSpecific()
     ChampBravoMapping_TBM9_hotstart()
   elseif (PLANE_ICAO == "UH1") then
     --Nimbus UH1?
-    --champ_set_axis_assignment(afy.axis_roll,  "none",  "normal")
-    --champ_set_axis_assignment(afy.axis_pitch, "none",  "normal")
-    --champ_set_axis_assignment(x55j.roll,       "roll",  "normal")
-    --champ_set_axis_assignment(x55j.pitch,      "pitch", "normal")
+    --set_axis_assignment(afy.axis_roll,  "none",  "normal")
+    --set_axis_assignment(afy.axis_pitch, "none",  "normal")
+    --set_axis_assignment(x55j.roll,       "roll",  "normal")
+    --set_axis_assignment(x55j.pitch,      "pitch", "normal")
   end
 end
 

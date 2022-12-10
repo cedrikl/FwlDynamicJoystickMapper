@@ -51,7 +51,7 @@ function ChampBravoMapping_CL60_hotstart()
   --  
   --do_every_frame("apPanelDualHandler()")
 
-  champ_set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
+  set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
   set_button_assignment(btq.axis12_2nd_func, "CL650/pedestal/throttle/at_disc_L")
   set_button_assignment(btq.axis3_2nd_func, "CL650/pedestal/throttle/toga_L")
 

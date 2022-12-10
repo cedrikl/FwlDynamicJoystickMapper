@@ -85,7 +85,7 @@ function ChampAlphaMapping_A330_JD()
     end
   ]])
   
-  champ_set_axis_assignment(btq.axis1,      "Speedbrakes", "reverse")
+  set_axis_assignment(btq.axis1,      "Speedbrakes", "reverse")
 end
 
 function ChampAlphaCheck_A330_JD()

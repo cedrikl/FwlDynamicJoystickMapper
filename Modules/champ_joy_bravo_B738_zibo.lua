@@ -52,7 +52,7 @@ function ChampBravoMapping_B738_zibo()
 
   do_every_frame("apPanelDualHandler()")
 
-  champ_set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
+  set_axis_assignment(btq.axis1, "speedbrakes", "reverse")
   set_button_assignment(btq.axis12_2nd_func, "laminar/B738/autopilot/left_at_dis_press")
   set_button_assignment(btq.axis3_2nd_func, "laminar/B738/autopilot/left_toga_press")
 
