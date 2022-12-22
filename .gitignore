@@ -1,9 +1,9 @@
 /Documentation/*
 /Internals/*
 /Modules/*
-!/Modules/champ_joy*
+!/Modules/xfdm*
 !/Modules/button_accel.lua
 /Scripts/*
-!/Scripts/champ_joy*
+!/Scripts/xfdm*
 /Scripts (disabled)/*
 ~/Scripts (disabled)/*JoyButtons.lua
