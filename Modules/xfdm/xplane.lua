@@ -1,10 +1,14 @@
 require("xfdm.base")
 
-xfdm:requestConnector("cmd_ap_disc",         xfdmConOutSimCommand, "sim/autopilot/servos_off_any")
-xfdm:requestConnector("cmd_pitch_trim_down", xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_down")
-xfdm:requestConnector("cmd_pitch_trim_up",   xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_up")
-xfdm:requestConnector("landing_lights",      xfdmConOutSimCommand, "sim/lights/landing_lights_on")
-xfdm:requestConnector("taxi_lights",         xfdmConOutSimCommand, "sim/lights/taxi_lights_on")
+xfdm:requestConnector("cmd_ap_disc",             xfdmConOutSimCommand, "sim/autopilot/servos_off_any")
+xfdm:requestConnector("cmd_ap_toga",             xfdmConOutSimCommand, "sim/autopilot/take_off_go_around")
+xfdm:requestConnector("cmd_pitch_trim_down",     xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_down")
+xfdm:requestConnector("cmd_pitch_trim_up",       xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_up")
+xfdm:requestConnector("landing_lights",          xfdmConOutSimCommand, "sim/lights/landing_lights_on")
+xfdm:requestConnector("taxi_lights",             xfdmConOutSimCommand, "sim/lights/taxi_lights_on")
+xfdm:requestConnector("white_flashlight",        xfdmConOutRwDataref,  "sim/graphics/misc/white_flashlight_on")
+xfdm:requestConnector("white_flashlight_toggle", xfdmConOutSimCommand, "sim/view/flashlight_wht")
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_white_flashlight()")
 
 xfdm:requestConnector("axis_pitch",                   xfdmConOutSimAxis, "Pitch")
 xfdm:requestConnector("axis_roll",                    xfdmConOutSimAxis, "Roll")
@@ -78,3 +82,13 @@ xfdm:requestConnector("axis_copilot_roll",            xfdmConOutSimAxis, "Copilo
 xfdm:requestConnector("axis_copilot_yaw",             xfdmConOutSimAxis, "Copilot Yaw")
 xfdm:requestConnector("axis_copilot_left_toe_brake",  xfdmConOutSimAxis, "Copilot Left toe brake")
 xfdm:requestConnector("axis_copilot_right_toe_brake", xfdmConOutSimAxis, "Copilot Right toe brake")
+
+function xfdm_set_white_flashlight()
+  local LightPos = xfdm:readConnectorDest("white_flashlight")
+  local SwPos = xfdm:readConnectorSrc("white_flashlight")
+  if (SwPos and (LightPos < 0.0001)) then
+    xfdm:driveConnectorDest("white_flashlight_toggle")
+  elseif (not(SwPos) and (LightPos > 0.9999)) then
+    xfdm:driveConnectorDest("white_flashlight_toggle")
+  end
+end

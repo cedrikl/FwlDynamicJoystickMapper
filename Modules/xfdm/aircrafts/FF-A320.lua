@@ -6,7 +6,8 @@ if (string.find(PLANE_ICAO, "A320")) then
 
   xfdm:requestConnector("landing_lights", xfdmLinkDataref, "N/A")
   xfdm:requestConnector("taxi_lights",    xfdmLinkDataref, "N/A")
+  --xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_nose_light")
 end
 
-function xfdm.aircrafts.ffa320.set_nose_light()
+function xfdm_set_nose_light()
 end

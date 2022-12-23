@@ -2,21 +2,20 @@ if not xfdm then
   --Instance guard
   xfdm = {}
   xfdm.step  = 0
-  xfdm.readyStep = 5
+  xfdm.readyStep = 4
   xfdm.msg = "TEST"
   xfdm.connectorQueue = {}  --Number Table
   xfdm.mappingQueue   = {}  --Number Table
-  xfdm.connectorTimeout      = 10 --seconds
+  xfdm.callbackQueue = {} --Number Table
+  xfdm.connectorTimeout      = 30 --seconds
   xfdm.currentConnectorStartTimestamp = -1
   xfdm.connectors = {}      --Hash Table
   xfdm.callbacks  = {}
-  xfdm.callbacks.sometimes = {} --Number Table
-  xfdm.callbacks.often     = {} --Number Table
-  xfdm.callbacks.always    = {} --Number Table
+  xfdm.callbacks = {} --Hash Table
   do_every_draw("xfdm:showSimMsg()")
 end
 
---require("xfdm.interaction")
+require("xfdm.interaction")
 
 function xfdm:showSimMsg()
   if (self.msg ~= "") then
@@ -42,16 +41,50 @@ function lines_from(file)
   return lines
 end
 
+-- https://stackoverflow.com/questions/41942289/display-contents-of-tables-in-lua
+function tprint (tbl, indent)
+  if not indent then indent = 0 end
+  local toprint = string.rep(" ", indent) .. "{\r\n"
+  indent = indent + 2 
+  for k, v in pairs(tbl) do
+    toprint = toprint .. string.rep(" ", indent)
+    if (type(k) == "number") then
+      toprint = toprint .. "[" .. k .. "] = "
+    elseif (type(k) == "string") then
+      toprint = toprint  .. k ..  "= "   
+    end
+    if (type(v) == "number") then
+      toprint = toprint .. v .. ",\r\n"
+    elseif (type(v) == "string") then
+      toprint = toprint .. "\"" .. v .. "\",\r\n"
+    elseif (type(v) == "table") then
+      toprint = toprint .. tprint(v, indent + 2) .. ",\r\n"
+    else
+      toprint = toprint .. "\"" .. tostring(v) .. "\",\r\n"
+    end
+  end
+  toprint = toprint .. string.rep(" ", indent-2) .. "}"
+  return toprint
+end
+
+function xfdm:getNumberOfHashItems(iHash)
+  local count = 0
+  if iHash then
+    for _ in pairs(iHash) do count = count + 1 end
+  end
+  return count
+end
+
 xfdmConInButton          = "xfdmConnectorInputJoyButton"
 xfdmConInAxis            = "xfdmConnectorInputJoyAxis"
 xfdmConInDataref         = "xfdmConnectorInputDataref"
 xfdmConInOtherCon        = "xfdmConnectorInputOtherConnector"
 
-xfdmConOutSimAxis        = "xfdmConnectorLinkAxis"
-xfdmConOutRoDataref      = "xfdmConnectorLinkRoDataref"
-xfdmConOutRwDataref      = "xfdmConnectorLinkRwDataref"
-xfdmConOutSimCommand     = "xfdmConnectorLinkCommand"
-xfdmConOutOtherConnector = "xfdmConnectorLinkConnector"
+xfdmConOutSimAxis        = "xfdmConnectorOutputAxis"
+xfdmConOutRoDataref      = "xfdmConnectorOutputRoDataref"
+xfdmConOutRwDataref      = "xfdmConnectorOutputRwDataref"
+xfdmConOutSimCommand     = "xfdmConnectorOutputCommand"
+xfdmConOutOtherConnector = "xfdmConnectorOutputConnector"
 
 xfdmNullLink = "xfdmNullLink"
 
@@ -63,13 +96,6 @@ function xfdm:requestConnector(iConnName, iConnDestType, iConnDestRef)
   table.insert(self.connectorQueue, {cName=iConnName, cDestType=iConnDestType, cDestRef=iConnDestRef})
 end
 
-function xfdm:requestCallback(iCallFreq, iCallFunc)
-  if     (iCallFreq == xfdmCallbackSometimes) then table.insert(self.callbacks.sometimes, {cFunc=iCallFunc})
-  elseif (iCallFreq == xfdmCallbackOften)     then table.insert(self.callbacks.often,     {cFunc=iCallFunc})
-  elseif (iCallFreq == xfdmCallbackAlways)    then table.insert(self.callbacks.always,    {cFunc=iCallFunc})
-  end
-end
-
 function xfdm:requestMapping(iConnName, iConnSrcType, iConnSrcRef, iConnSrcRev)
   if not iConnSrcRev then
     iConnSrcRev = "normal"
@@ -77,27 +103,37 @@ function xfdm:requestMapping(iConnName, iConnSrcType, iConnSrcRef, iConnSrcRev)
   table.insert(self.mappingQueue, {cName=iConnName, cSrcType=iConnSrcType, cSrcRef=iConnSrcRef, cSrcInvert=iConnSrcRev})
 end
 
+function xfdm:requestCallback(iCallFreq, iCallFunc)
+  table.insert(self.callbackQueue, {cName=iCallFunc, cFreq=iCallFreq})
+end
+
 function xfdm:setConnectorDest(iConnName, iConnDestType, iConnDestRef)
   if (self.connectors[iConnName]) then
-    logMsg(string.format("XFDM - linkConnector: Connector %s already exists, overriding with \"%s\"", iConnName, iConnDestRef))
+    logMsg(string.format("XFDM - setConnectorDest: Connector %s already exists, overriding with \"%s\"", iConnName, iConnDestRef))
     self.connectors[iConnName].cDestType = iConnDestType
     self.connectors[iConnName].cDestRef  = iConnDestRef
   else
     self.connectors[iConnName] = {cDestType=iConnDestType, cSrcRef=xfdmNullLink, cDestRef=iConnDestRef}
-    logMsg(string.format("XFDM - linkConnector: Created a new %s connector to \"%s\"", iConnDestType, iConnDestRef))
+    logMsg(string.format("XFDM - setConnectorDest: Created a new %s connector to \"%s\"", iConnDestType, iConnDestRef))
   end
 end
 
 function xfdm:setConnectorSource(iConnName, iConnSrcType, iConnSrcRef, iConnSrcRev)
   if not self.connectors[iConnName] then
     logMsg(string.format("XFDM - mapConnector: Requested connector \"%s\" does not exist, creating a new one mapped to %s", iConnName, xfdmNullLink))
-    self.linkConnector(iConnName, xfdmLinkRwDataref, xfdmNullLink)
+    self.setConnectorDest(iConnName, xfdmLinkRwDataref, xfdmNullLink)
   end
   if (self.connectors[iConnName].cSrcRef ~= xfdmNullLink) then
     logMsg(string.format("XFDM - mapConnector(warning): Requested connector \"%s\" was planning to be mapped to %s %s but has been overriden to %s %s.", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, iSrcType, iSrcRef))
   end
-  if ((self.connectors[iConnName].cDestType == xfdmLinkRoDataref) or (self.connectors[iConnName].cDestType == xfdmLinkRwDataref)) then
-    logMsg(string.format("XFDM - mapConnector(info): Requested connector \"%s\" is linked to a dataref. This probably means that another module will read interect with it directly.", iConnName))
+  if ((self.connectors[iConnName].cDestType == xfdmConOutRoDataref) or (self.connectors[iConnName].cDestType == xfdmConOutRwDataref)) then
+    logMsg(string.format("XFDM - mapConnector(info): Requested connector \"%s\" is linked to a dataref. This probably means that another module will interact with it directly.", iConnName))
+  end
+  if (self.connectors[iConnName].cSrcType == xfdmConInOtherCon) then
+    local tDest = iConnName
+    local tSrc  = self.connectors[iConnName].cSrcRef
+    self.connectors[tSrc].cDestRef = tDest
+    self.connectors[tSrc].cDestType = xfdmConOutOtherConnector
   end
   self.connectors[iConnName].cSrcType   = iConnSrcType
   self.connectors[iConnName].cSrcRef    = iConnSrcRef
@@ -107,7 +143,12 @@ end
 function xfdm:checkConnectorDest(iConnCandidate)
   if     (iConnCandidate.cDestType == xfdmConOutSimAxis)         then return true
   elseif (iConnCandidate.cDestType == xfdmConOutOtherConnector)  then return true
-  elseif (iConnCandidate.cDestType == xfdmConOutRwDataref)       then return XPLMFindDataRef(iConnCandidate.cDestRef)
+  elseif (iConnCandidate.cDestType == xfdmConOutRwDataref)       then
+    if (iConnCandidate.cDestRef == xfdmNullLink) then
+      return true
+    else
+      return XPLMFindDataRef(iConnCandidate.cDestRef)
+    end
   elseif (iConnCandidate.cDestType == xfdmConOutSimCommand)      then
     if (iConnCandidate.cDestRef == xfdmNullLink) then
       return true
@@ -117,6 +158,20 @@ function xfdm:checkConnectorDest(iConnCandidate)
   else
     return false
   end
+end
+
+function xfdm:startCallbacks()
+  for k,v in pairs(self.callbacks) do
+    if     (v.cFreq == xfdmCallbackSometimes) then
+      do_sometimes(v.cName)
+    elseif (v.cFreq == xfdmCallbackOften) then
+      do_often(v.cName)
+    elseif (v.cFreq == xfdmCallbackAlways) then
+      do_every_frame(v.cName)
+    end
+    logMsg(string.format("XFDM: Started the callback \"%s\" (%s)", v.cName, v.cFreq))
+  end
+  
 end
 
 function xfdm:tryToCreateNextConnector()
@@ -142,8 +197,23 @@ end
 
 function xfdm:tryToSetNextConnectorSrc()
   self:setConnectorSource(self.mappingQueue[1].cName, self.mappingQueue[1].cSrcType, self.mappingQueue[1].cSrcRef, self.mappingQueue[1].cSrcInvert)
-  self.msg = string.format("XFDM: Mapped the connector \"%s\" to %s %d.", self.mappingQueue[1].cName, self.mappingQueue[1].cSrcType, self.mappingQueue[1].cSrcRef)
+  self.msg = string.format("XFDM: Mapped the connector \"%s\" to %s %s.", self.mappingQueue[1].cName, self.mappingQueue[1].cSrcType, self.mappingQueue[1].cSrcRef)
   table.remove(self.mappingQueue, 1)
+end
+
+function xfdm:tryToSetNextCallback()
+  if (table.getn(self.callbackQueue) ~= 0) then
+    table.insert(self.callbacks, {cName=self.callbackQueue[1].cName, cFreq=self.callbackQueue[1].cFreq})
+    local ownKey = table.getn(self.callbacks)
+    for k,v in pairs(self.callbacks) do
+      if ((v.cName == self.callbackQueue[1].cName) and (k ~= ownKey)) then
+        logMsg(string.format("XFDM - tryToSetNextCallback(warning): Callback %s was already added in %d position, only keeping in last position.", k, v.cName))
+        table.remove(self.callbacks, k)
+        break
+      end
+    end
+    table.remove(self.callbackQueue, 1)
+  end
 end
 
 function xfdm:connectorCreationRunner()
@@ -166,35 +236,68 @@ function xfdm:connectorSourceRunner()
   end
 end
 
+function xfdm:findTopConnector(iConnName, iSrcRef)
+  local oConType = self.connectors[iSrcRef].cSrcType
+  local oConRef = self.connectors[iSrcRef].cSrcRef
+  logMsg(string.format("XFDM - findTopConnector: From %s (src: %s %s) to %s (src: %s %s)", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, iSrcRef, oConType, oConRef))
+  if (oConType == xfdmConInOtherCon) then
+    oConType, oConRef = self:findTopConnector()
+  end
+  return oConType, oConRef
+end
+
 function xfdm:assignConnectors()
   for k,v in pairs(xfdm.connectors) do
-    if (v.cSrcRef ~= xfdmNullLink) then
-      local tDestRef = v.cDestRef
+    if (v.cSrcRef ~= xfdmNullLink and
+        v.cDestType ~= xfdmConOutRoDataref and
+        v.cDestType ~= xfdmConOutRwDataref) then
+      local tSrcRef  = v.cSrcRef
+      local tSrcType = v.cSrcType
+      local tDestRef  = v.cDestRef
+      local tDestType = v.cDestType
 
-      if (v.cSrcType == xfdmConInAxis) then
+      if (tSrcType == xfdmConInOtherCon) then
+        tSrcType, tSrcRef = self:findTopConnector(k, tSrcRef)
+      end
+
+      if (tSrcType == xfdmConInAxis) then
         local tSrcDir = v.cSrcInvert
         if (tDestRef == xfdmNullLink) then
           tSrcDir = "normal"
           tDestRef = "none"
         end
-        set_axis_assignment(v.cSrcRef, tDestRef, tSrcDir)
-        logMsg(string.format("XFDM - assignConnectors: Assigned axis %d to \"%s\".", v.cSrcRef, v.cDestRef))
-      elseif (v.cSrcType == xfdmConInButton) then
+        set_axis_assignment(tSrcRef, tDestRef, tSrcDir)
+        logMsg(string.format("XFDM - assignConnectors: Assigned axis %d to \"%s\".", tSrcRef, tDestRef))
+      elseif (tSrcType == xfdmConInButton) then
         if (tDestRef == xfdmNullLink) then tDestRef = "sim/none/none" end
-        set_button_assignment(v.cSrcRef, v.cDestRef)
-        logMsg(string.format("XFDM - assignConnectors: Assigned button %d to \"%s\".", v.cSrcRef, v.cDestRef))
+        set_button_assignment(tSrcRef, tDestRef)
+        logMsg(string.format("XFDM - assignConnectors: Assigned button %d to \"%s\".", tSrcRef, tDestRef))
       end
     end
   end
   self.msg = "XFDM - assignConnectors: All assignments have been processed."
-  logMsg("XFDM - assignConnectors: All mappings have been processed.")
+  logMsg("XFDM - assignConnectors: All assignments have been processed.")
   self.step = self.step + 1
+end
+
+function xfdm:connectorCallbacksRunner()
+  if (table.getn(self.callbackQueue) == 0) then
+    self:startCallbacks()
+    self.msg = "XFDM - connectorCallbacksRunner: All callbacks have been started."
+    logMsg("XFDM - connectorCallbacksRunner: All callbacks have been started.")
+    self.step = self.step + 1
+  else
+    self:tryToSetNextCallback()
+  end
 end
 
 function xfdm:runner()
   if     (self.step == 0) then self:connectorCreationRunner()
   elseif (self.step == 1) then self:connectorSourceRunner()
   elseif (self.step == 2) then self:assignConnectors()
-  --elseif (self.step == 3) then self:connectorCallbacksRunner()
+  elseif (self.step == 3) then self:connectorCallbacksRunner()
+  elseif (self.step == xfdm.readyStep) then
+    self.msg = ""
+    self.step = self.step + 1
   end
 end
