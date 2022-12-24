@@ -30,14 +30,23 @@ xfdm:requestMapping("axis_yaw",               xfdmConInAxis,   pedals.yaw)
 xfdm:requestMapping("axis_left_toe_brake",    xfdmConInAxis,   pedals.brake_l,"reverse")
 xfdm:requestMapping("axis_right_toe_brake",   xfdmConInAxis,   pedals.brake_r,"reverse")
 
+xfdm:requestMapping("park_brake",             xfdmConInButton, throttles.sw1_up)
 xfdm:requestMapping("white_flashlight",       xfdmConInButton, throttles.sw4_up)
 xfdm:requestMapping("bravo_axis_1",           xfdmConInAxis,   throttles.axis1)
 xfdm:requestMapping("bravo_axis_2",           xfdmConInAxis,   throttles.axis2)
 xfdm:requestMapping("bravo_axis12_2nd_func",  xfdmConInButton, throttles.axis12_2nd_func)
 xfdm:requestMapping("bravo_axis_3",           xfdmConInAxis,   throttles.axis3)
+xfdm:requestMapping("bravo_axis3_2nd_func",   xfdmConInButton, throttles.axis3_2nd_func)
 xfdm:requestMapping("bravo_axis_4",           xfdmConInAxis,   throttles.axis4)
 xfdm:requestMapping("bravo_axis_5",           xfdmConInAxis,   throttles.axis5)
 xfdm:requestMapping("bravo_axis_6",           xfdmConInAxis,   throttles.axis6)
+
+xfdm:requestMapping("bravo_axis_1_rev_zone",  xfdmConInButton, throttles.axis1_rev_zone)
+xfdm:requestMapping("bravo_axis_2_rev_zone",  xfdmConInButton, throttles.axis2_rev_zone)
+xfdm:requestMapping("bravo_axis_3_rev_zone",  xfdmConInButton, throttles.axis3_rev_zone)
+xfdm:requestMapping("bravo_axis_4_rev_zone",  xfdmConInButton, throttles.axis4_rev_zone)
+xfdm:requestMapping("bravo_axis_5_rev_zone",  xfdmConInButton, throttles.axis5_rev_zone)
+xfdm:requestMapping("bravo_axis_6_rev_zone",  xfdmConInButton, throttles.axis6_rev_zone)
 
 if (pedals    == xfdmJoyNc or 
     sidestick == xfdmJoyNc or

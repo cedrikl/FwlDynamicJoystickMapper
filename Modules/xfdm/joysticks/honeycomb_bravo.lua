@@ -83,19 +83,29 @@ else
 end
 
 xfdm:requestConnector("bravo_axis_1",          xfdmConOutRwDataref, xfdmNullLink)
-xfdm:requestConnector("bravo_axis12_2nd_func", xfdmConOutRwDataref, xfdmNullLink)
 xfdm:requestConnector("bravo_axis_2",          xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis12_2nd_func", xfdmConOutRwDataref, xfdmNullLink)
 xfdm:requestConnector("bravo_axis_3",          xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis3_2nd_func",  xfdmConOutRwDataref, xfdmNullLink)
 xfdm:requestConnector("bravo_axis_4",          xfdmConOutRwDataref, xfdmNullLink)
 xfdm:requestConnector("bravo_axis_5",          xfdmConOutRwDataref, xfdmNullLink)
 xfdm:requestConnector("bravo_axis_6",          xfdmConOutRwDataref, xfdmNullLink)
 
-xfdmAcNbEngines  = get("sim/aircraft/engine/acf_num_engines")
-xfdmAcEngineType = get("sim/aircraft/prop/acf_en_type", 0)
-xfdmAcEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
-logMsg(string.format("XFDM - Honeycomb Bravo: The number of engines is %i (Type: %i)", xfdmAcNbEngines, xfdmAcEngineType))
+xfdm:requestConnector("bravo_axis_1_rev_zone", xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis_2_rev_zone", xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis_3_rev_zone", xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis_4_rev_zone", xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis_5_rev_zone", xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_axis_6_rev_zone", xfdmConOutRwDataref, xfdmNullLink)
 
-if (((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or (PLANE_ICAO == "B350")) then  --Prop aircraft
+local xfdmAcNbEngines  = get("sim/aircraft/engine/acf_num_engines")
+local xfdmAcEngineType = get("sim/aircraft/prop/acf_en_type", 0)
+local xfdmAcEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
+logMsg(string.format("XFDM - Honeycomb Bravo: The number of engines is %i (ICAO: %s Type: %i, Beta: %s)", xfdmAcNbEngines, PLANE_ICAO, xfdmAcEngineType, xfdmAcEngineBeta))
+
+if (((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or
+      (PLANE_ICAO == "B350") or (PLANE_ICAO == "BE9L")) then
+  --Prop aircraft
   xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_1", "reverse")
   xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_2", "reverse")
   xfdm:requestMapping("axis_prop_1",     xfdmConInOtherCon, "bravo_axis_3")
@@ -103,15 +113,64 @@ if (((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or (PLANE_ICAO == "B350
   xfdm:requestMapping("axis_mixture_1",  xfdmConInOtherCon, "bravo_axis_5")
   xfdm:requestMapping("axis_mixture_2",  xfdmConInOtherCon, "bravo_axis_6")
   xfdm:requestMapping("cmd_ap_toga",     xfdmConInOtherCon, "bravo_axis12_2nd_func")
+  if (xfdmAcEngineBeta) then
+    xfdm:requestConnector("bravo_axis_1",   xfdmConOutSimAxis, xfdmNullLink)
+    xfdm:requestConnector("bravo_axis_2",   xfdmConOutSimAxis, xfdmNullLink)
+    xfdm:requestMapping("axis_throttle_1",  xfdmConInAxis, xfdmNullLink)
+    xfdm:requestMapping("axis_throttle_2",  xfdmConInAxis, xfdmNullLink)
+    xfdm:requestMapping("eng_1_rev_toggle", xfdmConInOtherCon, "bravo_axis_1_rev_zone")
+    xfdm:requestMapping("eng_2_rev_toggle", xfdmConInOtherCon, "bravo_axis_2_rev_zone")
+
+    xfdm:requestCallback(xfdmCallbackAlways, "xfdm_set_beta_reversers()")
+  else
+    set_button_assignment(btq.axis1_rev_zone, "sim/engines/thrust_reverse_toggle_1")
+    set_button_assignment(btq.axis2_rev_zone, "sim/engines/thrust_reverse_toggle_2")
+  end
 else
-  --set_axis_assignment(btq.axis2, "throttle 1", "reverse")
-  --set_axis_assignment(btq.axis3, "throttle 2", "reverse")
-  --set_axis_assignment(btq.axis4, "throttle 3", "reverse")
-  --set_axis_assignment(btq.axis5, "throttle 4", "reverse")
-  --
-  --set_button_assignment(btq.axis12_2nd_func, "sim/autopilot/autothrottle_off")
-  --set_button_assignment(btq.axis3_2nd_func, "sim/engines/TOGA_power")
+  --Jets
+  xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_2", "reverse")
+  xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_3", "reverse")
+  xfdm:requestMapping("axis_throttle_3", xfdmConInOtherCon, "bravo_axis_4", "reverse")
+  xfdm:requestMapping("axis_throttle_4", xfdmConInOtherCon, "bravo_axis_5", "reverse")
+  xfdm:requestMapping("cmd_at_disc",     xfdmConInOtherCon, "bravo_axis12_2nd_func")
+  xfdm:requestMapping("cmd_at_toga",     xfdmConInOtherCon, "bravo_axis3_2nd_func")
+  --xfdm:requestCallback(xfdmCallbackAlways, "xfdm_set_jet_reversers()")
 end
---reverser_handler()
+
+
+
+function xfdm_set_beta_reversers()
+  local tEng1Mode = xfdm:readConnectorDest("eng_propmode", 0)
+  local tEng1Pos  = xfdm:readConnectorDest("eng_throttle_ratio", 0)
+  local tThrottle1Pos = xfdm:readConnectorSrc("bravo_axis_1")
+
+  if     ((tEng1Mode <= 1) and (tThrottle1Pos > 0.02)) then
+    xfdm:driveConnectorDest("eng_throttle_ratio", 0, tThrottle1Pos)
+  elseif ((tEng1Mode <= 1) and (tThrottle1Pos < 0.02) and (tEng1Pos >= 0.02)) then
+    xfdm:driveConnectorDest("eng_throttle_ratio", 0, 0)
+  elseif (tEng1Mode > 1) then
+    if (tThrottle1Pos < 0.45)  then --beta range
+      xfdm:driveConnectorDest("throttle_beta_rev_ratio", 0, (-2 * tThrottle1Pos - 0.01))
+    elseif (tThrottle1Pos > 0.50) then -- reverse
+      xfdm:driveConnectorDest("throttle_beta_rev_ratio", 0, (-2 * tThrottle1Pos - 0.01))
+    end
+  end
+
+  local tEng2Mode = xfdm:readConnectorDest("eng_propmode", 1)
+  local tEng2Pos  = xfdm:readConnectorDest("eng_throttle_ratio", 1)
+  local tThrottle2Pos = xfdm:readConnectorSrc("bravo_axis_2")
+
+  if     ((tEng2Mode <= 1) and (tThrottle2Pos > 0.02)) then
+    xfdm:driveConnectorDest("eng_throttle_ratio", 1, tThrottle2Pos)
+  elseif ((tEng2Mode <= 1) and (tThrottle2Pos < 0.02) and (tEng2Pos >= 0.02)) then
+    xfdm:driveConnectorDest("eng_throttle_ratio", 1, 0)
+  elseif (tEng2Mode > 1) then
+    if (tThrottle2Pos < 0.45)  then --beta range
+      xfdm:driveConnectorDest("throttle_beta_rev_ratio", 1, (-2 * tThrottle2Pos - 0.01))
+    elseif (tThrottle2Pos > 0.50) then -- reverse
+      xfdm:driveConnectorDest("throttle_beta_rev_ratio", 1, (-2 * tThrottle2Pos - 0.01))
+    end
+  end
+end
 
 return xfdm.joysticks.honeycomb_bravo

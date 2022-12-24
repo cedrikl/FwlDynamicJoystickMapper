@@ -4,11 +4,23 @@ xfdm:requestConnector("cmd_ap_disc",             xfdmConOutSimCommand, "sim/auto
 xfdm:requestConnector("cmd_ap_toga",             xfdmConOutSimCommand, "sim/autopilot/take_off_go_around")
 xfdm:requestConnector("cmd_pitch_trim_down",     xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_down")
 xfdm:requestConnector("cmd_pitch_trim_up",       xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_up")
+xfdm:requestConnector("cmd_at_toga",             xfdmConOutSimCommand, "sim/engines/TOGA_power")
+xfdm:requestConnector("cmd_at_disc",             xfdmConOutSimCommand, "sim/autopilot/autothrottle_off")
+
+xfdm:requestConnector("eng_1_rev_toggle",        xfdmConOutSimCommand, "sim/engines/beta_toggle_1")
+xfdm:requestConnector("eng_2_rev_toggle",        xfdmConOutSimCommand, "sim/engines/beta_toggle_2")
+xfdm:requestConnector("eng_propmode",            xfdmConOutRwDataref, "sim/flightmodel/engine/ENGN_propmode")
+xfdm:requestConnector("eng_throttle_ratio",      xfdmConOutRwDataref, "sim/cockpit2/engine/actuators/throttle_ratio")
+xfdm:requestConnector("throttle_beta_rev_ratio", xfdmConOutRwDataref, "sim/cockpit2/engine/actuators/throttle_beta_rev_ratio")
+
 xfdm:requestConnector("landing_lights",          xfdmConOutSimCommand, "sim/lights/landing_lights_on")
 xfdm:requestConnector("taxi_lights",             xfdmConOutSimCommand, "sim/lights/taxi_lights_on")
 xfdm:requestConnector("white_flashlight",        xfdmConOutRwDataref,  "sim/graphics/misc/white_flashlight_on")
 xfdm:requestConnector("white_flashlight_toggle", xfdmConOutSimCommand, "sim/view/flashlight_wht")
 xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_white_flashlight()")
+xfdm:requestConnector("park_brake",              xfdmConOutRwDataref, "sim/cockpit2/controls/parking_brake_ratio")
+xfdm:requestConnector("park_brake_toggle",       xfdmConOutSimCommand, "sim/flight_controls/brakes_toggle_max")
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_parking_brake()")
 
 xfdm:requestConnector("axis_pitch",                   xfdmConOutSimAxis, "Pitch")
 xfdm:requestConnector("axis_roll",                    xfdmConOutSimAxis, "Roll")
@@ -84,11 +96,22 @@ xfdm:requestConnector("axis_copilot_left_toe_brake",  xfdmConOutSimAxis, "Copilo
 xfdm:requestConnector("axis_copilot_right_toe_brake", xfdmConOutSimAxis, "Copilot Right toe brake")
 
 function xfdm_set_white_flashlight()
-  local LightPos = xfdm:readConnectorDest("white_flashlight")
-  local SwPos = xfdm:readConnectorSrc("white_flashlight")
-  if (SwPos and (LightPos < 0.0001)) then
+  local tLightPos = xfdm:readConnectorDest("white_flashlight")
+  local tSwPos = xfdm:readConnectorSrc("white_flashlight")
+  if (tSwPos and (tLightPos < 0.0001)) then
     xfdm:driveConnectorDest("white_flashlight_toggle")
-  elseif (not(SwPos) and (LightPos > 0.9999)) then
+  elseif (not(tSwPos) and (tLightPos > 0.9999)) then
     xfdm:driveConnectorDest("white_flashlight_toggle")
+  end
+end
+
+function xfdm_set_parking_brake()
+  local tParkPos = xfdm:readConnectorDest("park_brake")
+  local tSwPos = xfdm:readConnectorSrc("park_brake")
+
+  if (tSwPos and (tParkPos < 0.0001)) then
+    xfdm:driveConnectorDest("park_brake_toggle")
+  elseif (not(tSwPos) and (tParkPos > 0.9999)) then
+    xfdm:driveConnectorDest("park_brake_toggle")
   end
 end

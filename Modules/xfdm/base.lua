@@ -75,16 +75,16 @@ function xfdm:getNumberOfHashItems(iHash)
   return count
 end
 
-xfdmConInButton          = "xfdmConnectorInputJoyButton"
-xfdmConInAxis            = "xfdmConnectorInputJoyAxis"
-xfdmConInDataref         = "xfdmConnectorInputDataref"
-xfdmConInOtherCon        = "xfdmConnectorInputOtherConnector"
+xfdmConInButton      = "xfdmConnectorInputJoyButton"
+xfdmConInAxis        = "xfdmConnectorInputJoyAxis"
+xfdmConInDataref     = "xfdmConnectorInputDataref"
+xfdmConInOtherCon    = "xfdmConnectorInputOtherConnector"
 
-xfdmConOutSimAxis        = "xfdmConnectorOutputAxis"
-xfdmConOutRoDataref      = "xfdmConnectorOutputRoDataref"
-xfdmConOutRwDataref      = "xfdmConnectorOutputRwDataref"
-xfdmConOutSimCommand     = "xfdmConnectorOutputCommand"
-xfdmConOutOtherConnector = "xfdmConnectorOutputConnector"
+xfdmConOutSimAxis    = "xfdmConnectorOutputAxis"
+xfdmConOutRoDataref  = "xfdmConnectorOutputRoDataref"
+xfdmConOutRwDataref  = "xfdmConnectorOutputRwDataref"
+xfdmConOutSimCommand = "xfdmConnectorOutputCommand"
+xfdmConOutOtherCon   = "xfdmConnectorOutputConnector"
 
 xfdmNullLink = "xfdmNullLink"
 
@@ -133,7 +133,7 @@ function xfdm:setConnectorSource(iConnName, iConnSrcType, iConnSrcRef, iConnSrcR
     local tDest = iConnName
     local tSrc  = self.connectors[iConnName].cSrcRef
     self.connectors[tSrc].cDestRef = tDest
-    self.connectors[tSrc].cDestType = xfdmConOutOtherConnector
+    self.connectors[tSrc].cDestType = xfdmConOutOtherCon
   end
   self.connectors[iConnName].cSrcType   = iConnSrcType
   self.connectors[iConnName].cSrcRef    = iConnSrcRef
@@ -141,9 +141,9 @@ function xfdm:setConnectorSource(iConnName, iConnSrcType, iConnSrcRef, iConnSrcR
 end
 
 function xfdm:checkConnectorDest(iConnCandidate)
-  if     (iConnCandidate.cDestType == xfdmConOutSimAxis)         then return true
-  elseif (iConnCandidate.cDestType == xfdmConOutOtherConnector)  then return true
-  elseif (iConnCandidate.cDestType == xfdmConOutRwDataref)       then
+  if     (iConnCandidate.cDestType == xfdmConOutSimAxis)   then return true
+  elseif (iConnCandidate.cDestType == xfdmConOutOtherCon)  then return true
+  elseif (iConnCandidate.cDestType == xfdmConOutRwDataref) then
     if (iConnCandidate.cDestRef == xfdmNullLink) then
       return true
     else
@@ -185,7 +185,7 @@ function xfdm:tryToCreateNextConnector()
       self.currentConnectorStartTimestamp = get("sim/time/total_running_time_sec")
     end
     local sElapsedTime = get("sim/time/total_running_time_sec") - self.currentConnectorStartTimestamp
-    self.msg = string.format("XFDM: Waiting on \"%s\" to be created. %d/%d sec", self.connectorQueue[1].cDestRef, sElapsedTime, self.connectorTimeout)
+    self.msg = string.format("XFDM: Waiting on \"%s\"(%s) to be created. %d/%d sec", self.connectorQueue[1].cName, self.connectorQueue[1].cDestRef, sElapsedTime, self.connectorTimeout)
     if (sElapsedTime > self.connectorTimeout) then
       self.currentConnectorStartTimestamp = -1
       logMsg(string.format("XFDM - tryToCreateNextConnector(ERROR): \"%s\" (%s) could not be found within the timeout period. Overriding to dummy mapping.", self.connectorQueue[1].cLinkRef, self.connectorQueue[1].cLinkType))
@@ -236,12 +236,24 @@ function xfdm:connectorSourceRunner()
   end
 end
 
-function xfdm:findTopConnector(iConnName, iSrcRef)
-  local oConType = self.connectors[iSrcRef].cSrcType
-  local oConRef = self.connectors[iSrcRef].cSrcRef
-  logMsg(string.format("XFDM - findTopConnector: From %s (src: %s %s) to %s (src: %s %s)", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, iSrcRef, oConType, oConRef))
+function xfdm:findTopConnector(iConnName)
+  local tSrcName = self.connectors[iConnName].cSrcRef
+  local oConType = self.connectors[tSrcName].cSrcType
+  local oConRef = self.connectors[tSrcName].cSrcRef
+  logMsg(string.format("XFDM - findTopConnector: From %s (src: %s %s) to %s (src: %s %s)", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, tSrcName, oConType, oConRef))
   if (oConType == xfdmConInOtherCon) then
-    oConType, oConRef = self:findTopConnector()
+    oConType, oConRef = self:findTopConnector(tSrcName)
+  end
+  return oConType, oConRef
+end
+
+function xfdm:findLastConnector(iConnName)
+  local tDestName = self.connectors[iConnName].cDestRef
+  local oConType = self.connectors[tDestName].cDestType
+  local oConRef = self.connectors[tDestName].cDestRef
+  logMsg(string.format("XFDM - findLastConnector: From %s (dest: %s %s) to %s (dest: %s %s)", iConnName, self.connectors[iConnName].cDestType, self.connectors[iConnName].cDestRef, tDestName, oConType, oConRef))
+  if (oConType == xfdmConOutOtherCon) then
+    oConType, oConRef = self:findLastConnector(tDestName)
   end
   return oConType, oConRef
 end
