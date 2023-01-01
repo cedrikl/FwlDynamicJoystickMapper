@@ -1,6 +1,8 @@
 require("xfdm.base")
 
-xfdm.joysticks = {}
+if not xfdm.joysticks then
+  xfdm.joysticks = {}
+end
 
 xfdmJoyNc = "NO CONNECT"
 

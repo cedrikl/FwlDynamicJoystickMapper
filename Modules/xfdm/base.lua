@@ -143,7 +143,7 @@ end
 function xfdm:checkConnectorDest(iConnCandidate)
   if     (iConnCandidate.cDestType == xfdmConOutSimAxis)   then return true
   elseif (iConnCandidate.cDestType == xfdmConOutOtherCon)  then return true
-  elseif (iConnCandidate.cDestType == xfdmConOutRwDataref) then
+  elseif ((iConnCandidate.cDestType == xfdmConOutRwDataref) or (iConnCandidate.cDestType == xfdmConOutRoDataref)) then
     if (iConnCandidate.cDestRef == xfdmNullLink) then
       return true
     else

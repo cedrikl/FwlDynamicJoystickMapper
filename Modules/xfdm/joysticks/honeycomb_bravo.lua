@@ -1,6 +1,8 @@
 require("xfdm.joysticks.base")
 
-xfdm.joysticks.honeycomb_bravo = {}
+if not xfdm.joysticks.honeycomb_bravo then
+  xfdm.joysticks.honeycomb_bravo = {}
+end
 
 local vid = 0x294b
 local pid = 0x1901

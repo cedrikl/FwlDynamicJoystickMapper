@@ -7,6 +7,7 @@ require("xfdm.plugins.x-camera")
 pedals    = require("xfdm.joysticks.thrustmaster_tpr")
 sidestick = require("xfdm.joysticks.virpil_cm3_aprime_l")
 throttles = require("xfdm.joysticks.honeycomb_bravo")
+            require("xfdm.joysticks.honeycomb_bravo_leds")
 
 require("xfdm.aircrafts.FF-A320")
 
@@ -55,4 +56,5 @@ if (pedals    == xfdmJoyNc or
   logMsg("XFDM (Error): A required connected joystick could not be detected.")
 else
   do_every_frame("xfdm:runner()")
+  xfdm.joysticks.honeycomb_bravo.leds:runner()
 end

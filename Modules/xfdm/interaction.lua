@@ -20,7 +20,7 @@ function xfdm:readConnectorDest(iConnectorName, iArrayIndex)
     tDestType, tDestRef = findLastConnector(iConnectorName)
   end
 
-  if (tDestType == xfdmConOutRwDataref) or (tDestType == xfdmConOutRwDataref) then
+  if (tDestType == xfdmConOutRwDataref) or (tDestType == xfdmConOutRoDataref) then
     if iArrayIndex then
       return get(tDestRef, iArrayIndex)
     else
