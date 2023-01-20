@@ -33,17 +33,19 @@ function xfdm:driveConnectorDest(iConnectorName, iArrayIndex, iConnectorValue)
   local tDestType = xfdm.connectors[iConnectorName].cDestType
   local tDestRef  = xfdm.connectors[iConnectorName].cDestRef
 
-  if tDestType == xfdmConOutOtherCon then
-    tDestType, tDestRef = findLastConnector(iConnectorName)
-  end
-
-  if (tDestType == xfdmConOutRwDataref) or (tDestType == xfdmConOutRwDataref) then
-    if iArrayIndex then
-      return set_array(tDestRef, iArrayIndex, iConnectorValue)
-    else
-      return set(tDestRef, iConnectorValue)
+  if (tDestRef ~= xfdmNullLink) then
+    if tDestType == xfdmConOutOtherCon then
+      tDestType, tDestRef = findLastConnector(iConnectorName)
     end
-  elseif tDestType == xfdmConOutSimCommand then
-    command_once(tDestRef)
+
+    if (tDestType == xfdmConOutRwDataref) or (tDestType == xfdmConOutRwDataref) then
+      if iArrayIndex then
+        return set_array(tDestRef, iArrayIndex, iConnectorValue)
+      else
+        return set(tDestRef, iConnectorValue)
+      end
+    elseif tDestType == xfdmConOutSimCommand then
+      command_once(tDestRef)
+    end
   end
 end

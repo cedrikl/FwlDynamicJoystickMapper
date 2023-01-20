@@ -32,7 +32,25 @@ xfdm:requestMapping("axis_left_toe_brake",    xfdmConInAxis,   pedals.brake_l,"r
 xfdm:requestMapping("axis_right_toe_brake",   xfdmConInAxis,   pedals.brake_r,"reverse")
 
 xfdm:requestMapping("park_brake",             xfdmConInButton, throttles.sw1_up)
+xfdm:requestMapping("anti_ice_eng_on",        xfdmConInButton, throttles.sw2_up)
+xfdm:requestMapping("anti_ice_eng_off",       xfdmConInButton, throttles.sw2_dn)
+xfdm:requestMapping("anti_ice_wing_on",       xfdmConInButton, throttles.sw3_up)
+xfdm:requestMapping("anti_ice_wing_off",      xfdmConInButton, throttles.sw3_dn)
 xfdm:requestMapping("white_flashlight",       xfdmConInButton, throttles.sw4_up)
+xfdm:requestMapping("lights_strobe_on",       xfdmConInButton, throttles.sw5_up)
+xfdm:requestMapping("lights_strobe_off",      xfdmConInButton, throttles.sw5_dn)
+xfdm:requestMapping("lights_taxi_on",         xfdmConInButton, throttles.sw6_up)
+xfdm:requestMapping("lights_taxi_off",        xfdmConInButton, throttles.sw6_dn)
+xfdm:requestMapping("lights_ldg_on",          xfdmConInButton, throttles.sw7_up)
+xfdm:requestMapping("lights_ldg_off",         xfdmConInButton, throttles.sw7_dn)
+
+xfdm:requestMapping("flaps_up",               xfdmConInButton, throttles.flaps_up)
+xfdm:requestMapping("flaps_down",             xfdmConInButton, throttles.flaps_dn)
+xfdm:requestMapping("gear_up",                xfdmConInButton, throttles.gear_up)
+xfdm:requestMapping("gear_down",              xfdmConInButton, throttles.gear_dn)
+xfdm:requestMapping("trim_pitch_up",          xfdmConInButton, throttles.trim_dn)
+xfdm:requestMapping("trim_pitch_down",        xfdmConInButton, throttles.trim_up)
+
 xfdm:requestMapping("bravo_axis_1",           xfdmConInAxis,   throttles.axis1)
 xfdm:requestMapping("bravo_axis_2",           xfdmConInAxis,   throttles.axis2)
 xfdm:requestMapping("bravo_axis12_2nd_func",  xfdmConInButton, throttles.axis12_2nd_func)
@@ -49,9 +67,27 @@ xfdm:requestMapping("bravo_axis_4_rev_zone",  xfdmConInButton, throttles.axis4_r
 xfdm:requestMapping("bravo_axis_5_rev_zone",  xfdmConInButton, throttles.axis5_rev_zone)
 xfdm:requestMapping("bravo_axis_6_rev_zone",  xfdmConInButton, throttles.axis6_rev_zone)
 
-if (pedals    == xfdmJoyNc or 
-    sidestick == xfdmJoyNc or
-    throttles == xfdmJoyNc) then
+xfdm:requestMapping("bravo_ap_dial_cw",       xfdmConInButton, throttles.ap_incr)
+xfdm:requestMapping("bravo_ap_dial_ccw",      xfdmConInButton, throttles.ap_decr)
+xfdm:requestMapping("bravo_ap_button_hdg",    xfdmConInButton, throttles.ap_hdg)
+xfdm:requestMapping("bravo_ap_button_nav",    xfdmConInButton, throttles.ap_nav)
+xfdm:requestMapping("bravo_ap_button_apr",    xfdmConInButton, throttles.ap_apr)
+xfdm:requestMapping("bravo_ap_button_rev",    xfdmConInButton, throttles.ap_rev)
+xfdm:requestMapping("bravo_ap_button_alt",    xfdmConInButton, throttles.ap_alt)
+xfdm:requestMapping("bravo_ap_button_vs",     xfdmConInButton, throttles.ap_vs)
+xfdm:requestMapping("bravo_ap_button_ias",    xfdmConInButton, throttles.ap_ias)
+xfdm:requestMapping("bravo_ap_button_cmd",    xfdmConInButton, throttles.ap_master)
+
+xfdm:requestMapping("bravo_ap_mode_hdg",      xfdmConInButton, throttles.ap_mode_hdg)
+xfdm:requestMapping("bravo_ap_mode_alt",      xfdmConInButton, throttles.ap_mode_alt)
+xfdm:requestMapping("bravo_ap_mode_ver",      xfdmConInButton, throttles.ap_mode_vs)
+xfdm:requestMapping("bravo_ap_mode_ias",      xfdmConInButton, throttles.ap_mode_ias)
+xfdm:requestMapping("bravo_ap_mode_crs",      xfdmConInButton, throttles.ap_mode_crs)
+
+
+if (pedals.state    == xfdmJoyNc or 
+    sidestick.state == xfdmJoyNc or
+    throttles.state == xfdmJoyNc) then
   xfdm.msg = "XFDM (Error): A required connected joystick could not be detected."
   logMsg("XFDM (Error): A required connected joystick could not be detected.")
 else

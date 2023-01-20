@@ -1,51 +1,48 @@
 require("xfdm.joysticks.honeycomb_bravo")
 local bit = require("bit")
 
-if not xfdm.joysticks.honeycomb_bravo.leds then
-  --Instance guard
+xfdm.joysticks.honeycomb_bravo.leds = {}
+xfdm.joysticks.honeycomb_bravo.leds.nobr      = 0
+xfdm.joysticks.honeycomb_bravo.leds.report_ID = 0
+xfdm.joysticks.honeycomb_bravo.leds.bravo_pointer = 0
 
-  xfdm.joysticks.honeycomb_bravo.leds = {}
-  xfdm.joysticks.honeycomb_bravo.leds.nobr      = 0
-  xfdm.joysticks.honeycomb_bravo.leds.report_ID = 0
-  xfdm.joysticks.honeycomb_bravo.leds.bravo_pointer = 0
+--USB Registers (32bits, DCBA)
+xfdm.joysticks.honeycomb_bravo.leds.raw = 0
+xfdm.joysticks.honeycomb_bravo.leds.raw_old = 0
 
-  --USB Registers (32bits, DCBA)
-  xfdm.joysticks.honeycomb_bravo.leds.raw = 0
-  xfdm.joysticks.honeycomb_bravo.leds.raw_old = 0
+--Block A
+xfdm.joysticks.honeycomb_bravo.leds.HEADING          = (2^00)
+xfdm.joysticks.honeycomb_bravo.leds.NAV              = (2^01)
+xfdm.joysticks.honeycomb_bravo.leds.APR              = (2^02)
+xfdm.joysticks.honeycomb_bravo.leds.REV              = (2^03)
+xfdm.joysticks.honeycomb_bravo.leds.ALT              = (2^04)
+xfdm.joysticks.honeycomb_bravo.leds.VS               = (2^05)
+xfdm.joysticks.honeycomb_bravo.leds.IAS              = (2^06)
+xfdm.joysticks.honeycomb_bravo.leds.AP               = (2^07)
+--Block B
+xfdm.joysticks.honeycomb_bravo.leds.LEFT_GEAR_GREEN  = (2^08)
+xfdm.joysticks.honeycomb_bravo.leds.LEFT_GEAR_RED    = (2^09)
+xfdm.joysticks.honeycomb_bravo.leds.NOSE_GEAR_GREEN  = (2^10)
+xfdm.joysticks.honeycomb_bravo.leds.NOSE_GEAR_RED    = (2^11)
+xfdm.joysticks.honeycomb_bravo.leds.RIGHT_GEAR_GREEN = (2^12)
+xfdm.joysticks.honeycomb_bravo.leds.RIGHT_GEAR_RED   = (2^13)
+xfdm.joysticks.honeycomb_bravo.leds.MASTER_WARNING   = (2^14)
+xfdm.joysticks.honeycomb_bravo.leds.ENGINE_FIRE      = (2^15)
+--Block C
+xfdm.joysticks.honeycomb_bravo.leds.LOW_OIL_PRESS    = (2^16)
+xfdm.joysticks.honeycomb_bravo.leds.LOW_FUEL_PRESS   = (2^17)
+xfdm.joysticks.honeycomb_bravo.leds.ANTI_ICE         = (2^18)
+xfdm.joysticks.honeycomb_bravo.leds.STARTER          = (2^19)
+xfdm.joysticks.honeycomb_bravo.leds.APU              = (2^20)
+xfdm.joysticks.honeycomb_bravo.leds.MASTER_CAUTION   = (2^21)
+xfdm.joysticks.honeycomb_bravo.leds.VACUUM           = (2^22)
+xfdm.joysticks.honeycomb_bravo.leds.LOW_HYD_PRESS    = (2^23)
+--Block D
+xfdm.joysticks.honeycomb_bravo.leds.FUEL_PUMP        = (2^24)
+xfdm.joysticks.honeycomb_bravo.leds.PARKING_BRAKE    = (2^25)
+xfdm.joysticks.honeycomb_bravo.leds.LOW_VOLTS        = (2^26)
+xfdm.joysticks.honeycomb_bravo.leds.DOOR             = (2^27)
 
-  --Block A
-  xfdm.joysticks.honeycomb_bravo.leds.HEADING          = (2^00)
-  xfdm.joysticks.honeycomb_bravo.leds.NAV              = (2^01)
-  xfdm.joysticks.honeycomb_bravo.leds.APR              = (2^02)
-  xfdm.joysticks.honeycomb_bravo.leds.REV              = (2^03)
-  xfdm.joysticks.honeycomb_bravo.leds.ALT              = (2^04)
-  xfdm.joysticks.honeycomb_bravo.leds.VS               = (2^05)
-  xfdm.joysticks.honeycomb_bravo.leds.IAS              = (2^06)
-  xfdm.joysticks.honeycomb_bravo.leds.AP               = (2^07)
-  --Block B
-  xfdm.joysticks.honeycomb_bravo.leds.LEFT_GEAR_GREEN  = (2^08)
-  xfdm.joysticks.honeycomb_bravo.leds.LEFT_GEAR_RED    = (2^09)
-  xfdm.joysticks.honeycomb_bravo.leds.NOSE_GEAR_GREEN  = (2^10)
-  xfdm.joysticks.honeycomb_bravo.leds.NOSE_GEAR_RED    = (2^11)
-  xfdm.joysticks.honeycomb_bravo.leds.RIGHT_GEAR_GREEN = (2^12)
-  xfdm.joysticks.honeycomb_bravo.leds.RIGHT_GEAR_RED   = (2^13)
-  xfdm.joysticks.honeycomb_bravo.leds.MASTER_WARNING   = (2^14)
-  xfdm.joysticks.honeycomb_bravo.leds.ENGINE_FIRE      = (2^15)
-  --Block C
-  xfdm.joysticks.honeycomb_bravo.leds.LOW_OIL_PRESS    = (2^16)
-  xfdm.joysticks.honeycomb_bravo.leds.LOW_FUEL_PRESS   = (2^17)
-  xfdm.joysticks.honeycomb_bravo.leds.ANTI_ICE         = (2^18)
-  xfdm.joysticks.honeycomb_bravo.leds.STARTER          = (2^19)
-  xfdm.joysticks.honeycomb_bravo.leds.APU              = (2^20)
-  xfdm.joysticks.honeycomb_bravo.leds.MASTER_CAUTION   = (2^21)
-  xfdm.joysticks.honeycomb_bravo.leds.VACUUM           = (2^22)
-  xfdm.joysticks.honeycomb_bravo.leds.LOW_HYD_PRESS    = (2^23)
-  --Block D
-  xfdm.joysticks.honeycomb_bravo.leds.FUEL_PUMP        = (2^24)
-  xfdm.joysticks.honeycomb_bravo.leds.PARKING_BRAKE    = (2^25)
-  xfdm.joysticks.honeycomb_bravo.leds.LOW_VOLTS        = (2^26)
-  xfdm.joysticks.honeycomb_bravo.leds.DOOR             = (2^27)
-end
 
 define_shared_DataRef("xfdm/joysticks/bravo/leds/ap_hdg",     "Int")
 define_shared_DataRef("xfdm/joysticks/bravo/leds/ap_nav",     "Int")

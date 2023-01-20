@@ -8,10 +8,11 @@ local pid = 0x838f
 local device_pointer = hid_open(vid, pid)
 
 if (device_pointer == nil) then
-  xfdm.joysticks.virpil_cm3_aprime_l = xfdmJoyNc
+  xfdm.joysticks.virpil_cm3_aprime_l.state = xfdmJoyNc
   logMsg("XFDM - Joysticks(warning): Could not detect a Virpil MT-50 CM3 base w/ Alpha Prime L.")
 else
   hid_close(device_pointer)
+  xfdm.joysticks.virpil_cm3_aprime_l.state = xfdmJoyOk
 
   local start_axis   = xfdm.joysticks.detect(vid, pid) * 25
   local start_button = xfdm.joysticks.detect(vid, pid) * 160

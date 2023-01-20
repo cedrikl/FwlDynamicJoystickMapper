@@ -10,8 +10,7 @@ if not xfdm then
   xfdm.connectorTimeout      = 30 --seconds
   xfdm.currentConnectorStartTimestamp = -1
   xfdm.connectors = {}      --Hash Table
-  xfdm.callbacks  = {}
-  xfdm.callbacks = {} --Hash Table
+  xfdm.callbacks = {}
   do_every_draw("xfdm:showSimMsg()")
 end
 
@@ -19,8 +18,13 @@ require("xfdm.interaction")
 
 function xfdm:showSimMsg()
   if (self.msg ~= "") then
-      draw_string_Helvetica_18(math.floor(SCREEN_WIDTH*0.1), math.floor(SCREEN_HEIGHT*0.8), self.msg)
+      --draw_string_Helvetica_18
+      _,_ = big_bubble(math.floor(SCREEN_WIDTH*0.1), math.floor(SCREEN_HEIGHT*0.8), "XFDM Info", self.msg)
   end
+end
+
+function bool_to_number(value)
+  return value and 1 or 0
 end
 
 -- see if the file exists
@@ -127,7 +131,7 @@ function xfdm:setConnectorSource(iConnName, iConnSrcType, iConnSrcRef, iConnSrcR
     logMsg(string.format("XFDM - mapConnector(warning): Requested connector \"%s\" was planning to be mapped to %s %s but has been overriden to %s %s.", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, iSrcType, iSrcRef))
   end
   if ((self.connectors[iConnName].cDestType == xfdmConOutRoDataref) or (self.connectors[iConnName].cDestType == xfdmConOutRwDataref)) then
-    logMsg(string.format("XFDM - mapConnector(info): Requested connector \"%s\" is linked to a dataref. This probably means that another module will interact with it directly.", iConnName))
+    logMsg(string.format("XFDM - mapConnector(info): Requested connector \"%s\" to \"%s:%s\" is linked to a dataref. This probably means that another module will interact with it directly.", iConnName, iConnSrcType, iConnSrcRef))
   end
   if (self.connectors[iConnName].cSrcType == xfdmConInOtherCon) then
     local tDest = iConnName

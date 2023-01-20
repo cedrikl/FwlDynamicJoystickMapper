@@ -1,10 +1,9 @@
 require("xfdm.base")
 
-if not xfdm.joysticks then
-  xfdm.joysticks = {}
-end
+xfdm.joysticks = {}
 
 xfdmJoyNc = "NO CONNECT"
+xfdmJoyOk = "Connected"
 
 function xfdm.joysticks.detect(joy_vid, joy_pid)
 
