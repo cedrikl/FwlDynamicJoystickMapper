@@ -5,14 +5,18 @@ xfdmNullTimestamp = -1
 xfdm.joysticks.honeycomb_bravo = {}
 xfdm.joysticks.honeycomb_bravo.ap = {}
 
+xfdm.joysticks.honeycomb_bravo.sAccelThreshold  = 3
+xfdm.joysticks.honeycomb_bravo.sAccelMultiplier = 3
+xfdm.joysticks.honeycomb_bravo.sAccelMaxMultiplier = 40
+xfdm.joysticks.honeycomb_bravo.sAccelTimeout = 500 / 1000
+
 xfdmApModeNull = -1
 xfdmApModeAlt = 1
 xfdmApModeVs  = 2
 xfdmApModeHdg = 3
 xfdmApModeCrs = 4
 xfdmApModeIas = 5
-xfdm.joysticks.honeycomb_bravo.ap["bravo_ap_button_dial"] = {cPreDir = 0, cAccel = 1, cPreMode = xfdmApModeNull, cLastTickTime = xfdmNullTimestamp}
-
+xfdm.joysticks.honeycomb_bravo.ap["bravo_ap_button_dial"] = {cPreDir = 0, cAccelClicks = 1, cPreMode = xfdmApModeNull, cLastTickTime = xfdmNullTimestamp}
 xfdm.joysticks.honeycomb_bravo.ap["bravo_ap_button_hdg"] = {cPressTimestamp = xfdmNullTimestamp, cReleaseTimestamp = xfdmNullTimestamp}
 xfdm.joysticks.honeycomb_bravo.ap["bravo_ap_button_nav"] = {cPressTimestamp = xfdmNullTimestamp, cReleaseTimestamp = xfdmNullTimestamp}
 xfdm.joysticks.honeycomb_bravo.ap["bravo_ap_button_apr"] = {cPressTimestamp = xfdmNullTimestamp, cReleaseTimestamp = xfdmNullTimestamp}
@@ -360,10 +364,9 @@ xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo:apButto
 
 function xfdm.joysticks.honeycomb_bravo:command_multiple(iCommand, iCount)
   local tRemaining = iCount
-  while (tRemaining > 0)
-  do
-    xfdm:driveConnectorDest(iCommand)
+  while (tRemaining > 0) do
     tRemaining = tRemaining - 1
+    xfdm:driveConnectorDest(iCommand)
   end
 end
 
@@ -407,44 +410,53 @@ function xfdm.joysticks.honeycomb_bravo:bravo_ap_dial_alt_ccw(iCount) self:comma
 function xfdm.joysticks.honeycomb_bravo:bravo_ap_dial_ver_ccw(iCount) self:command_multiple("bravo_ap_dial_ver_ccw", iCount) end
 function xfdm.joysticks.honeycomb_bravo:bravo_ap_dial_ias_ccw(iCount) self:command_multiple("bravo_ap_dial_ias_ccw", iCount) end
 
---xfdm.joysticks.honeycomb_bravo.ap["bravo_ap_button_dial"] = {cPreDir = 0, cAccel = 1, cPreMode = xfdmApModeNull, cLastTickTime = xfdmNullTimestamp}
---bravo_ap_dial_cw
---bravo_ap_dial_ccw
-
-function xfdm.joysticks.honeycomb_bravo:apDialAccel(iCurDir, iTimeInterval)
-  if (self.ap["bravo_ap_button_dial"].cPreDir ~= iCurDir) then
+function xfdm.joysticks.honeycomb_bravo:apDialAccel(iDir, iDelaySinceLastTick)
+  --Inspired by https://docs.spadnext.com/features/tuner-acceleration
+  if (iDir ~= self.ap["bravo_ap_button_dial"].cPreDir) then
+    self.ap["bravo_ap_button_dial"].cAccelClicks = 1
     return 1
   else
-    --TO DO: Build acceleration logic
-    return 1
-  end
-end
+    if (iDelaySinceLastTick < self.sAccelTimeout) then 
+      self.ap["bravo_ap_button_dial"].cAccelClicks = self.ap["bravo_ap_button_dial"].cAccelClicks + 1
+    end
 
-function xfdm.joysticks.honeycomb_bravo:apDialInvoke(iCmd, iCnt)
-  
+    if (self.ap["bravo_ap_button_dial"].cAccelClicks <= self.sAccelThreshold) then 
+      return 1
+    else
+      local tDiff = self.ap["bravo_ap_button_dial"].cAccelClicks - self.sAccelThreshold
+      return math.min(tDiff * self.sAccelMultiplier, self.sAccelMaxMultiplier)
+    end
+  end
 end
 
 function xfdm.joysticks.honeycomb_bravo:apDialRunner()
   local tCurrentTime = get("sim/time/total_running_time_sec")
   local tApMode = self:getApMode()
-  local tDialTimeout = 1.5
-  local tCurDir = 0
+  local tDialDebounce = 80 / 1000
+  local tDialTimeout = 500 / 1000
+  local tDir = 0
 
-  if     xfdm:readConnectorSrc("bravo_ap_dial_cw")  then tCurDir = 1
-  elseif xfdm:readConnectorSrc("bravo_ap_dial_ccw") then tCurDir = -1
-  end
+  local tDelaySinceLastTick = tCurrentTime - self.ap["bravo_ap_button_dial"].cLastTickTime
 
-  if ((self.ap["bravo_ap_button_dial"].cLastTickTime ~= xfdmNullTimestamp) and ((tCurrentTime - self.ap["bravo_ap_button_dial"].cLastTickTime) > tDialTimeout)) then
+  if ((self.ap["bravo_ap_button_dial"].cLastTickTime ~= xfdmNullTimestamp) and (tDelaySinceLastTick > tDialTimeout)) then
     --Reset state
     self.ap["bravo_ap_button_dial"].cLastTickTime = xfdmNullTimestamp
     self.ap["bravo_ap_button_dial"].cPreMode      = xfdmApModeNull
-    self.ap["bravo_ap_button_dial"].cAccel  = 0
+    self.ap["bravo_ap_button_dial"].cAccelClicks = 1
     self.ap["bravo_ap_button_dial"].cPreDir = 0
   end
 
-  if (tCurDir ~= 0) then
-    local tCommandCount = self:apDialAccel(tCurDir, tCurrentTime - self.ap["bravo_ap_button_dial"].cLastTickTime)
-    self:callApDialFunction(tCurDir, tCommandCount, tApMode)
+  if (tDelaySinceLastTick > tDialDebounce) then
+    if     xfdm:readConnectorSrc("bravo_ap_dial_cw")  then tDir = 1
+    elseif xfdm:readConnectorSrc("bravo_ap_dial_ccw") then tDir = -1
+    end
+  end
+
+  if (tDir ~= 0) then
+    local tCommandCount = self:apDialAccel(tDir, tDelaySinceLastTick)
+    self:callApDialFunction(tDir, tCommandCount, tApMode)
+    self.ap["bravo_ap_button_dial"].cPreDir = tDir
+    self.ap["bravo_ap_button_dial"].cLastTickTime = tCurrentTime
   end
 
 end

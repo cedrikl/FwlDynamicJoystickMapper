@@ -179,9 +179,18 @@ function xfdm:startCallbacks()
 end
 
 function xfdm:tryToCreateNextConnector()
+  if(self.connectorQueue[1].cDestType ~= xfdmConOutSimAxis    and
+     self.connectorQueue[1].cDestType ~= xfdmConOutRoDataref  and
+     self.connectorQueue[1].cDestType ~= xfdmConOutRwDataref  and
+     self.connectorQueue[1].cDestType ~= xfdmConOutSimCommand and
+     self.connectorQueue[1].cDestType ~= xfdmConOutOtherCon)
+  then
+    logMsg(string.format("XFDM - tryToCreateNextConnector(ERROR): \"%s\" destination type is not a valid option. Overriding to xfdmConOutRoDataref.", self.connectorQueue[1].cName))
+    self.connectorQueue[1].cDestType = xfdmConOutRoDataref
+  end
   if(self:checkConnectorDest(self.connectorQueue[1])) then
     self:setConnectorDest(self.connectorQueue[1].cName, self.connectorQueue[1].cDestType, self.connectorQueue[1].cDestRef)
-    self.msg = string.format("XFDM: Created a connector linked to \"%s\".", self.connectorQueue[1].cDestRef)
+    self.msg = string.format("XFDM: Created a connector \"%s\" linked to \"%s\".", self.connectorQueue[1].cName, self.connectorQueue[1].cDestRef)
     table.remove(self.connectorQueue, 1)
   else
     --Giving it some time

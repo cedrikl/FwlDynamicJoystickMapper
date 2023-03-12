@@ -242,6 +242,48 @@ function xfdm.joysticks.honeycomb_bravo.leds:update()
   self:writeUsb()
 end
 
+function xfdm.joysticks.honeycomb_bravo.leds:checkNoseGear()
+  if (xfdm:readConnectorDest("ldg_gear_pos", 0) == 1) then
+    xfdm:driveConnectorDest("bravo_led_ngg", nil, 1)
+    xfdm:driveConnectorDest("bravo_led_ngr", nil, 0)
+  elseif ((xfdm:readConnectorDest("ldg_gear_pos", 0) < 1) and (xfdm:readConnectorDest("ldg_gear_pos", 0) > 0)) then
+    xfdm:driveConnectorDest("bravo_led_ngg", nil, 0)
+    xfdm:driveConnectorDest("bravo_led_ngr", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_ngg", nil, 0)
+    xfdm:driveConnectorDest("bravo_led_ngr", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkNoseGear()")
+
+function xfdm.joysticks.honeycomb_bravo.leds:checkLeftGear()
+  if (xfdm:readConnectorDest("ldg_gear_pos", 1) == 1) then
+    xfdm:driveConnectorDest("bravo_led_lgg", nil, 1)
+    xfdm:driveConnectorDest("bravo_led_lgr", nil, 0)
+  elseif ((xfdm:readConnectorDest("ldg_gear_pos", 1) < 1) and (xfdm:readConnectorDest("ldg_gear_pos", 1) > 0)) then
+    xfdm:driveConnectorDest("bravo_led_lgg", nil, 0)
+    xfdm:driveConnectorDest("bravo_led_lgr", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_lgg", nil, 0)
+    xfdm:driveConnectorDest("bravo_led_lgr", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkLeftGear()")
+
+function xfdm.joysticks.honeycomb_bravo.leds:checkRightGear()
+  if (xfdm:readConnectorDest("ldg_gear_pos", 2) == 1) then
+    xfdm:driveConnectorDest("bravo_led_rgg", nil, 1)
+    xfdm:driveConnectorDest("bravo_led_rgr", nil, 0)
+  elseif ((xfdm:readConnectorDest("ldg_gear_pos", 2) < 1) and (xfdm:readConnectorDest("ldg_gear_pos", 2) > 0)) then
+    xfdm:driveConnectorDest("bravo_led_rgg", nil, 0)
+    xfdm:driveConnectorDest("bravo_led_rgr", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_rgg", nil, 0)
+    xfdm:driveConnectorDest("bravo_led_rgr", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkRightGear()")
+
 function xfdm.joysticks.honeycomb_bravo.leds:checkHdg()
   if (xfdm:readConnectorDest("ap_hdg_mode") == 1) then
     xfdm:driveConnectorDest("bravo_led_hdg", nil, 1)
@@ -314,48 +356,6 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkApMaster()
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkApMaster()")
 
-function xfdm.joysticks.honeycomb_bravo.leds:checkNoseGear()
-  if (xfdm:readConnectorDest("ldg_gear_pos", 0) == 1) then
-    xfdm:driveConnectorDest("bravo_led_ngg", nil, 1)
-    xfdm:driveConnectorDest("bravo_led_ngr", nil, 0)
-  elseif ((xfdm:readConnectorDest("ldg_gear_pos", 0) < 1) and (xfdm:readConnectorDest("ldg_gear_pos", 0) > 0)) then
-    xfdm:driveConnectorDest("bravo_led_ngg", nil, 0)
-    xfdm:driveConnectorDest("bravo_led_ngr", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_ngg", nil, 0)
-    xfdm:driveConnectorDest("bravo_led_ngr", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkNoseGear()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkLeftGear()
-  if (xfdm:readConnectorDest("ldg_gear_pos", 1) == 1) then
-    xfdm:driveConnectorDest("bravo_led_lgg", nil, 1)
-    xfdm:driveConnectorDest("bravo_led_lgr", nil, 0)
-  elseif ((xfdm:readConnectorDest("ldg_gear_pos", 1) < 1) and (xfdm:readConnectorDest("ldg_gear_pos", 1) > 0)) then
-    xfdm:driveConnectorDest("bravo_led_lgg", nil, 0)
-    xfdm:driveConnectorDest("bravo_led_lgr", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_lgg", nil, 0)
-    xfdm:driveConnectorDest("bravo_led_lgr", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkLeftGear()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkRightGear()
-  if (xfdm:readConnectorDest("ldg_gear_pos", 2) == 1) then
-    xfdm:driveConnectorDest("bravo_led_rgg", nil, 1)
-    xfdm:driveConnectorDest("bravo_led_rgr", nil, 0)
-  elseif ((xfdm:readConnectorDest("ldg_gear_pos", 2) < 1) and (xfdm:readConnectorDest("ldg_gear_pos", 2) > 0)) then
-    xfdm:driveConnectorDest("bravo_led_rgg", nil, 0)
-    xfdm:driveConnectorDest("bravo_led_rgr", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_rgg", nil, 0)
-    xfdm:driveConnectorDest("bravo_led_rgr", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkRightGear()")
-
 function xfdm.joysticks.honeycomb_bravo.leds:checkMasterWarning()
   if (xfdm:readConnectorDest("annun_master_warning") == 1) then
     xfdm:driveConnectorDest("bravo_led_mwar", nil, 1)
@@ -364,6 +364,15 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkMasterWarning()
   end
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkMasterWarning()")
+
+function xfdm.joysticks.honeycomb_bravo.leds:checkMasterCaution()
+  if (xfdm:readConnectorDest("annun_master_caution") == 1) then
+    xfdm:driveConnectorDest("bravo_led_mcau", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_mcau", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkMasterCaution()")
 
 function xfdm.joysticks.honeycomb_bravo.leds:checkFire()
   if ((xfdm:readConnectorDest("annun_fire", 0) == 1) or
@@ -378,6 +387,15 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkFire()
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkFire()")
 
+function xfdm.joysticks.honeycomb_bravo.leds:checkVac()
+  if (xfdm:readConnectorDest("annun_vacuum") == 1) then
+    xfdm:driveConnectorDest("bravo_led_vac", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_vac", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkVac()")
+
 function xfdm.joysticks.honeycomb_bravo.leds:checkOil()
   if ((xfdm:readConnectorDest("annun_oil_press", 0) == 1) or
       (xfdm:readConnectorDest("annun_oil_press", 1) == 1) or
@@ -391,6 +409,15 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkOil()
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkOil()")
 
+function xfdm.joysticks.honeycomb_bravo.leds:checkHyd()
+  if (xfdm:readConnectorDest("annun_hydpress") == 1) then
+    xfdm:driveConnectorDest("bravo_led_hyd", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_hyd", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkHyd()")
+
 function xfdm.joysticks.honeycomb_bravo.leds:checkFuel()
   if ((xfdm:readConnectorDest("annun_fuel_press", 0) == 1) or
       (xfdm:readConnectorDest("annun_fuel_press", 1) == 1) or
@@ -403,6 +430,17 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkFuel()
   end
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkFuel()")
+
+function xfdm.joysticks.honeycomb_bravo.leds:checkPump()
+  if ((xfdm:readConnectorDest("annun_pump_l") == 1) or
+      (xfdm:readConnectorDest("annun_pump_r") == 1)
+    ) then
+    xfdm:driveConnectorDest("bravo_led_pump", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_pump", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkPump()")
 
 function xfdm.joysticks.honeycomb_bravo.leds:checkAntiIce()
   if ((xfdm:readConnectorDest("anti_ice_engine", 0) == 1) or
@@ -420,6 +458,15 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkAntiIce()
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkAntiIce()")
 
+function xfdm.joysticks.honeycomb_bravo.leds:checkPark()
+  if (xfdm:readConnectorDest("annun_parkbrake") == 1) then
+    xfdm:driveConnectorDest("bravo_led_park", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_park", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkPark()")
+
 function xfdm.joysticks.honeycomb_bravo.leds:checkStart()
   if ((xfdm:readConnectorDest("starters", 0) == 1) or
       (xfdm:readConnectorDest("starters", 1) == 1) or
@@ -433,62 +480,6 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkStart()
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkStart()")
 
-function xfdm.joysticks.honeycomb_bravo.leds:checkApu()
-  if (xfdm:readConnectorDest("apu_state") == 1) then
-    xfdm:driveConnectorDest("bravo_led_apu", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_apu", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkApu()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkMasterCaution()
-  if (xfdm:readConnectorDest("annun_master_caution") == 1) then
-    xfdm:driveConnectorDest("bravo_led_mcau", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_mcau", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkMasterCaution()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkVac()
-  if (xfdm:readConnectorDest("annun_vacuum") == 1) then
-    xfdm:driveConnectorDest("bravo_led_vac", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_vac", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkVac()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkHyd()
-  if (xfdm:readConnectorDest("annun_hydpress") == 1) then
-    xfdm:driveConnectorDest("bravo_led_hyd", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_hyd", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkHyd()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkPump()
-  if ((xfdm:readConnectorDest("annun_pump_l") == 1) or
-      (xfdm:readConnectorDest("annun_pump_r") == 1)
-    ) then
-    xfdm:driveConnectorDest("bravo_led_pump", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_pump", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkPump()")
-
-function xfdm.joysticks.honeycomb_bravo.leds:checkPark()
-  if (xfdm:readConnectorDest("annun_parkbrake") == 1) then
-    xfdm:driveConnectorDest("bravo_led_park", nil, 1)
-  else
-    xfdm:driveConnectorDest("bravo_led_park", nil, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkPark()")
-
 function xfdm.joysticks.honeycomb_bravo.leds:checkBat()
   if (xfdm:readConnectorDest("annun_low_volt") == 1) then
     xfdm:driveConnectorDest("bravo_led_batt", nil, 1)
@@ -497,6 +488,15 @@ function xfdm.joysticks.honeycomb_bravo.leds:checkBat()
   end
 end
 xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkBat()")
+
+function xfdm.joysticks.honeycomb_bravo.leds:checkApu()
+  if (xfdm:readConnectorDest("apu_state") == 1) then
+    xfdm:driveConnectorDest("bravo_led_apu", nil, 1)
+  else
+    xfdm:driveConnectorDest("bravo_led_apu", nil, 0)
+  end
+end
+xfdm:requestCallback(xfdmCallbackAlways, "xfdm.joysticks.honeycomb_bravo.leds:checkApu()")
 
 function xfdm.joysticks.honeycomb_bravo.leds:checkDoor()
   if ((xfdm:readConnectorDest("annun_door", 00) == 1) or
