@@ -10,6 +10,8 @@ throttles = require("xfdm.joysticks.honeycomb_bravo")
             require("xfdm.joysticks.honeycomb_bravo_leds")
 
 require("xfdm.aircrafts.FF-A320")
+require("xfdm.aircrafts.Toliss-A320")
+require("xfdm.aircrafts.Zibo-B737")
 
 clear_all_axis_assignments()
 clear_all_button_assignments()
@@ -59,6 +61,11 @@ xfdm:requestMapping("bravo_axis3_2nd_func",   xfdmConInButton, throttles.axis3_2
 xfdm:requestMapping("bravo_axis_4",           xfdmConInAxis,   throttles.axis4)
 xfdm:requestMapping("bravo_axis_5",           xfdmConInAxis,   throttles.axis5)
 xfdm:requestMapping("bravo_axis_6",           xfdmConInAxis,   throttles.axis6)
+
+xfdm:requestMapping("bravo_axis_2_rev_handle", xfdmConInButton, throttles.axis2_rev_handle)
+xfdm:requestMapping("bravo_axis_3_rev_handle", xfdmConInButton, throttles.axis3_rev_handle)
+xfdm:requestMapping("bravo_axis_4_rev_handle", xfdmConInButton, throttles.axis4_rev_handle)
+xfdm:requestMapping("bravo_axis_5_rev_handle", xfdmConInButton, throttles.axis5_rev_handle)
 
 xfdm:requestMapping("bravo_axis_1_rev_zone",  xfdmConInButton, throttles.axis1_rev_zone)
 xfdm:requestMapping("bravo_axis_2_rev_zone",  xfdmConInButton, throttles.axis2_rev_zone)
