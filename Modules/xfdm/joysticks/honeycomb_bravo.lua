@@ -263,27 +263,27 @@ function xfdm_set_jet_reversers()
   local tEng3Rev = xfdm:readConnectorDest("throttle_beta_rev_ratio", 2)
   local tEng4Rev = xfdm:readConnectorDest("throttle_beta_rev_ratio", 3)
 
-  if   ((tEng1Rev >= -1) and (tEng1LeverPos < 0.05) and (tThrottle1Rev == 1)) then
+  if   ((tEng1Rev >= -1) and (tEng1LeverPos < 0.05) and (tThrottle1Rev)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 0, -1.0001)
-  elseif ((tEng1Rev < 0) and (tEng1LeverPos < 0.05) and (tThrottle1Rev ~= 1)) then
+  elseif ((tEng1Rev < 0) and (tEng1LeverPos < 0.05) and not(tThrottle1Rev)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 0, 0)
   end
 
-  if   ((tEng2Rev >= -1) and (tEng2LeverPos < 0.05) and (tThrottle2Rev == 1)) then
+  if   ((tEng2Rev >= -1) and (tEng2LeverPos < 0.05) and (tThrottle2Rev)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 1, -1.0001)
-  elseif ((tEng2Rev < 0) and (tEng2LeverPos < 0.05) and (tThrottle2Rev ~= 1)) then
+  elseif ((tEng2Rev < 0) and (tEng2LeverPos < 0.05) and not(tThrottle2Rev)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 1, 0)
   end
 
-  if   ((tEng3Rev >= -1) and (tEng3LeverPos < 0.05) and (tThrottle3Rev == 1)) then
+  if   ((tEng3Rev >= -1) and (tEng3LeverPos < 0.05) and (tThrottle3Rev)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 2, -1.0001)
-  elseif ((tEng3Rev < 0) and (tEng3LeverPos < 0.05) and (tThrottle3Rev ~= 1)) then
+  elseif ((tEng3Rev < 0) and (tEng3LeverPos < 0.05) and not(tThrottle3Rev)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 2, 0)
   end
 
   if   ((tEng4Rev >= -1) and (tEng4LeverPos < 0.05) and (tThrottle4Rev == 1)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 3, -1.0001)
-  elseif ((tEng4Rev < 0) and (tEng4LeverPos < 0.05) and (tThrottle4Rev ~= 1)) then
+  elseif ((tEng4Rev < 0) and (tEng4LeverPos < 0.05) and not(tThrottle4Rev ~= 1)) then
     xfdm:driveConnectorDest("throttle_beta_rev_ratio", 3, 0)
   end
 end
