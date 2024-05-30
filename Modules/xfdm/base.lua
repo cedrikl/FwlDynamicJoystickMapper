@@ -8,6 +8,7 @@ if not xfdm then
   xfdm.mappingQueue   = {}  --Number Table
   xfdm.callbackQueue = {} --Number Table
   xfdm.connectorTimeout      = 30 --seconds
+  --xfdm.connectorTimeout      = 3 --seconds
   xfdm.currentConnectorStartTimestamp = -1
   xfdm.connectors = {}      --Hash Table
   xfdm.callbacks = {}
@@ -201,7 +202,7 @@ function xfdm:tryToCreateNextConnector()
     self.msg = string.format("XFDM: Waiting on \"%s\"(%s) to be created. %d/%d sec", self.connectorQueue[1].cName, self.connectorQueue[1].cDestRef, sElapsedTime, self.connectorTimeout)
     if (sElapsedTime > self.connectorTimeout) then
       self.currentConnectorStartTimestamp = -1
-      logMsg(string.format("XFDM - tryToCreateNextConnector(ERROR): \"%s\" (%s) could not be found within the timeout period. Overriding to dummy mapping.", self.connectorQueue[1].cLinkRef, self.connectorQueue[1].cLinkType))
+      logMsg(string.format("XFDM - tryToCreateNextConnector(ERROR): \"%s\" (%s) could not be found within the timeout period. Overriding to dummy mapping.", self.connectorQueue[1].cDestRef, self.connectorQueue[1].cDestType))
       self.connectorQueue[1].cDestType = xfdmLinkCommand
       self.connectorQueue[1].cDestRef = xfdmNullLink
     end

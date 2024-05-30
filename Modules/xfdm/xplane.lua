@@ -8,6 +8,7 @@ xfdm:requestConnector("cmd_pitch_trim_down",          xfdmConOutSimCommand, "sim
 xfdm:requestConnector("cmd_pitch_trim_up",            xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_up")
 xfdm:requestConnector("cmd_at_toga",                  xfdmConOutSimCommand, "sim/engines/TOGA_power")
 xfdm:requestConnector("cmd_at_disc",                  xfdmConOutSimCommand, "sim/autopilot/autothrottle_hard_off")
+xfdm:requestConnector("cmd_at_cws",                   xfdmConOutSimCommand, xfdmNullLink)
 
 xfdm:requestConnector("eng_1_rev_toggle",             xfdmConOutSimCommand, "sim/engines/beta_toggle_1")
 xfdm:requestConnector("eng_2_rev_toggle",             xfdmConOutSimCommand, "sim/engines/beta_toggle_2")

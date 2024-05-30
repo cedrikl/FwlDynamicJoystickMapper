@@ -204,6 +204,7 @@ if (((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or
   end
 else
   --Jets
+  xfdm:requestMapping("axis_speedbrakes",xfdmConInOtherCon, "bravo_axis_1", "reverse")
   xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_2", "reverse")
   xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_3", "reverse")
   xfdm:requestMapping("axis_throttle_3", xfdmConInOtherCon, "bravo_axis_4", "reverse")

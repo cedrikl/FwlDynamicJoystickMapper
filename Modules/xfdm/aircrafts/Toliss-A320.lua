@@ -20,6 +20,8 @@ xfdm:requestConnector("toliss_a320_anti_ice_eng1_on",  xfdmConOutSimCommand, "to
 xfdm:requestConnector("toliss_a320_anti_ice_eng1_off", xfdmConOutSimCommand, "toliss_airbus/antiicecommands/ENG1Off")
 xfdm:requestConnector("toliss_a320_anti_ice_eng2_on",  xfdmConOutSimCommand, "toliss_airbus/antiicecommands/ENG2On")
 xfdm:requestConnector("toliss_a320_anti_ice_eng2_off", xfdmConOutSimCommand, "toliss_airbus/antiicecommands/ENG2Off")
+
+
 function xfdm_set_anti_ice()
   local tEng1Pos = xfdm:readConnectorDest("toliss_a320_anti_ice_eng1_pos")
   local tEng2Pos = xfdm:readConnectorDest("toliss_a320_anti_ice_eng2_pos")

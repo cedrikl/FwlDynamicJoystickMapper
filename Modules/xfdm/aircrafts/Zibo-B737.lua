@@ -3,6 +3,8 @@ require("xfdm.joysticks.honeycomb_bravo")
 
 if string.find(PLANE_ICAO, "B738") then
 
+xfdm:requestConnector("cmd_ap_disc",                 xfdmConOutSimCommand, "laminar/B738/autopilot/capt_disco_press")
+
 xfdm:requestConnector("cmd_at_toga",                 xfdmConOutSimCommand, "laminar/B738/autopilot/left_toga_press")
 xfdm:requestConnector("cmd_at_disc",                 xfdmConOutSimCommand, "laminar/B738/autopilot/left_at_dis_press")
 
