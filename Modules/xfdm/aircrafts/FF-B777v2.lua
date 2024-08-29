@@ -6,10 +6,20 @@ if (string.find(PLANE_ICAO, "B772")) then
   xfdm:requestConnector("cmd_at_disc",       xfdmConOutSimCommand, "1-sim/command/apDiscLeftButton_button")
   xfdm:requestConnector("cmd_at_toga",       xfdmConOutSimCommand, "1-sim/command/togaLeftButton_button")
 
-  xfdm:requestConnector("anti_ice_eng_on",   xfdmConOutSimCommand, xfdmNullLink)
-  xfdm:requestConnector("anti_ice_eng_off",  xfdmConOutSimCommand, xfdmNullLink)
-  xfdm:requestConnector("anti_ice_wing_on",  xfdmConOutSimCommand, xfdmNullLink)
-  xfdm:requestConnector("anti_ice_wing_off", xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("trim_pitch_up1",      xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_up")
+  xfdm:requestConnector("trim_pitch_down1",    xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_down")
+  xfdm:requestConnector("trim_pitch_up2",      xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("trim_pitch_down2",    xfdmConOutSimCommand, xfdmNullLink)
+
+  xfdm:requestConnector("trim_rudder_left1",   xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("trim_rudder_right1",  xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("trim_rudder_left2",   xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("trim_rudder_right2",  xfdmConOutSimCommand, xfdmNullLink)
+
+  xfdm:requestConnector("anti_ice_eng_on",     xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("anti_ice_eng_off",    xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("anti_ice_wing_on",    xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("anti_ice_wing_off",   xfdmConOutSimCommand, xfdmNullLink)
 
   xfdm:requestConnector("strobe_light_toggle", xfdmConOutSimCommand, "1-sim/command/strobeLightSwitch_trigger")
   xfdm:requestConnector("lights_strobe_on",    xfdmConOutSimCommand, xfdmNullLink)

@@ -1,3 +1,5 @@
+xfdm.lastBeginTime = 0
+
 function xfdm:readConnectorSrc(iConnectorName, iArrayIndex)
   local tSrcType = xfdm.connectors[iConnectorName].cSrcType
   local tSrcRef  = xfdm.connectors[iConnectorName].cSrcRef
@@ -46,6 +48,37 @@ function xfdm:driveConnectorDest(iConnectorName, iArrayIndex, iConnectorValue)
       end
     elseif tDestType == xfdmConOutSimCommand then
       command_once(tDestRef)
+    end
+  end
+end
+
+function xfdm:beginConnectorDest(iConnectorName)
+  local tDestType = xfdm.connectors[iConnectorName].cDestType
+  local tDestRef  = xfdm.connectors[iConnectorName].cDestRef
+  xfdm.lastBeginTime = get("sim/time/total_running_time_sec")
+
+  if (tDestRef ~= xfdmNullLink) then
+    if tDestType == xfdmConOutOtherCon then
+      tDestType, tDestRef = findLastConnector(iConnectorName)
+    end
+
+    if tDestType == xfdmConOutSimCommand then
+      command_begin(tDestRef)
+    end
+  end
+end
+
+function xfdm:endConnectorDest(iConnectorName)
+  local tDestType = xfdm.connectors[iConnectorName].cDestType
+  local tDestRef  = xfdm.connectors[iConnectorName].cDestRef
+
+  if (tDestRef ~= xfdmNullLink) then
+    if tDestType == xfdmConOutOtherCon then
+      tDestType, tDestRef = findLastConnector(iConnectorName)
+    end
+
+    if tDestType == xfdmConOutSimCommand then
+      command_end(tDestRef)
     end
   end
 end

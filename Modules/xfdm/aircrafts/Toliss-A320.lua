@@ -3,13 +3,38 @@ require("xfdm.joysticks.honeycomb_bravo")
 
 if string.find(PLANE_ICAO, "A319") or
    string.find(PLANE_ICAO, "A321") or
-   string.find(PLANE_ICAO, "A21N") then
-
+   string.find(PLANE_ICAO, "A19N") or
+   string.find(PLANE_ICAO, "A2[01]N")
+then
 
 xfdm:requestConnector("eng_1_rev_toggle",              xfdmConOutSimCommand, "sim/engines/thrust_reverse_toggle_1")
 xfdm:requestConnector("eng_2_rev_toggle",              xfdmConOutSimCommand, "sim/engines/thrust_reverse_toggle_2")
 xfdm:requestConnector("eng_throttle_ratio",            xfdmConOutRoDataref, "toliss_airbus/joystick/throttle/rawLeverPos")
 xfdm:requestConnector("throttle_beta_rev_ratio",       xfdmConOutRoDataref, "AirbusFBW/throttle_input")
+
+xfdm:requestConnector("bravo_ap_button_hdg_short",     xfdmConOutSimCommand, "AirbusFBW/PushHDGSel")
+xfdm:requestConnector("bravo_ap_button_nav_short",     xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_apr_short",     xfdmConOutSimCommand, "AirbusFBW/APPRbutton")
+xfdm:requestConnector("bravo_ap_button_rev_short",     xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_alt_short",     xfdmConOutSimCommand, "AirbusFBW/PushAltitude")
+xfdm:requestConnector("bravo_ap_button_vs_short",      xfdmConOutSimCommand, "AirbusFBW/PushVSSel")
+xfdm:requestConnector("bravo_ap_button_ias_short",     xfdmConOutSimCommand, "AirbusFBW/PushSPDSel")
+xfdm:requestConnector("bravo_ap_button_cmd_short",     xfdmConOutSimCommand, "toliss_airbus/ap1_push")
+
+xfdm:requestConnector("bravo_ap_button_hdg_long",      xfdmConOutSimCommand, "AirbusFBW/PullHDGSel")
+xfdm:requestConnector("bravo_ap_button_nav_long",      xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_apr_long",      xfdmConOutSimCommand, "AirbusFBW/LOCbutton")
+xfdm:requestConnector("bravo_ap_button_rev_long",      xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_alt_long",      xfdmConOutSimCommand, "AirbusFBW/PullAltitude")
+xfdm:requestConnector("bravo_ap_button_vs_long",       xfdmConOutSimCommand, "AirbusFBW/PullVSSel")
+xfdm:requestConnector("bravo_ap_button_ias_long",      xfdmConOutSimCommand, "AirbusFBW/PullSPDSel")
+xfdm:requestConnector("bravo_ap_button_cmd_long",      xfdmConOutSimCommand, "toliss_airbus/ap2_push")
+
+xfdm:requestConnector("bravo_ap_dial_crs_cw",          xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_dial_crs_ccw",         xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_dial_ver_cw",          xfdmConOutSimCommand, "sim/autopilot/vertical_speed_up")
+xfdm:requestConnector("bravo_ap_dial_ver_ccw",         xfdmConOutSimCommand, "sim/autopilot/vertical_speed_down")
+
 xfdm:requestConnector("anti_ice_wing_on",              xfdmConOutSimCommand, "toliss_airbus/antiicecommands/WingOn")
 xfdm:requestConnector("anti_ice_wing_off",             xfdmConOutSimCommand, "toliss_airbus/antiicecommands/WingOff")
 xfdm:requestConnector("anti_ice_eng_on",               xfdmConOutSimCommand, xfdmNullLink)
@@ -20,23 +45,24 @@ xfdm:requestConnector("toliss_a320_anti_ice_eng1_on",  xfdmConOutSimCommand, "to
 xfdm:requestConnector("toliss_a320_anti_ice_eng1_off", xfdmConOutSimCommand, "toliss_airbus/antiicecommands/ENG1Off")
 xfdm:requestConnector("toliss_a320_anti_ice_eng2_on",  xfdmConOutSimCommand, "toliss_airbus/antiicecommands/ENG2On")
 xfdm:requestConnector("toliss_a320_anti_ice_eng2_off", xfdmConOutSimCommand, "toliss_airbus/antiicecommands/ENG2Off")
-
-
-function xfdm_set_anti_ice()
-  local tEng1Pos = xfdm:readConnectorDest("toliss_a320_anti_ice_eng1_pos")
-  local tEng2Pos = xfdm:readConnectorDest("toliss_a320_anti_ice_eng2_pos")
-  local tSwPos = xfdm:readConnectorSrc("anti_ice_eng_on")
-
-  if         (tSwPos  and (tEng1Pos ~= 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng1_on")
-  elseif (not(tSwPos) and (tEng1Pos == 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng1_off")
-  end
-  
-  if         (tSwPos  and (tEng2Pos ~= 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng2_on")
-  elseif (not(tSwPos) and (tEng2Pos == 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng2_off")
-  end
-end
-xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_anti_ice()")
-
+xfdm:requestConnector("lights_strobe_on",              xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("lights_strobe_off",             xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("toliss_strobe_down",            xfdmConOutSimCommand, "toliss_airbus/lightcommands/StrobeLightDown")
+xfdm:requestConnector("toliss_strobe_up",              xfdmConOutSimCommand, "toliss_airbus/lightcommands/StrobeLightUp")
+xfdm:requestConnector("toliss_strobe_pos",             xfdmConOutRoDataref,  "ckpt/oh/strobeLight/anim")
+xfdm:requestConnector("lights_taxi_on",                xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("lights_taxi_off",               xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("toliss_taxi_down",              xfdmConOutSimCommand, "toliss_airbus/lightcommands/NoseLightDown")
+xfdm:requestConnector("toliss_taxi_up",                xfdmConOutSimCommand, "toliss_airbus/lightcommands/NoseLightUp")
+xfdm:requestConnector("toliss_taxi_pos",               xfdmConOutRoDataref,  "ckpt/oh/taxiLight/anim")
+xfdm:requestConnector("lights_ldg_on",                 xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("lights_ldg_off",                xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("toliss_ldg1_down",              xfdmConOutSimCommand, "toliss_airbus/lightcommands/LLandLightDown")
+xfdm:requestConnector("toliss_ldg1_up",                xfdmConOutSimCommand, "toliss_airbus/lightcommands/LLandLightUp")
+xfdm:requestConnector("toliss_ldg1_pos",               xfdmConOutRoDataref,  "ckpt/oh/ladningLightLeft/anim")
+xfdm:requestConnector("toliss_ldg2_down",              xfdmConOutSimCommand, "toliss_airbus/lightcommands/RLandLightDown")
+xfdm:requestConnector("toliss_ldg2_up",                xfdmConOutSimCommand, "toliss_airbus/lightcommands/RLandLightUp")
+xfdm:requestConnector("toliss_ldg2_pos",               xfdmConOutRoDataref,  "ckpt/oh/ladningLightRight/anim")
 
 function xfdm_set_jet_reversers()
   -- Jets (Spoilers/ENG1/ENG2/ENG3/ENG4/Flaps)
@@ -62,28 +88,70 @@ function xfdm_set_jet_reversers()
   end
 end
 
-xfdm:requestConnector("bravo_ap_button_hdg_short", xfdmConOutSimCommand, "AirbusFBW/PushHDGSel")
-xfdm:requestConnector("bravo_ap_button_nav_short", xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_apr_short", xfdmConOutSimCommand, "AirbusFBW/APPRbutton")
-xfdm:requestConnector("bravo_ap_button_rev_short", xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_alt_short", xfdmConOutSimCommand, "AirbusFBW/PushAltitude")
-xfdm:requestConnector("bravo_ap_button_vs_short",  xfdmConOutSimCommand, "AirbusFBW/PushVSSel")
-xfdm:requestConnector("bravo_ap_button_ias_short", xfdmConOutSimCommand, "AirbusFBW/PushSPDSel")
-xfdm:requestConnector("bravo_ap_button_cmd_short", xfdmConOutSimCommand, "toliss_airbus/ap1_push")
+function xfdm_set_anti_ice()
+  local tEng1Pos = xfdm:readConnectorDest("toliss_a320_anti_ice_eng1_pos")
+  local tEng2Pos = xfdm:readConnectorDest("toliss_a320_anti_ice_eng2_pos")
+  local tSwPos = xfdm:readConnectorSrc("anti_ice_eng_on")
 
-xfdm:requestConnector("bravo_ap_button_hdg_long",  xfdmConOutSimCommand, "AirbusFBW/PullHDGSel")
-xfdm:requestConnector("bravo_ap_button_nav_long",  xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_apr_long",  xfdmConOutSimCommand, "AirbusFBW/LOCbutton")
-xfdm:requestConnector("bravo_ap_button_rev_long",  xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_alt_long",  xfdmConOutSimCommand, "AirbusFBW/PullAltitude")
-xfdm:requestConnector("bravo_ap_button_vs_long",   xfdmConOutSimCommand, "AirbusFBW/PullVSSel")
-xfdm:requestConnector("bravo_ap_button_ias_long",  xfdmConOutSimCommand, "AirbusFBW/PullSPDSel")
-xfdm:requestConnector("bravo_ap_button_cmd_long",  xfdmConOutSimCommand, "toliss_airbus/ap2_push")
+  if         (tSwPos  and (tEng1Pos ~= 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng1_on")
+  elseif (not(tSwPos) and (tEng1Pos == 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng1_off")
+  end
+  
+  if         (tSwPos  and (tEng2Pos ~= 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng2_on")
+  elseif (not(tSwPos) and (tEng2Pos == 1)) then xfdm:driveConnectorDest("toliss_a320_anti_ice_eng2_off")
+  end
+end
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_anti_ice()")
 
-xfdm:requestConnector("bravo_ap_dial_crs_cw",    xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_dial_crs_ccw",   xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_dial_ver_cw",    xfdmConOutSimCommand, "sim/autopilot/vertical_speed_up")
-xfdm:requestConnector("bravo_ap_dial_ver_ccw",   xfdmConOutSimCommand, "sim/autopilot/vertical_speed_down")
+function xfdm_set_light_strobe()
+  local tCockpitPos = xfdm:readConnectorDest("toliss_strobe_pos")
+  local tSwPos      = xfdm:readConnectorSrc("lights_strobe_on")
+
+  if (tSwPos and (tCockpitPos < 2)) then 
+    xfdm:driveConnectorDest("toliss_strobe_up")
+    xfdm:driveConnectorDest("toliss_strobe_up")
+  elseif (not(tSwPos) and (tCockpitPos > 1)) then 
+    xfdm:driveConnectorDest("toliss_strobe_down")
+  end
+end
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_light_strobe()")
+
+function xfdm_set_light_taxi_ldg()
+  local tCockpitTaxiPos = xfdm:readConnectorDest("toliss_taxi_pos")
+  local tCockpitLdg1Pos = xfdm:readConnectorDest("toliss_ldg1_pos")
+  local tCockpitLdg2Pos = xfdm:readConnectorDest("toliss_ldg2_pos")
+  local tSwTaxi      = xfdm:readConnectorSrc("lights_taxi_on")
+  local tSwLdg       = xfdm:readConnectorSrc("lights_ldg_on")
+
+  if (tSwLdg and (tCockpitLdg1Pos < 2)) then 
+    xfdm:driveConnectorDest("toliss_ldg1_up")
+    xfdm:driveConnectorDest("toliss_ldg1_up")
+  elseif (not(tSwLdg) and (tCockpitLdg1Pos > 1)) then 
+    xfdm:driveConnectorDest("toliss_ldg1_down")
+    xfdm:driveConnectorDest("toliss_ldg1_down")
+  end
+
+  if (tSwLdg  and (tCockpitLdg2Pos < 2)) then 
+    xfdm:driveConnectorDest("toliss_ldg2_up")
+    xfdm:driveConnectorDest("toliss_ldg2_up")
+  elseif (not(tSwLdg) and (tCockpitLdg2Pos > 1)) then 
+    xfdm:driveConnectorDest("toliss_ldg2_down")
+    xfdm:driveConnectorDest("toliss_ldg2_down")
+  end
+
+  if (tSwLdg and (tCockpitTaxiPos < 2)) then 
+    xfdm:driveConnectorDest("toliss_taxi_up")
+    xfdm:driveConnectorDest("toliss_taxi_up")
+  elseif (not(tSwLdg) and tSwTaxi and (tCockpitTaxiPos < 1)) then 
+    xfdm:driveConnectorDest("toliss_taxi_up")
+  elseif (not(tSwLdg) and tSwTaxi and (tCockpitTaxiPos > 1)) then 
+    xfdm:driveConnectorDest("toliss_taxi_down")
+  elseif (not(tSwLdg) and not(tSwTaxi) and (tCockpitTaxiPos > 0)) then 
+    xfdm:driveConnectorDest("toliss_taxi_down")
+    xfdm:driveConnectorDest("toliss_taxi_down")
+  end
+end
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_light_taxi_ldg()")
 
 --BravoLights
 xfdm:requestConnector("ap_hdg_mode", xfdmConOutRoDataref, "AirbusFBW/APLateralMode")

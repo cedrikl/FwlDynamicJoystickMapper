@@ -154,7 +154,7 @@ function xfdm:checkConnectorDest(iConnCandidate)
     else
       return XPLMFindDataRef(iConnCandidate.cDestRef)
     end
-  elseif (iConnCandidate.cDestType == xfdmConOutSimCommand)      then
+  elseif (iConnCandidate.cDestType == xfdmConOutSimCommand) then
     if (iConnCandidate.cDestRef == xfdmNullLink) then
       return true
     else

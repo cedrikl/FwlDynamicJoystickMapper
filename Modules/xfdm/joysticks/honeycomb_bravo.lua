@@ -180,8 +180,11 @@ local xfdmAcEngineType = get("sim/aircraft/prop/acf_en_type", 0)
 local xfdmAcEngineBeta = get("sim/aircraft/overflow/acf_has_beta")
 logMsg(string.format("XFDM - Honeycomb Bravo: The number of engines is %i (ICAO: %s Type: %i, Beta: %s)", xfdmAcNbEngines, PLANE_ICAO, xfdmAcEngineType, xfdmAcEngineBeta))
 
-if (((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or
-      (PLANE_ICAO == "B350") or (PLANE_ICAO == "BE9L")) then
+if (
+     ((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or
+     (PLANE_ICAO == "B350") or 
+     (PLANE_ICAO == "BE9L")
+   ) then
   --Prop aircraft
   xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_1", "reverse")
   xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_2", "reverse")
@@ -204,11 +207,12 @@ if (((xfdmAcEngineType <= 4) and (xfdmAcNbEngines <= 2)) or
   end
 else
   --Jets
-  xfdm:requestMapping("axis_speedbrakes",xfdmConInOtherCon, "bravo_axis_1", "reverse")
+  xfdm:requestMapping("axis_speedbrakes",xfdmConInOtherCon, "bravo_axis_1")
   xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_2", "reverse")
   xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_3", "reverse")
   xfdm:requestMapping("axis_throttle_3", xfdmConInOtherCon, "bravo_axis_4", "reverse")
   xfdm:requestMapping("axis_throttle_4", xfdmConInOtherCon, "bravo_axis_5", "reverse")
+  xfdm:requestMapping("axis_flaps",      xfdmConInOtherCon, "bravo_axis_6", "reverse")
   xfdm:requestMapping("cmd_at_disc",     xfdmConInOtherCon, "bravo_axis12_2nd_func")
   xfdm:requestMapping("cmd_at_toga",     xfdmConInOtherCon, "bravo_axis3_2nd_func")
   xfdm:requestCallback(xfdmCallbackAlways, "xfdm_set_jet_reversers()")

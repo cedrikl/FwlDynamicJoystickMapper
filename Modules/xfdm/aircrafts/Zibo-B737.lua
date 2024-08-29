@@ -1,7 +1,9 @@
 require("xfdm.base")
 require("xfdm.joysticks.honeycomb_bravo")
 
-if string.find(PLANE_ICAO, "B738") then
+if string.find(PLANE_ICAO, "B738") or -- 737-800 NG
+   string.find(PLANE_ICAO, "B78M")    -- 737 Max 8
+then
 
 xfdm:requestConnector("cmd_ap_disc",                 xfdmConOutSimCommand, "laminar/B738/autopilot/capt_disco_press")
 

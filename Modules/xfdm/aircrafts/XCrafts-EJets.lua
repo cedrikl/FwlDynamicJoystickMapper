@@ -1,97 +1,93 @@
 require("xfdm.base")
 require("xfdm.joysticks.honeycomb_bravo")
 
-if string.find(PLANE_ICAO, "DH8D") then
+if string.find(PLANE_ICAO, "E17[05]") or -- E170/E175
+   string.find(PLANE_ICAO, "E19[05]")    -- E190/E195 + Lineage 1000 (E190)
+then
 
-xfdm:requestConnector("bravo_ap_dial_ias_cw",    xfdmConOutSimCommand, "FJS/Q4XP/Autopilot/WheelDN")
-xfdm:requestConnector("bravo_ap_dial_ias_ccw",   xfdmConOutSimCommand, "FJS/Q4XP/Autopilot/WheelUP")
-xfdm:requestConnector("bravo_ap_dial_ver_cw",    xfdmConOutSimCommand, "FJS/Q4XP/Autopilot/WheelDN")
-xfdm:requestConnector("bravo_ap_dial_ver_ccw",   xfdmConOutSimCommand, "FJS/Q4XP/Autopilot/WheelUP")
-xfdm:requestConnector("bravo_ap_dial_crs_cw",    xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_dial_crs_ccw",   xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("q4xp_crs_pos",            xfdmConOutRwDataref,  "sim/cockpit2/radios/actuators/hsi_obs_deg_mag_pilot")
-function xfdm.joysticks.honeycomb_bravo:bravo_ap_dial_crs_cw(iCount)
-  local tCrsPos = xfdm:readConnectorDest("q4xp_crs_pos")
-  local tValue = (tCrsPos + iCount) % 360
-  logMsg(tValue)
-  xfdm:driveConnectorDest("q4xp_crs_pos", nil, tValue)
+xfdm:requestConnector("cmd_at_cws",                  xfdmConOutSimCommand, "XCrafts/ERJ/TCS")
+
+xfdm:requestConnector("anti_ice_wing_on",            xfdmConOutSimCommand,  xfdmNullLink)
+xfdm:requestConnector("anti_ice_wing_off",           xfdmConOutSimCommand,  xfdmNullLink)
+xfdm:requestConnector("ejet_wai_pos",                xfdmConOutRoDataref,   "sim/cockpit2/ice/ice_tail_hot_bleed_air_on")
+xfdm:requestConnector("ejet_wai1_on",                xfdmConOutSimCommand,  "sim/ice/wing_tai0_on")
+xfdm:requestConnector("ejet_wai1_off",               xfdmConOutSimCommand,  "sim/ice/wing_tai0_off")
+xfdm:requestConnector("ejet_wai2_on",                xfdmConOutSimCommand,  "sim/ice/wing_tai1_on")
+xfdm:requestConnector("ejet_wai2_off",               xfdmConOutSimCommand,  "sim/ice/wing_tai1_off")
+
+xfdm:requestConnector("anti_ice_eng_on",             xfdmConOutSimCommand,  xfdmNullLink)
+xfdm:requestConnector("anti_ice_eng_off",            xfdmConOutSimCommand,  xfdmNullLink)
+xfdm:requestConnector("ejet_eai_pos",                xfdmConOutRoDataref,   "sim/cockpit2/ice/cowling_thermal_anti_ice_per_engine")
+xfdm:requestConnector("ejet_eai1_on",                xfdmConOutSimCommand,  "sim/ice/inlet_eai0_on")
+xfdm:requestConnector("ejet_eai1_off",               xfdmConOutSimCommand,  "sim/ice/inlet_eai0_off")
+xfdm:requestConnector("ejet_eai2_on",                xfdmConOutSimCommand,  "sim/ice/inlet_eai1_on")
+xfdm:requestConnector("ejet_eai2_off",               xfdmConOutSimCommand,  "sim/ice/inlet_eai1_off")
+
+function xfdm_set_eng_anti_ice()
+  local tEai1Pos = xfdm:readConnectorDest("ejet_eai_pos", 0)
+  local tEai2Pos = xfdm:readConnectorDest("ejet_eai_pos", 1)
+  local tSwPos   = xfdm:readConnectorSrc("anti_ice_eng_on")
+
+  if (tSwPos and (tEai1Pos ~= 1)) then
+    xfdm:driveConnectorDest("ejet_eai1_on")
+  elseif (not(tSwPos) and (tEai1Pos > 0)) then
+    xfdm:driveConnectorDest("ejet_eai1_off")
+  end
+
+  if (tSwPos and (tEai2Pos ~= 1)) then
+    xfdm:driveConnectorDest("ejet_eai2_on")
+  elseif (not(tSwPos) and (tEai2Pos > 0)) then
+    xfdm:driveConnectorDest("ejet_eai2_off")
+  end
 end
-function xfdm.joysticks.honeycomb_bravo:bravo_ap_dial_crs_ccw(iCount)  xfdm.joysticks.honeycomb_bravo:bravo_ap_dial_crs_cw(iCount * -1) end
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_eng_anti_ice()")
+
+function xfdm_set_wing_anti_ice()
+  local tWaiPos = xfdm:readConnectorDest("ejet_wai_pos")
+  local tSwPos   = xfdm:readConnectorSrc("anti_ice_wing_on")
+
+  if (tSwPos and (tWaiPos ~= 1)) then
+    xfdm:driveConnectorDest("ejet_wai1_on")
+    xfdm:driveConnectorDest("ejet_wai2_on")
+  elseif (not(tSwPos) and (tWaiPos > 0)) then
+    xfdm:driveConnectorDest("ejet_wai1_off")
+    xfdm:driveConnectorDest("ejet_wai2_off")
+  end
+end
+xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_wing_anti_ice()")
+
+xfdm:requestConnector("bravo_ap_button_nav_short", xfdmConOutSimCommand, "XCrafts/ERJ/LNAV")
+xfdm:requestConnector("bravo_ap_button_apr_short", xfdmConOutSimCommand, "XCrafts/ERJ/APPCH")
+xfdm:requestConnector("bravo_ap_button_rev_short", xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_alt_short", xfdmConOutSimCommand, "XCrafts/ERJ/FLCH")
+xfdm:requestConnector("bravo_ap_button_vs_short",  xfdmConOutSimCommand, "XCrafts/ERJ/VS")
+xfdm:requestConnector("bravo_ap_button_ias_short", xfdmConOutSimCommand, "sim/autopilot/speed_hold")
+--xfdm:requestConnector("bravo_ap_button_cmd_short", xfdmConOutSimCommand, "laminar/B738/autopilot/cmd_a_press")
+
+xfdm:requestConnector("bravo_ap_button_hdg_long",  xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_nav_long",  xfdmConOutSimCommand, "XCrafts/ERJ/VNAV")
+xfdm:requestConnector("bravo_ap_button_apr_long",  xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_rev_long",  xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_alt_long",  xfdmConOutSimCommand, "XCrafts/ERJ/alt_hold")
+xfdm:requestConnector("bravo_ap_button_vs_long",   xfdmConOutSimCommand, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_button_ias_long",  xfdmConOutSimCommand, xfdmNullLink)
+--xfdm:requestConnector("bravo_ap_button_cmd_long",  xfdmConOutSimCommand, "laminar/B738/autopilot/cws_a_press")
 
 --Acceleration Tuning
 xfdm.joysticks.honeycomb_bravo.sAccelThreshold  = 3
 xfdm.joysticks.honeycomb_bravo.sAccelMultiplier = 2
-xfdm.joysticks.honeycomb_bravo.sAccelMaxMultiplier = 20
+xfdm.joysticks.honeycomb_bravo.sAccelMaxMultiplier = 10
 
-xfdm:requestConnector("bravo_ap_button_hdg_short", xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_hdg")
-xfdm:requestConnector("bravo_ap_button_nav_short", xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_nav")
-xfdm:requestConnector("bravo_ap_button_apr_short", xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_appr")
-xfdm:requestConnector("bravo_ap_button_rev_short", xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_bc")
-xfdm:requestConnector("bravo_ap_button_alt_short", xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_altsel")
-xfdm:requestConnector("bravo_ap_button_vs_short",  xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_vs")
-xfdm:requestConnector("bravo_ap_button_ias_short", xfdmConOutRwDataref,  xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_cmd_short", xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_ap")
+xfdm:requestConnector("bravo_ap_dial_cw",        xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_dial_ccw",       xfdmConOutRwDataref, xfdmNullLink)
+xfdm:requestConnector("bravo_ap_dial_alt_cw",    xfdmConOutSimCommand, "XCrafts/ERJ/ALT_up_100")
+xfdm:requestConnector("bravo_ap_dial_ver_cw",    xfdmConOutSimCommand, "XCrafts/ERJ/VS_up_10")
+xfdm:requestConnector("bravo_ap_dial_ias_cw",    xfdmConOutSimCommand, "XCrafts/ERJ/SPD_up_1")
+xfdm:requestConnector("bravo_ap_dial_alt_ccw",   xfdmConOutSimCommand, "XCrafts/ERJ/ALT_dn_100")
+xfdm:requestConnector("bravo_ap_dial_ver_ccw",   xfdmConOutSimCommand, "XCrafts/ERJ/VS_dn_10")
+xfdm:requestConnector("bravo_ap_dial_ias_ccw",   xfdmConOutSimCommand, "XCrafts/ERJ/SPD_dn_1")
 
-xfdm:requestConnector("bravo_ap_button_hdg_long",  xfdmConOutSimCommand, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_nav_long",  xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_vnav")
-xfdm:requestConnector("bravo_ap_button_apr_long",  xfdmConOutRwDataref,  xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_rev_long",  xfdmConOutRwDataref,  xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_alt_long",  xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_alt")
-xfdm:requestConnector("bravo_ap_button_vs_long",   xfdmConOutRwDataref,  xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_ias_long",  xfdmConOutRwDataref, xfdmNullLink)
-xfdm:requestConnector("bravo_ap_button_cmd_long",  xfdmConOutSimCommand, "FJS/Q4XP/SoftKey/ap_yd")
-
-xfdm:requestConnector("cmd_ap_disc",                 xfdmConOutSimCommand, "FJS/Q4XP/Autopilot/AUTOPILOT_DISCONNECT")
-xfdm:requestConnector("cmd_at_disc",                 xfdmConOutSimCommand, "FJS/Q4XP/ENGINES/PowerGatePassALL")
-xfdm:requestConnector("cmd_at_cws",                  xfdmConOutSimCommand, "FJS/Q4XP/Autopilot/TCS_Engage")
-
-xfdm:requestConnector("anti_ice_eng_on",             xfdmConOutSimCommand,  xfdmNullLink)
-xfdm:requestConnector("anti_ice_eng_off",            xfdmConOutSimCommand,  xfdmNullLink)
-xfdm:requestConnector("q4xp_prop_ai_pos",            xfdmConOutRwDataref,   "FJS/Q4XP/Manips/KnobWDetent_Anim")
-xfdm:requestConnector("anti_ice_wing_on",            xfdmConOutSimCommand,  xfdmNullLink)
-xfdm:requestConnector("anti_ice_wing_off",           xfdmConOutSimCommand,  xfdmNullLink)
-xfdm:requestConnector("lights_strobe_on",            xfdmConOutSimCommand,  xfdmNullLink)
-xfdm:requestConnector("lights_strobe_off",           xfdmConOutSimCommand,  xfdmNullLink)
-xfdm:requestConnector("q4xp_lights_strobe_pos",      xfdmConOutRwDataref,   "FJS/Q4XP/Manips/TwoSwitch_Anim")
-
-function xfdm_set_prop_ai()
-  local tCockpitPos = xfdm:readConnectorDest("q4xp_prop_ai_pos", 2)
-  local tSwPos = xfdm:readConnectorSrc("anti_ice_eng_on")
-
-  if (tSwPos and (tCockpitPos ~= 1)) then
-    xfdm:driveConnectorDest("q4xp_prop_ai_pos", 2, 1)
-  elseif (not(tSwPos) and (tCockpitPos ~= 0)) then
-    xfdm:driveConnectorDest("q4xp_prop_ai_pos", 2, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_prop_ai()")
-
-function xfdm_set_wing_ai()
-  local tCockpitPos = xfdm:readConnectorDest("q4xp_prop_ai_pos", 0)
-  local tSwPos = xfdm:readConnectorSrc("anti_ice_wing_on")
-
-  if (tSwPos and (tCockpitPos ~= 1)) then
-    xfdm:driveConnectorDest("q4xp_prop_ai_pos", 0, 2)
-  elseif (not(tSwPos) and (tCockpitPos ~= 0)) then
-    xfdm:driveConnectorDest("q4xp_prop_ai_pos", 0, 0)
-  end
-end
-xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_wing_ai()")
-
-function xfdm_set_strobe_light()
-  local tStrobePos = xfdm:readConnectorDest("q4xp_lights_strobe_pos", 23)
-  local tSwPos = xfdm:readConnectorSrc("lights_strobe_on")
-
-  if (tSwPos and (tStrobePos < 0.0001)) then
-    xfdm:driveConnectorDest("q4xp_lights_strobe_pos", 23, 1)
-  elseif (not(tSwPos) and (tStrobePos > 0.9999)) then
-    xfdm:driveConnectorDest("q4xp_lights_strobe_pos", 23, -1)
-  end
-end
-xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_strobe_light()")
-
---BravoLights
-
+----BravoLights
 --xfdm:requestConnector("ap_hdg_mode", xfdmConOutRoDataref, "laminar/B738/autopilot/hdg_sel_status")
 --function xfdm.joysticks.honeycomb_bravo.leds:checkHdg()
 --  if (xfdm:readConnectorDest("ap_hdg_mode") == 1) then

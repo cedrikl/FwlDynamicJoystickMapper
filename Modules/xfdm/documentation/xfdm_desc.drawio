@@ -1,0 +1,161 @@
+<mxfile host="app.diagrams.net" modified="2024-07-31T23:54:37.665Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" etag="hu-NT923FedyMtFrEn41" version="24.4.10" type="device" pages="2">
+  <diagram id="srbFPtrYPCiaAHXt68zt" name="usage">
+    <mxGraphModel dx="1439" dy="1167" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-5" value="Joystick&lt;div&gt;Button&lt;/div&gt;" style="triangle;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-6" value="Joystick&lt;div&gt;Axis&lt;/div&gt;" style="triangle;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-8" value="xfdm:requestConnector(iName, iType, iDest)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="80" width="800" height="286" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-30" value="Creates a connector and/or maps to the right. Ultimate end of the chain is the sim data (including reading datarefs)." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-8" vertex="1">
+          <mxGeometry y="26" width="800" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-9" value="+ iName: string, unique otherwise it will override the existing one. The override is very useful for payware planes.&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Example:&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;requestConnector(&quot;lights_taxi_on&quot;, xfdmConOutSimCommand, &quot;sim/lights/taxi_lights_on&quot;)&amp;nbsp; from the xplane module)&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;requestConnector(&quot;lights_taxi_on&quot;, xfdmConOutSimCommand, &quot;toliss/lights/ovhd_sw1_up&quot;)&amp;nbsp; from a payware module)&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-8" vertex="1">
+          <mxGeometry y="60" width="800" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-10" value="+ iType: alias. List from below:&lt;div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConOutSimAxis: should be a valid xplane axis. (these never exist outside default xplane)&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;-&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;xfdmConOutRwDataref: Connects to a writeable dataref. Make sure it is writable otherwise the FWL will crash.&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;-&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;xfdmConOutRoDataref: Connects to a readonly dataref. Useful to be able to validate and read datarefs for dynamic logic.&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConOutSimCommand = connects to an xplane command. Found in settings or DataRefTool.&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConOutOtherCon: connects to another connector. For compatibility it should be of the same type.&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmNullLink: connects to nothing. Useful for custom connectors that will get overriden later or unmap buttons/axis.&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-8" vertex="1">
+          <mxGeometry y="144" width="800" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-11" value="+ iDest: string, xplane (command,dataref or axis)(full path), other connector (name) or xfdmNullLink (no quotes)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-8" vertex="1">
+          <mxGeometry y="260" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-12" value="xfdm:requestMapping(iName, iType, iSource, iReverse)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="400" width="800" height="236" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-31" value="Maps the left side of an existing connector. Ultimate end of the chain is the joysticks." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-12" vertex="1">
+          <mxGeometry y="26" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-13" value="+ iName: string, must be a existing connector." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-12" vertex="1">
+          <mxGeometry y="52" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-14" value="+ iType: alias. List from below:&lt;div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConInButton: Equivalent of mapping a button in xplane&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConInAxis&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; = &quot;xfdmConnectorInputJoyAxis&quot;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConInDataref&amp;nbsp; &amp;nbsp; &amp;nbsp;= &quot;xfdmConnectorInputDataref&quot;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- xfdmConInOtherCon&amp;nbsp; &amp;nbsp; = &quot;xfdmConnectorInputOtherConnector&quot;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-12" vertex="1">
+          <mxGeometry y="78" width="800" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-32" value="+ iSource: number. Button number or axis number. This matches the list from &quot;Output\preferences\X-Plane Joystick Settings.prf&quot;. In reality you will always use alias from the specific joystick module." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-12" vertex="1">
+          <mxGeometry y="166" width="800" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-15" value="+ iReverse (optional): only used to reverse an axis." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-12" vertex="1">
+          <mxGeometry y="210" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-18" value="&lt;span style=&quot;text-align: left;&quot;&gt;xfdm:readConnectorSrc(iName, iIndex)&lt;/span&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="680" width="800" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-19" value="+ iName: Name of the connector to read from." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-18" vertex="1">
+          <mxGeometry y="26" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-20" value="+ iIndex (optional): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-18" vertex="1">
+          <mxGeometry y="52" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-22" value="&lt;span style=&quot;text-align: left;&quot;&gt;xfdm:readConnectorDest(iName, iIndex)&lt;/span&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="800" width="800" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-23" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-22" vertex="1">
+          <mxGeometry y="26" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-24" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="DLJRmdFu2bftk5TotQ-9-22" vertex="1">
+          <mxGeometry y="52" width="800" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-26" value="Sim&lt;div&gt;Dataref&lt;/div&gt;" style="triangle;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-27" value="Sim&lt;div&gt;Axis&lt;/div&gt;" style="triangle;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-28" value="Sim&lt;div&gt;Button&lt;/div&gt;" style="triangle;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1520" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DLJRmdFu2bftk5TotQ-9-29" value="Nothing" style="triangle;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1640" width="80" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="flow">
+    <mxGraphModel dx="925" dy="878" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="S4M1dbazuhbMyNnYh-03-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="S4M1dbazuhbMyNnYh-03-8" target="S4M1dbazuhbMyNnYh-03-15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-8" value="Start of Script" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="360" y="40" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-9" value="End of Script" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="80" y="840" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="S4M1dbazuhbMyNnYh-03-10" target="S4M1dbazuhbMyNnYh-03-31" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-10" value="Create Connector" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="320" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-12" value="Check Connector Link" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="280" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="S4M1dbazuhbMyNnYh-03-14" target="S4M1dbazuhbMyNnYh-03-9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-14" value="DO_EVERY_FRAME(&quot;xfdmInitRunner&quot;)" style="rounded=1;whiteSpace=wrap;html=1;rotation=-90;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="-160" y="520" width="520" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="S4M1dbazuhbMyNnYh-03-15" target="S4M1dbazuhbMyNnYh-03-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-15" value="Require Modules&lt;br&gt;&lt;br&gt;Base&lt;br&gt;X-Plane&lt;br&gt;Joysticks&lt;br&gt;Plugins&lt;br&gt;Aircraft" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="360" y="120" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="S4M1dbazuhbMyNnYh-03-18" target="S4M1dbazuhbMyNnYh-03-14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-18" value="Task Lists (table.insert)&lt;br&gt;&lt;br&gt;Connectors To Create&lt;br&gt;DO_ALWAYS callbacks&lt;br&gt;DO_OFTEN callbacks" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="120" y="120" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-19" value="User mapping to connectors" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="560" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-20" value="Start all the DO_OFTEN/ALWAYS" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="640" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-26" value="If connectors left" style="rounded=1;whiteSpace=wrap;html=1;rotation=-90;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="100" y="380" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-31" value="remove task" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="480" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-32" value="DO_EVERY_DRAW" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="420" y="320" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-33" value="Check timeout" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="420" y="360" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-38" value="If init flag" style="rounded=1;whiteSpace=wrap;html=1;rotation=-90;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="40" y="380" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="S4M1dbazuhbMyNnYh-03-39" target="S4M1dbazuhbMyNnYh-03-31" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-41" value="log error" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="S4M1dbazuhbMyNnYh-03-40" vertex="1" connectable="0">
+          <mxGeometry x="0.2289" relative="1" as="geometry">
+            <mxPoint x="29" y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-39" value="Override link to none" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="420" y="400" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-43" value="If run flag" style="rounded=1;whiteSpace=wrap;html=1;rotation=-90;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="80" y="700" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="S4M1dbazuhbMyNnYh-03-44" value="If no init/run flag" style="rounded=1;whiteSpace=wrap;html=1;rotation=-90;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="100" y="560" width="120" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
