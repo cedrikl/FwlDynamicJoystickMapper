@@ -54,6 +54,7 @@ xfdm:requestConnector("view_left",                    xfdmConOutSimCommand, "sim
 xfdm:requestConnector("view_up_left",                 xfdmConOutSimCommand, "sim/general/hat_switch_up_left")
 xfdm:requestConnector("view_default",                 xfdmConOutSimCommand, "sim/view/default_view")
 xfdm:requestConnector("view_circle",                  xfdmConOutSimCommand, "sim/view/circle")
+xfdm:requestConnector("view_chase",                   xfdmConOutSimCommand, "sim/view/chase")
 
 xfdm:requestConnector("elec_bat_on",                  xfdmConOutSimCommand, "sim/electrical/battery_1_on")
 xfdm:requestConnector("elec_bat_off",                 xfdmConOutSimCommand, "sim/electrical/battery_1_off")
@@ -117,6 +118,7 @@ xfdm:requestConnector("vr_reset_view",                xfdmConOutSimCommand, "sim
 xfdm:requestConnector("vr_touchpad",                  xfdmConOutSimCommand, "sim/VR/reserved/touchpad")
 xfdm:requestConnector("vr_select",                    xfdmConOutSimCommand, "sim/VR/reserved/select")
 xfdm:requestConnector("vr_zoom",                      xfdmConOutSimCommand, "sim/VR/quick_zoom_view")
+xfdm:requestConnector("vr_toggle",                    xfdmConOutSimCommand, "sim/VR/toggle_vr")
 
 xfdm:requestConnector("axis_pitch",                   xfdmConOutSimAxis, "Pitch")
 xfdm:requestConnector("axis_roll",                    xfdmConOutSimAxis, "Roll")

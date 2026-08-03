@@ -1,11 +1,12 @@
 require("xfdm.base")
 require("xfdm.joysticks.honeycomb_bravo")
 
+if (string.find(PLANE_ICAO, "A320")) then
+
 xfdm.aircrafts = {}
 xfdm.aircrafts.ffa320 = {}
 xfdm.aircrafts.ffa320.pushPullEndQueue = {}
 
-if (string.find(PLANE_ICAO, "A320")) then
 xfdm:requestConnector("bravo_ap_dial_hdg_cw",    xfdmConOutSimCommand, "a320/Panel/FCU_Lateral_switch+")
 xfdm:requestConnector("bravo_ap_dial_hdg_ccw",   xfdmConOutSimCommand, "a320/Panel/FCU_Lateral_switch-")
 xfdm:requestConnector("bravo_ap_dial_crs_cw",    xfdmConOutSimCommand, xfdmNullLink)
@@ -167,7 +168,7 @@ function xfdm.aircrafts.ffa320:apButtonRunner()
       local tCurrentTime = get("sim/time/total_running_time_sec")
 
       if (tCurrentTime - xfdm.lastBeginTime > 0.35) then
-        logMsg(lastFFa320ButtonTime)
+        --logMsg(lastFFa320ButtonTime)
         --logMsg(tprint(xfdm.aircrafts.ffa320.pushPullEndQueue))
         for k,v in pairs(xfdm.aircrafts.ffa320.pushPullEndQueue) do
           --logMsg(v.cName)

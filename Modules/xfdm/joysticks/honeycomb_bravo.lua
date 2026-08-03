@@ -186,6 +186,7 @@ if (
      (PLANE_ICAO == "BE9L")
    ) then
   --Prop aircraft
+  logMsg(string.format("XFDM - Using Prop Throttles"))
   xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_1", "reverse")
   xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_2", "reverse")
   xfdm:requestMapping("axis_prop_1",     xfdmConInOtherCon, "bravo_axis_3")
@@ -194,6 +195,7 @@ if (
   xfdm:requestMapping("axis_mixture_2",  xfdmConInOtherCon, "bravo_axis_6")
   xfdm:requestMapping("cmd_ap_toga",     xfdmConInOtherCon, "bravo_axis12_2nd_func")
   if (xfdmAcEngineBeta) then
+    logMsg(string.format("XFDM - Using Prop+Beta Throttles"))
     xfdm:requestConnector("bravo_axis_1",   xfdmConOutSimAxis, xfdmNullLink)
     xfdm:requestConnector("bravo_axis_2",   xfdmConOutSimAxis, xfdmNullLink)
     xfdm:requestMapping("axis_throttle_1",  xfdmConInAxis, xfdmNullLink)
@@ -207,6 +209,7 @@ if (
   end
 else
   --Jets
+  logMsg(string.format("XFDM - Using Jet Throttles"))
   xfdm:requestMapping("axis_speedbrakes",xfdmConInOtherCon, "bravo_axis_1")
   xfdm:requestMapping("axis_throttle_1", xfdmConInOtherCon, "bravo_axis_2", "reverse")
   xfdm:requestMapping("axis_throttle_2", xfdmConInOtherCon, "bravo_axis_3", "reverse")

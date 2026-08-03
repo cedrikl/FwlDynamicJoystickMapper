@@ -1,7 +1,7 @@
 require("xfdm.base")
 
 if string.find(PLANE_ICAO, "B738") or -- 737-800 NG
-   string.find(PLANE_ICAO, "B78M")    -- 737 Max 8
+   string.find(PLANE_ICAO, "B38M")    -- 737 Max 8
 then
 
 
@@ -22,9 +22,13 @@ xfdm:requestConnector("zibo_bat_status",             xfdmConOutRoDataref,   "lam
 xfdm:requestConnector("nav_irs1_on",                 xfdmConOutSimCommand,  xfdmNullLink)
 xfdm:requestConnector("nav_irs1_off",                xfdmConOutSimCommand,  xfdmNullLink)
 xfdm:requestConnector("zibo_sw_irs1",                xfdmConOutRwDataref,   "laminar/B738/toggle_switch/irs_left")
+xfdm:requestConnector("zibo_sw_irs1+",               xfdmConOutSimCommand,  "laminar/B738/toggle_switch/irs_L_right")
+xfdm:requestConnector("zibo_sw_irs1-",               xfdmConOutSimCommand,  "laminar/B738/toggle_switch/irs_L_left")
 xfdm:requestConnector("nav_irs2_on",                 xfdmConOutSimCommand,  xfdmNullLink)
 xfdm:requestConnector("nav_irs2_off",                xfdmConOutSimCommand,  xfdmNullLink)
 xfdm:requestConnector("zibo_sw_irs2",                xfdmConOutRwDataref,   "laminar/B738/toggle_switch/irs_right")
+xfdm:requestConnector("zibo_sw_irs2+",               xfdmConOutSimCommand,  "laminar/B738/toggle_switch/irs_R_right")
+xfdm:requestConnector("zibo_sw_irs2-",               xfdmConOutSimCommand,  "laminar/B738/toggle_switch/irs_R_left")
 
 xfdm:requestConnector("lights_bcn_on",               xfdmConOutSimCommand,  xfdmNullLink)
 xfdm:requestConnector("lights_bcn_off",              xfdmConOutSimCommand,  xfdmNullLink)
@@ -83,16 +87,20 @@ function xfdm_set_irs()
   local tSw1Pos      = xfdm:readConnectorSrc("nav_irs1_on")
   local tSw2Pos      = xfdm:readConnectorSrc("nav_irs2_on")
 
-  if (tSw1Pos and (tCockpitPos1 ~= 1)) then
-    xfdm:driveConnectorDest("zibo_sw_irs1", nil, 2)
-  elseif (not(tSw1Pos) and (tCockpitPos1 > 0)) then
-    xfdm:driveConnectorDest("zibo_sw_irs1", nil, 0)
+  if (tSw1Pos and (tCockpitPos1 < 1.9)) then
+    xfdm:driveConnectorDest("zibo_sw_irs1+")
+  elseif (tSw1Pos and (tCockpitPos1 > 2.1)) then
+	xfdm:driveConnectorDest("zibo_sw_irs1-")
+  elseif (not(tSw1Pos) and (tCockpitPos1 > 0.1)) then
+    xfdm:driveConnectorDest("zibo_sw_irs1-")
   end
   
-  if (tSw2Pos and (tCockpitPos2 ~= 1)) then
-    xfdm:driveConnectorDest("zibo_sw_irs2", nil, 2)
-  elseif (not(tSw2Pos) and (tCockpitPos2 > 0)) then
-    xfdm:driveConnectorDest("zibo_sw_irs2", nil, 0)
+  if (tSw2Pos and (tCockpitPos2 < 1.9)) then
+    xfdm:driveConnectorDest("zibo_sw_irs2+")
+  elseif (tSw2Pos and (tCockpitPos2 > 2.1)) then
+    xfdm:driveConnectorDest("zibo_sw_irs2-")
+  elseif (not(tSw2Pos) and (tCockpitPos2 > 0.1)) then
+    xfdm:driveConnectorDest("zibo_sw_irs2-")
   end
 end
 xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_irs()")

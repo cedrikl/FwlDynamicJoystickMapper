@@ -2,7 +2,7 @@ require("xfdm.base")
 require("xfdm.joysticks.honeycomb_bravo")
 
 if string.find(PLANE_ICAO, "B738") or -- 737-800 NG
-   string.find(PLANE_ICAO, "B78M")    -- 737 Max 8
+   string.find(PLANE_ICAO, "B38M")    -- 737 Max 8
 then
 
 xfdm:requestConnector("cmd_ap_disc",                 xfdmConOutSimCommand, "laminar/B738/autopilot/capt_disco_press")
@@ -83,9 +83,9 @@ xfdm:requestConnector("bravo_ap_button_ias_long",  xfdmConOutSimCommand, "lamina
 xfdm:requestConnector("bravo_ap_button_cmd_long",  xfdmConOutSimCommand, "laminar/B738/autopilot/cws_a_press")
 
 --Acceleration Tuning
-xfdm.joysticks.honeycomb_bravo.sAccelThreshold  = 3
+xfdm.joysticks.honeycomb_bravo.sAccelThreshold  = 6
 xfdm.joysticks.honeycomb_bravo.sAccelMultiplier = 2
-xfdm.joysticks.honeycomb_bravo.sAccelMaxMultiplier = 20
+xfdm.joysticks.honeycomb_bravo.sAccelMaxMultiplier = 2
 
 xfdm:requestConnector("bravo_ap_dial_crs_cw",    xfdmConOutSimCommand, "laminar/B738/autopilot/course_pilot_up")
 xfdm:requestConnector("bravo_ap_dial_crs_ccw",   xfdmConOutSimCommand, "laminar/B738/autopilot/course_pilot_dn")

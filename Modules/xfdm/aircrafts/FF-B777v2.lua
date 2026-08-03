@@ -1,10 +1,47 @@
 require("xfdm.base")
 require("xfdm.joysticks.honeycomb_bravo")
 
-if (string.find(PLANE_ICAO, "B772")) then
+if(string.find(PLANE_ICAO, "B772") or
+	 string.find(PLANE_ICAO, "B77W")
+  ) then
 
-  xfdm:requestConnector("cmd_at_disc",       xfdmConOutSimCommand, "1-sim/command/apDiscLeftButton_button")
-  xfdm:requestConnector("cmd_at_toga",       xfdmConOutSimCommand, "1-sim/command/togaLeftButton_button")
+  logMsg("XFDM - Aircrafts: Creating Mapping FF B777v2.")
+
+  xfdm:requestConnector("eng_1_rev_toggle",              xfdmConOutSimCommand, "sim/engines/thrust_reverse_toggle_1")
+  xfdm:requestConnector("eng_2_rev_toggle",              xfdmConOutSimCommand, "sim/engines/thrust_reverse_toggle_2")
+  xfdm:requestConnector("eng_throttle_ratio_1",          xfdmConOutRoDataref, "1-sim/ckpt/thrustLeftLever/anim")
+  xfdm:requestConnector("eng_throttle_ratio_2",          xfdmConOutRoDataref, "1-sim/ckpt/thrustRightLever/anim")
+  xfdm:requestConnector("throttle_beta_rev_ratio_1",     xfdmConOutRoDataref, "1-sim/ckpt/reverseLeftLever/anim")
+  xfdm:requestConnector("throttle_beta_rev_ratio_2",     xfdmConOutRoDataref, "1-sim/ckpt/reverseRightLever/anim")
+
+  function xfdm_set_jet_reversers()
+    -- Jets (Spoilers/ENG1/ENG2/ENG3/ENG4/Flaps)
+    local tThrottle1Rev = xfdm:readConnectorSrc("bravo_axis_2_rev_handle")
+    local tThrottle2Rev = xfdm:readConnectorSrc("bravo_axis_3_rev_handle")
+
+    local tEng1LeverPos = xfdm:readConnectorDest("eng_throttle_ratio_1")
+    local tEng2LeverPos = xfdm:readConnectorDest("eng_throttle_ratio_2")
+
+    local tEng1Rev = xfdm:readConnectorDest("throttle_beta_rev_ratio_1")
+    local tEng2Rev = xfdm:readConnectorDest("throttle_beta_rev_ratio_2")
+
+    if         (tThrottle1Rev  and (tEng1Rev < 0.1)  and (tEng1LeverPos < 1.3)) then
+      
+      xfdm:driveConnectorDest("eng_1_rev_toggle")
+    elseif (not(tThrottle1Rev) and (tEng1Rev < 0.32) and (tEng1LeverPos < 1.3)) then
+      
+      xfdm:driveConnectorDest("eng_1_rev_toggle")
+    end
+
+    if         (tThrottle2Rev  and (tEng2Rev < 0.1)  and (tEng2LeverPos < 1.3)) then
+      xfdm:driveConnectorDest("eng_2_rev_toggle")
+    elseif (not(tThrottle2Rev) and (tEng2Rev < 0.32) and (tEng2LeverPos < 1.3)) then
+      xfdm:driveConnectorDest("eng_2_rev_toggle")
+    end
+  end
+
+  xfdm:requestConnector("cmd_at_disc",         xfdmConOutSimCommand, "1-sim/command/apDiscLeftButton_button")
+  xfdm:requestConnector("cmd_at_toga",         xfdmConOutSimCommand, "1-sim/command/togaLeftButton_button")
 
   xfdm:requestConnector("trim_pitch_up1",      xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_up")
   xfdm:requestConnector("trim_pitch_down1",    xfdmConOutSimCommand, "sim/flight_controls/pitch_trim_down")
@@ -142,7 +179,7 @@ if (string.find(PLANE_ICAO, "B772")) then
   xfdm:requestConnector("bravo_ap_mode_ias",         xfdmConOutSimCommand, "1-sim/comm/HC/selectorIAS")
   xfdm:requestConnector("bravo_ap_mode_crs",         xfdmConOutSimCommand, xfdmNullLink)
 
-  xfdm:requestMapping("axis_speedbrakes",xfdmConInOtherCon, "bravo_axis_1")
+  xfdm:requestMapping("axis_speedbrakes", xfdmConInOtherCon, "bravo_axis_1")
 
 --1-sim/command/parkbrake_trigger
 end

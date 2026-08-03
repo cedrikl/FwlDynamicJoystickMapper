@@ -119,20 +119,20 @@ function xfdm:setConnectorDest(iConnName, iConnDestType, iConnDestRef)
     self.connectors[iConnName].cDestRef  = iConnDestRef
   else
     self.connectors[iConnName] = {cDestType=iConnDestType, cSrcRef=xfdmNullLink, cDestRef=iConnDestRef}
-    logMsg(string.format("XFDM - setConnectorDest: Created a new %s connector to \"%s\"", iConnDestType, iConnDestRef))
+    logMsg(string.format("XFDM - setConnectorDest: Created a new %s connector %s to \"%s\"", iConnDestType, iConnName, iConnDestRef))
   end
 end
 
 function xfdm:setConnectorSource(iConnName, iConnSrcType, iConnSrcRef, iConnSrcRev)
   if not self.connectors[iConnName] then
-    logMsg(string.format("XFDM - mapConnector: Requested connector \"%s\" does not exist, creating a new one mapped to %s", iConnName, xfdmNullLink))
+    logMsg(string.format("XFDM - setConnectorSource: Requested connector \"%s\" does not exist, creating a new one mapped to %s", iConnName, xfdmNullLink))
     self.setConnectorDest(iConnName, xfdmLinkRwDataref, xfdmNullLink)
   end
   if (self.connectors[iConnName].cSrcRef ~= xfdmNullLink) then
-    logMsg(string.format("XFDM - mapConnector(warning): Requested connector \"%s\" was planning to be mapped to %s %s but has been overriden to %s %s.", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, iSrcType, iSrcRef))
+    logMsg(string.format("XFDM - setConnectorSource(warning): Requested connector \"%s\" was planning to be mapped to %s %s but has been overriden to %s %s.", iConnName, self.connectors[iConnName].cSrcType, self.connectors[iConnName].cSrcRef, iConnSrcType, iConnSrcRef))
   end
   if ((self.connectors[iConnName].cDestType == xfdmConOutRoDataref) or (self.connectors[iConnName].cDestType == xfdmConOutRwDataref)) then
-    logMsg(string.format("XFDM - mapConnector(info): Requested connector \"%s\" to \"%s:%s\" is linked to a dataref. This probably means that another module will interact with it directly.", iConnName, iConnSrcType, iConnSrcRef))
+    logMsg(string.format("XFDM - setConnectorSource(info): Requested connector \"%s\" to \"%s:%s\" is linked to a dataref. This probably means that another module will interact with it directly.", iConnName, iConnSrcType, iConnSrcRef))
   end
   if (self.connectors[iConnName].cSrcType == xfdmConInOtherCon) then
     local tDest = iConnName
