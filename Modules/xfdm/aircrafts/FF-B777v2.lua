@@ -15,7 +15,8 @@ if(string.find(PLANE_ICAO, "B772") or
   xfdm:requestConnector("throttle_beta_rev_ratio_2",     xfdmConOutRoDataref, "1-sim/ckpt/reverseRightLever/anim")
 
   function xfdm_set_jet_reversers()
-    -- Jets (Spoilers/ENG1/ENG2/ENG3/ENG4/Flaps)
+    -- Thresholds are extremely precise since this is a xfdmCallbackAlways callback.
+    -- Potentially likely to break when FlightFactor updates/tuning.
     local tThrottle1Rev = xfdm:readConnectorSrc("bravo_axis_2_rev_handle")
     local tThrottle2Rev = xfdm:readConnectorSrc("bravo_axis_3_rev_handle")
 
@@ -25,17 +26,17 @@ if(string.find(PLANE_ICAO, "B772") or
     local tEng1Rev = xfdm:readConnectorDest("throttle_beta_rev_ratio_1")
     local tEng2Rev = xfdm:readConnectorDest("throttle_beta_rev_ratio_2")
 
-    if         (tThrottle1Rev  and (tEng1Rev < 0.1)  and (tEng1LeverPos < 1.3)) then
-      
+    if         (tThrottle1Rev  and (tEng1Rev < 0.01)  and (tEng1LeverPos < 1.3)) then
+      --logMsg(string.format("XFDM -FFB777v2: Engage ENG 1 Rev (tThrottle1Rev=%s,tEng1Rev=%2.2f, tEng1LeverPos=%2.2f)", tThrottle1Rev,tEng1Rev,tEng1LeverPos))
       xfdm:driveConnectorDest("eng_1_rev_toggle")
-    elseif (not(tThrottle1Rev) and (tEng1Rev < 0.32) and (tEng1LeverPos < 1.3)) then
-      
+    elseif (not(tThrottle1Rev) and (tEng1Rev > 0.29) and (tEng1LeverPos < 1.3)) then
+      --logMsg(string.format("XFDM -FFB777v2: Disengage ENG 1 Rev (tThrottle1Rev=%s,tEng1Rev=%2.2f, tEng1LeverPos=%2.2f)", tThrottle1Rev,tEng1Rev,tEng1LeverPos))
       xfdm:driveConnectorDest("eng_1_rev_toggle")
     end
 
-    if         (tThrottle2Rev  and (tEng2Rev < 0.1)  and (tEng2LeverPos < 1.3)) then
+    if         (tThrottle2Rev  and (tEng2Rev < 0.01)  and (tEng2LeverPos < 1.3)) then
       xfdm:driveConnectorDest("eng_2_rev_toggle")
-    elseif (not(tThrottle2Rev) and (tEng2Rev < 0.32) and (tEng2LeverPos < 1.3)) then
+    elseif (not(tThrottle2Rev) and (tEng2Rev > 0.29) and (tEng2LeverPos < 1.3)) then
       xfdm:driveConnectorDest("eng_2_rev_toggle")
     end
   end
