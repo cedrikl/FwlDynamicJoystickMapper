@@ -4,16 +4,19 @@ require("xfdm.xplane")
 require("xfdm.plugins.xchecklist")
 require("xfdm.plugins.x-camera")
 
-pedals    = require("xfdm.joysticks.thrustmaster_tpr")
+--pedals    = require("xfdm.joysticks.thrustmaster_tpr")
 sidestick = require("xfdm.joysticks.virpil_cm3_aprime_l")
 throttles = require("xfdm.joysticks.honeycomb_bravo")
             require("xfdm.joysticks.honeycomb_bravo_leds")
 
 require("xfdm.aircrafts.FF-A320")
 require("xfdm.aircrafts.FF-B777v2")
+require("xfdm.aircrafts.FlyJSim-Q4XP")
+require("xfdm.aircrafts.Hotstart-CL60")
+require("xfdm.aircrafts.Rotate-MD11F")
 require("xfdm.aircrafts.Toliss-A320")
 require("xfdm.aircrafts.Zibo-B737")
-require("xfdm.aircrafts.FlyJSim-Q4XP")
+
 
 clear_all_axis_assignments()
 clear_all_button_assignments()
@@ -35,9 +38,9 @@ xfdm:requestMapping("axis_pitch",             xfdmConInAxis,   sidestick.axis_pi
 xfdm:requestMapping("axis_view_up_down",      xfdmConInAxis,   sidestick.axis_view_y)
 xfdm:requestMapping("axis_view_left_right",   xfdmConInAxis,   sidestick.axis_view_x)
 
-xfdm:requestMapping("axis_yaw",               xfdmConInAxis,   pedals.yaw)
-xfdm:requestMapping("axis_left_toe_brake",    xfdmConInAxis,   pedals.brake_l,"reverse")
-xfdm:requestMapping("axis_right_toe_brake",   xfdmConInAxis,   pedals.brake_r,"reverse")
+--xfdm:requestMapping("axis_yaw",               xfdmConInAxis,   pedals.yaw)
+--xfdm:requestMapping("axis_left_toe_brake",    xfdmConInAxis,   pedals.brake_l,"reverse")
+--xfdm:requestMapping("axis_right_toe_brake",   xfdmConInAxis,   pedals.brake_r,"reverse")
 
 xfdm:requestMapping("park_brake",             xfdmConInButton, throttles.sw1_up)
 xfdm:requestMapping("anti_ice_eng_on",        xfdmConInButton, throttles.sw2_up)
@@ -98,8 +101,9 @@ xfdm:requestMapping("bravo_ap_mode_ias",      xfdmConInButton, throttles.ap_mode
 xfdm:requestMapping("bravo_ap_mode_crs",      xfdmConInButton, throttles.ap_mode_crs)
 
 
-if (pedals.state    == xfdmJoyNc or 
-    sidestick.state == xfdmJoyNc or
+--if (pedals.state    == xfdmJoyNc or 
+--    sidestick.state == xfdmJoyNc or
+if (sidestick.state == xfdmJoyNc or
     throttles.state == xfdmJoyNc) then
   xfdm.msg = "XFDM (Error): A required connected joystick could not be detected."
   logMsg("XFDM (Error): A required connected joystick could not be detected.")
