@@ -54,10 +54,46 @@ if(string.find(PLANE_ICAO, "B772") or
   xfdm:requestConnector("trim_rudder_left2",   xfdmConOutSimCommand, xfdmNullLink)
   xfdm:requestConnector("trim_rudder_right2",  xfdmConOutSimCommand, xfdmNullLink)
 
-  xfdm:requestConnector("anti_ice_eng_on",     xfdmConOutSimCommand, xfdmNullLink)
-  xfdm:requestConnector("anti_ice_eng_off",    xfdmConOutSimCommand, xfdmNullLink)
-  xfdm:requestConnector("anti_ice_wing_on",    xfdmConOutSimCommand, xfdmNullLink)
-  xfdm:requestConnector("anti_ice_wing_off",   xfdmConOutSimCommand, xfdmNullLink)
+  xfdm:requestConnector("anti_ice_engL_on",    xfdmConOutSimCommand, "1-sim/command/antiiceEngLeftSwitch_set_2")
+  xfdm:requestConnector("anti_ice_engL_auto",  xfdmConOutSimCommand, "1-sim/command/antiiceEngLeftSwitch_set_1")
+  xfdm:requestConnector("anti_ice_engL_off",   xfdmConOutSimCommand, "1-sim/command/antiiceEngLeftSwitch_set_0")
+  xfdm:requestConnector("anti_ice_engR_on",    xfdmConOutSimCommand, "1-sim/command/antiiceEngRightSwitch_set_2")
+  xfdm:requestConnector("anti_ice_engR_auto",  xfdmConOutSimCommand, "1-sim/command/antiiceEngRightSwitch_set_1")
+  xfdm:requestConnector("anti_ice_engR_off",   xfdmConOutSimCommand, "1-sim/command/antiiceEngRightSwitch_set_0")
+  xfdm:requestConnector("anti_ice_wings_on",   xfdmConOutSimCommand, "1-sim/command/antiiceWingsSwitch_set_2")
+  xfdm:requestConnector("anti_ice_wings_auto", xfdmConOutSimCommand, "1-sim/command/antiiceWingsSwitch_set_1")
+  xfdm:requestConnector("anti_ice_wings_off",  xfdmConOutSimCommand, "1-sim/command/antiiceWingsSwitch_set_0")
+  xfdm:requestConnector("Apu_Gen_But",         xfdmConOutRoDataref,  "1-sim/ckpt/apuGenButton/anim")
+
+--The Set_antiice is set so you can't turn them neither on "auto" nor "on" until you have the APU Generator switch "on".
+--That way, you can't drain the Batts by mistake. Once the APU gen is on, both Wings and Engs anti-ice will switch to "auto"
+-- and if you flip each switch to "on", the buttons will go at the "on" position. 
+  function xfdm_set_antiice()
+	local tJoyEngIceOn = xfdm:readConnectorSrc("anti_ice_eng_on")	
+    local tSimApuGen = xfdm:readConnectorDest("Apu_Gen_But")
+    
+    if (tJoyEngIceOn and (tSimApuGen == 1)) then
+      xfdm:driveConnectorDest("anti_ice_engL_on")
+      xfdm:driveConnectorDest("anti_ice_engR_on")
+	elseif ((not tJoyEngIceOn) and (tSimApuGen == 1)) then
+      xfdm:driveConnectorDest("anti_ice_engL_auto")
+      xfdm:driveConnectorDest("anti_ice_engR_auto")
+    elseif ((not tJoyEngIceOn) and (tSimApuGen == 0)) then
+      xfdm:driveConnectorDest("anti_ice_engL_off")
+      xfdm:driveConnectorDest("anti_ice_engR_off")    
+	end
+
+	local tJoyWingIceOn = xfdm:readConnectorSrc("anti_ice_wing_on")
+
+    if (tJoyWingIceOn and (tSimApuGen == 1)) then
+      xfdm:driveConnectorDest("anti_ice_wings_on")
+    elseif ((not tJoyWingIceOn) and (tSimApuGen == 1)) then
+      xfdm:driveConnectorDest("anti_ice_wings_auto")
+    elseif ((not tJoyWingIceOn) and (tSimApuGen == 0)) then
+      xfdm:driveConnectorDest("anti_ice_wings_off")
+    end
+  end
+  xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_antiice()")
 
   xfdm:requestConnector("strobe_light_toggle", xfdmConOutSimCommand, "1-sim/command/strobeLightSwitch_trigger")
   xfdm:requestConnector("lights_strobe_on",    xfdmConOutSimCommand, xfdmNullLink)
@@ -74,7 +110,7 @@ if(string.find(PLANE_ICAO, "B772") or
       xfdm:driveConnectorDest("strobe_light_toggle")
     end
   end
-  xfdm:requestCallback(xfdmCallbackAlways, "xfdm_set_strobe_light()")
+  xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_strobe_light()")
 
 
   xfdm:requestConnector("taxi_light_toggle", xfdmConOutSimCommand, "1-sim/command/taxiLightSwitch_trigger")
@@ -92,7 +128,7 @@ if(string.find(PLANE_ICAO, "B772") or
       xfdm:driveConnectorDest("taxi_light_toggle")
     end
   end
-  xfdm:requestCallback(xfdmCallbackAlways, "xfdm_set_taxi_light()")
+  xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_taxi_light()")
 
 
   xfdm:requestConnector("nose_ldg_light_toggle", xfdmConOutSimCommand, "1-sim/command/landingLightNoseSwitch_trigger")
@@ -130,7 +166,7 @@ if(string.find(PLANE_ICAO, "B772") or
       xfdm:driveConnectorDest("r_ldg_light_toggle")
     end
   end
-  xfdm:requestCallback(xfdmCallbackAlways, "xfdm_set_ldg_lights()")
+  xfdm:requestCallback(xfdmCallbackOften, "xfdm_set_ldg_lights()")
 
 
   xfdm:requestConnector("bravo_ap_dial_cw",         xfdmConOutSimCommand, "1-sim/comm/HC/inc")
